@@ -1,0 +1,496 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hearing Impairment | Through Their Eyes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #E67E22;
+            --peach: #FAD7A0;
+            --bg: #FFF9F0;
+            --text: #5D4037;
+            --card: #FFFFFF;
+            --muted: #7A5A4F;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: 'Atkinson Hyperlegible', sans-serif;
+            background: radial-gradient(circle at top right, #ffe8cc 0%, var(--bg) 40%, #fffdf9 100%);
+            color: var(--text);
+            line-height: 1.75;
+            letter-spacing: 0.01em;
+        }
+
+        header {
+            text-align: center;
+            padding: 2.5rem 1rem 3.2rem;
+            background: linear-gradient(180deg, var(--peach) 0%, var(--bg) 100%);
+        }
+
+        h1 {
+            margin: 0;
+            color: var(--primary);
+            font-size: clamp(2rem, 5vw, 3rem);
+        }
+
+        .siteTagline {
+            margin: 0.6rem auto 0;
+            color: var(--muted);
+            max-width: 760px;
+            padding: 0 1rem;
+        }
+
+        nav {
+            background: linear-gradient(90deg, #CC6B1D 0%, #E98D3A 100%);
+            padding: 0.9rem 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 14px rgba(93, 64, 55, 0.18);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        nav a {
+            margin: 0;
+            text-decoration: none;
+            color: #fff;
+            font-weight: bold;
+            font-size: 1rem;
+            padding: 0.45rem 0.85rem;
+            border-radius: 999px;
+            transition: background-color 0.25s ease, color 0.25s ease;
+        }
+
+        nav a:hover {
+            background-color: rgba(255, 255, 255, 0.22);
+            color: #fff7e8;
+        }
+
+        .lang-switch {
+            margin: 0.9rem auto 0;
+            padding: 0;
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+            max-width: 800px;
+            padding: 0 1rem;
+        }
+
+        .lang-btn {
+            border: 1px solid #e4b98a;
+            background: #fff4e6;
+            color: #7d4b24;
+            border-radius: 999px;
+            padding: 0.28rem 0.75rem;
+            font-family: inherit;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .lang-btn.active {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+
+        .main-wrap {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 1rem 1rem 2.6rem;
+        }
+
+        .carousel-card,
+        .intro-card {
+            background: var(--card);
+            border-radius: 18px;
+            box-shadow: 0 8px 24px rgba(93, 64, 55, 0.12);
+            border: 1px solid #f5ddc5;
+        }
+
+        .carousel-card {
+            padding: 1rem 1rem 1.2rem;
+        }
+
+        .carousel-shell {
+            position: relative;
+            overflow: hidden;
+            border-radius: 14px;
+            background: #fff4e9;
+            width: 100%;
+            max-height: 70vh;
+        }
+
+        .carousel-track {
+            display: flex;
+            align-items: center;
+            transition: transform 0.35s ease;
+        }
+
+        .slide {
+            min-width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 180px;
+            padding: 0.6rem;
+        }
+
+        .slide img {
+            width: auto;
+            height: auto;
+            max-width: 100%;
+            max-height: 70vh;
+            object-fit: contain;
+            border-radius: 10px;
+            background: #fff;
+        }
+
+        .empty-slide {
+            color: #8b6b60;
+            font-weight: 600;
+            text-align: center;
+            padding: 1.5rem;
+            max-width: 620px;
+        }
+
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            border-radius: 999px;
+            width: 40px;
+            height: 40px;
+            background: rgba(93, 64, 55, 0.75);
+            color: #fff;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .carousel-btn:hover { background: rgba(93, 64, 55, 0.9); }
+        .carousel-btn.prev { left: 10px; }
+        .carousel-btn.next { right: 10px; }
+
+        .dots {
+            margin-top: 0.9rem;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            border: none;
+            background: #e2c9b3;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .dot.active { background: var(--primary); }
+
+        .intro-card {
+            margin-top: 1.5rem;
+            text-align: left;
+            padding: 1.2rem 1.3rem;
+        }
+
+        .intro-card h2 {
+            margin: 0 0 0.5rem;
+            color: var(--primary);
+        }
+
+        .intro-card p { margin: 0.6rem 0; }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 1.8rem 0.9rem 2.2rem;
+            }
+
+            h1 {
+                font-size: clamp(2rem, 9vw, 2.8rem);
+            }
+
+            nav {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 8px;
+                padding: 0.7rem;
+            }
+
+            nav a {
+                margin: 0;
+                font-size: 0.92rem;
+                padding: 0.4rem 0.7rem;
+            }
+
+            .lang-switch {
+                justify-content: flex-end;
+            }
+
+            .slide { min-height: 160px; }
+
+            .slide img {
+                max-height: 55vh;
+            }
+
+            .carousel-btn {
+                width: 34px;
+                height: 34px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 data-i18n="title">Hearing Impairment</h1>
+        <p class="siteTagline" data-i18n="tagline">Communication can flourish in many forms beyond sound.</p>
+        <div class="lang-switch" aria-label="Language switcher">
+            <button class="lang-btn" id="lang-en" type="button">English</button>
+            <button class="lang-btn" id="lang-zh" type="button">繁體中文</button>
+        </div>
+    </header>
+
+    <nav>
+        <a href="../index.html" data-i18n="navHome">Home</a>
+        <a href="../stories.html" data-i18n="navStories">Through Their Eyes</a>
+        <a href="../help.html" data-i18n="navHelp">Seek For Help!!</a>
+        <a href="../community.html" data-i18n="navCommunity">Community Events</a>
+    </nav>
+
+    <main class="main-wrap">
+        <section class="carousel-card" aria-label="Story image carousel">
+            <div style="text-align: left; padding: 0.5rem 0 0.5rem 0;">
+                <a href="../stories.html" data-i18n="backButton" style="display: inline-block; padding: 0.6rem 1.2rem; background: linear-gradient(135deg, #f39c3d 0%, #e67e22 100%); color: #fff; text-decoration: none; border-radius: 25px; font-weight: 700; transition: transform 0.15s ease, box-shadow 0.15s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 14px rgba(230, 126, 34, 0.25)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">← Back to Through Their Eyes</a>
+            </div>
+            <div class="carousel-shell" id="carousel-shell">
+                <div class="carousel-track" id="carousel-track"></div>
+                <button class="carousel-btn prev" type="button" id="prev-btn" aria-label="Previous slide">&#10094;</button>
+                <button class="carousel-btn next" type="button" id="next-btn" aria-label="Next slide">&#10095;</button>
+            </div>
+            <div class="dots" id="dots"></div>
+        </section>
+
+        <section class="intro-card">
+            <h2 data-i18n="intro">Introduction</h2>
+            <p data-i18n="senP1">Hearing Impairment occurs when there is a problem with one or more parts of the ear or the nerves that send sound signals to the brain.</p>
+            <p data-i18n="senP2">Hearing loss is not a reflection of intelligence. Students with HI have the same range of intellectual ability as their peers; they simply access information through different channels—often relying more on visual cues.</p>
+            <p data-i18n="typesHeading">Types of Hearing Loss:</p>
+            <ul>
+                <li data-i18n="li1">Conductive: Sound is blocked from passing through the outer or middle ear, often due to fluid or wax.</li>
+                <li data-i18n="li2">Sensorineural: Damage to the sensitive hair cells in the inner ear or the auditory nerve. This is usually permanent.</li>
+                <li data-i18n="li3">Unilateral vs. Bilateral: Hearing loss in only one ear (unilateral) or both ears (bilateral).</li>
+                <li data-i18n="li4">Fluctuating: Hearing that changes from day to day (common with "glue ear").</li>
+            </ul>
+            <p data-i18n="stylesHeading">Communication Styles:</p>
+            <ul>
+                <li data-i18n="li5">Oral/Aural: Using speech and residual hearing (often with hearing aids).</li>
+                <li data-i18n="li6">Sign Language: Using a visual language like BSL or ASL.</li>
+                <li data-i18n="li7">Total Communication: A mix of signs, speech, lip-reading, and gestures.</li>
+            </ul>
+            <p data-i18n="helpSection">How Parents Can Help:</p>
+            <ul>
+                <li data-i18n="li8">Face-to-Face Contact: Always ensure your child can see your face before you start speaking. Avoid talking from another room.</li>
+                <li data-i18n="li9">Check Equipment: Make it a daily habit to check that hearing aids or cochlear implant batteries are working and the devices are clean.</li>
+                <li data-i18n="li10">Reduce Background Noise: Turn off the TV or noisy appliances when having a conversation to help your child focus on your voice.</li>
+                <li data-i18n="li11">Advocate for Subtitles: Ensure that any videos watched at home or school have captions enabled to provide a visual anchor for the audio.</li>
+            </ul>
+            <p data-i18n="studentNote">A Note to Students!!!</p>
+            <p data-i18n="studentText">Being deaf or hard of hearing is a different way of experiencing the world. While you might miss some sounds, you often develop an incredible "visual eye" for detail. Communication is a two-way street; it is not just about you hearing others, but about others learning how to reach you. From famous musicians like Beethoven to modern-day actors and activists, many people have shown that silence or partial sound does not stop you from having a loud and powerful voice in the world!</p>
+        </section>
+    </main>
+
+    <script>
+        const I18N = {
+            en: {
+                title: 'Hearing Impairment',
+                tagline: 'Communication can flourish in many forms beyond sound.',
+                navHome: 'Home',
+                navStories: 'Through Their Eyes',
+                navHelp: 'Seek For Help!!',
+                navCommunity: 'Community Events',
+                backButton: '\u2190 Back to Through Their Eyes',
+                intro: 'Introduction',
+                senP1: 'Hearing Impairment occurs when there is a problem with one or more parts of the ear or the nerves that send sound signals to the brain.',
+                senP2: 'Hearing loss is not a reflection of intelligence. Students with HI have the same range of intellectual ability as their peers; they simply access information through different channels-often relying more on visual cues.',
+                typesHeading: 'Types of Hearing Loss:',
+                li1: 'Conductive: Sound is blocked from passing through the outer or middle ear, often due to fluid or wax.',
+                li2: 'Sensorineural: Damage to the sensitive hair cells in the inner ear or the auditory nerve. This is usually permanent.',
+                li3: 'Unilateral vs. Bilateral: Hearing loss in only one ear (unilateral) or both ears (bilateral).',
+                li4: 'Fluctuating: Hearing that changes from day to day (common with "glue ear").',
+                stylesHeading: 'Communication Styles:',
+                li5: 'Oral/Aural: Using speech and residual hearing (often with hearing aids).',
+                li6: 'Sign Language: Using a visual language like BSL or ASL.',
+                li7: 'Total Communication: A mix of signs, speech, lip-reading, and gestures.',
+                helpSection: 'How Parents Can Help:',
+                li8: 'Face-to-Face Contact: Always ensure your child can see your face before you start speaking. Avoid talking from another room.',
+                li9: 'Check Equipment: Make it a daily habit to check that hearing aids or cochlear implant batteries are working and the devices are clean.',
+                li10: 'Reduce Background Noise: Turn off the TV or noisy appliances when having a conversation to help your child focus on your voice.',
+                li11: 'Advocate for Subtitles: Ensure that any videos watched at home or school have captions enabled to provide a visual anchor for the audio.',
+                studentNote: 'A Note to Students!!!',
+                studentText: 'Being deaf or hard of hearing is a different way of experiencing the world. While you might miss some sounds, you often develop an incredible "visual eye" for detail. Communication is a two-way street; it is not just about you hearing others, but about others learning how to reach you. From famous musicians like Beethoven to modern-day actors and activists, many people have shown that silence or partial sound does not stop you from having a loud and powerful voice in the world!'
+            },
+            zh: {
+                title: '聽覺障礙',
+                tagline: '溝通可以透過聲音以外的多種方式綻放。',
+                navHome: '首頁',
+                navStories: '他們的故事',
+                navHelp: '需要支援',
+                navCommunity: '社區活動',
+                backButton: '\u2190 返回他們的故事',
+                intro: '介紹',
+                senP1: '聽覺障礙指的是耳朵的一個或多個部位，或是將聲音訊號傳送到大腦的神經出現問題。',
+                senP2: '聽力損失並不代表智力受損。聽障學生的智力發展與同儕完全相同，他們只是透過不同的管道（通常更依賴視覺線索）來接收資訊。',
+                typesHeading: '聽力損失的類型：',
+                li1: '傳導性聽損（Conductive）： 聲音在通過外耳或中耳時受阻，通常是由於積水或耳垢過多所致。',
+                li2: '感音神經性聽損（Sensorineural）： 內耳中敏感的毛細胞或聽神經受損，這類聽損通常是永久性的',
+                li3: '單側與雙側聽損： 僅有一隻耳朵（單側）或兩隻耳朵（雙側）出現聽力損失。',
+                li4: '波動性聽損（Fluctuating）： 聽力狀況每天都在變化（常見於「膠耳」，即中耳積水）。',
+                stylesHeading: '溝通方式：',
+                li5: '口語/聽覺法： 運用殘餘聽力並結合口語溝通（通常需配戴助聽器）。',
+                li6: '手語： 使用視覺語言，如自然手語或文法手語。',
+                li7: '綜合溝通法： 結合手語、口語、唇讀及肢體動作的混合模式。',
+                helpSection: '家長可以如何協助：',
+                li8: '面對面溝通： 開始說話前，請務必確保孩子能看清你的臉。避免從另一個房間隔空喊話。',
+                li9: '檢查設備： 養成每日檢查助聽器或人工耳蝸（人工植入耳）電池是否正常運作，並確保設備清潔。',
+                li10: '降低環境噪音： 交談時請關掉電視或吵雜的家電，幫助孩子專注於你的聲音。',
+                li11: '善用字幕： 確保在家中或學校觀看的影片皆開啟字幕，為音訊提供視覺上的輔助。',
+                studentNote: '給學生的小提示！！！',
+                studentText: '失聰或聽力受損只是另一種體驗世界的方式。雖然你可能會錯過某些聲音，但你往往會發展出驚人的「視覺敏銳度」來觀察細節。 溝通是雙向的；這不只是關於你如何「聽」他人說話，更是關於他人如何學習與你交流。從歷史上的音樂巨擘貝多芬，到現代的演員與社會活動家，許多人都證明了：寂靜或部分的聲音，並不能阻止你在世界上發出宏亮且強而有力的聲音！'
+            }
+        };
+
+        function applyLanguage(lang) {
+            const elements = document.querySelectorAll('[data-i18n]');
+            elements.forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (I18N[lang] && I18N[lang][key]) {
+                    el.textContent = I18N[lang][key];
+                }
+            });
+            updateSlidesForLanguage(lang);
+            localStorage.setItem('senergy_lang', lang);
+            updateButtonStates(lang);
+        }
+
+        function updateButtonStates(lang) {
+            document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+            document.getElementById('lang-zh').classList.toggle('active', lang === 'zh');
+        }
+
+        document.getElementById('lang-en').addEventListener('click', () => applyLanguage('en'));
+        document.getElementById('lang-zh').addEventListener('click', () => applyLanguage('zh'));
+
+        const SLIDES_BY_LANG = {
+            en: [
+                'HI 1.jpg',
+                'HI 2.jpg',
+                'HI 3.jpg',
+                'HI 4.jpg',
+                'HI 5.jpg',
+                'HI 6.jpg'
+            ],
+            zh: [
+                'HI stories Chin/HI 1 chin.jpg',
+                'HI stories Chin/HI 2 chin.jpg',
+                'HI stories Chin/HI 3 chin.jpg',
+                'HI stories Chin/HI 4 chin.jpg',
+                'HI stories Chin/HI 5 chin.jpg',
+                'HI stories Chin/HI 6 chin.jpg'
+            ]
+        };
+        let slides = [];
+
+        const track = document.getElementById('carousel-track');
+        const dotsWrap = document.getElementById('dots');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        let current = 0;
+
+        function updateSlidesForLanguage(lang) {
+            const nextSlides = (SLIDES_BY_LANG[lang] || SLIDES_BY_LANG.en).slice();
+            const hasChanged = nextSlides.length !== slides.length || nextSlides.some((src, i) => src !== slides[i]);
+            slides = nextSlides;
+            if (current >= slides.length) current = 0;
+            if (hasChanged) buildCarousel();
+        }
+
+        function buildCarousel() {
+            track.innerHTML = '';
+            dotsWrap.innerHTML = '';
+
+            if (slides.length === 0) {
+                const empty = document.createElement('div');
+                empty.className = 'slide';
+                empty.innerHTML = '<div class="empty-slide">Upload images into this folder, then add their file names to the <code>slides</code> list in this page to show them here.</div>';
+                track.appendChild(empty);
+                prevBtn.style.display = 'none';
+                nextBtn.style.display = 'none';
+                return;
+            }
+
+            slides.forEach((src, index) => {
+                const slide = document.createElement('div');
+                slide.className = 'slide';
+                const img = document.createElement('img');
+                img.src = src;
+                img.alt = 'Hearing Impairment image ' + (index + 1);
+                slide.appendChild(img);
+                track.appendChild(slide);
+
+                const dot = document.createElement('button');
+                dot.className = 'dot';
+                dot.type = 'button';
+                dot.setAttribute('aria-label', 'Go to slide ' + (index + 1));
+                dot.addEventListener('click', () => {
+                    current = index;
+                    updateCarousel();
+                });
+                dotsWrap.appendChild(dot);
+            });
+
+            prevBtn.style.display = '';
+            nextBtn.style.display = '';
+            updateCarousel();
+        }
+
+        function updateCarousel() {
+            track.style.transform = 'translateX(' + (-current * 100) + '%)';
+            const dots = dotsWrap.querySelectorAll('.dot');
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === current);
+            });
+        }
+
+        prevBtn.addEventListener('click', () => {
+            if (!slides.length) return;
+            current = (current - 1 + slides.length) % slides.length;
+            updateCarousel();
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (!slides.length) return;
+            current = (current + 1) % slides.length;
+            updateCarousel();
+        });
+
+        applyLanguage(localStorage.getItem('senergy_lang') || 'en');
+    </script>
+    <script src="../story-memo.js"></script>
+    <script src="../nav-active.js"></script>
+</body>
+</html>
+
+

@@ -1,0 +1,483 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Specific Learning Difficulties | Through Their Eyes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #E67E22;
+            --peach: #FAD7A0;
+            --bg: #FFF9F0;
+            --text: #5D4037;
+            --card: #FFFFFF;
+            --muted: #7A5A4F;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: 'Atkinson Hyperlegible', sans-serif;
+            background: radial-gradient(circle at top right, #ffe8cc 0%, var(--bg) 40%, #fffdf9 100%);
+            color: var(--text);
+            line-height: 1.75;
+            letter-spacing: 0.01em;
+        }
+
+        header {
+            text-align: center;
+            padding: 2.5rem 1rem 3.2rem;
+            background: linear-gradient(180deg, var(--peach) 0%, var(--bg) 100%);
+        }
+
+        h1 {
+            margin: 0;
+            color: var(--primary);
+            font-size: clamp(2rem, 5vw, 3rem);
+        }
+
+        .siteTagline {
+            margin: 0.6rem auto 0;
+            color: var(--muted);
+            max-width: 760px;
+            padding: 0 1rem;
+        }
+
+        nav {
+            background: linear-gradient(90deg, #CC6B1D 0%, #E98D3A 100%);
+            padding: 0.9rem 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 14px rgba(93, 64, 55, 0.18);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        nav a {
+            margin: 0;
+            text-decoration: none;
+            color: #fff;
+            font-weight: bold;
+            font-size: 1rem;
+            padding: 0.45rem 0.85rem;
+            border-radius: 999px;
+            transition: background-color 0.25s ease, color 0.25s ease;
+        }
+
+        nav a:hover {
+            background-color: rgba(255, 255, 255, 0.22);
+            color: #fff7e8;
+        }
+
+        .lang-switch {
+            margin: 0.9rem auto 0;
+            padding: 0;
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+            max-width: 800px;
+            padding: 0 1rem;
+        }
+
+        .lang-btn {
+            border: 1px solid #e4b98a;
+            background: #fff4e6;
+            color: #7d4b24;
+            border-radius: 999px;
+            padding: 0.28rem 0.75rem;
+            font-family: inherit;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .lang-btn.active {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+
+        .main-wrap {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 1rem 1rem 2.6rem;
+        }
+
+        .carousel-card,
+        .intro-card {
+            background: var(--card);
+            border-radius: 18px;
+            box-shadow: 0 8px 24px rgba(93, 64, 55, 0.12);
+            border: 1px solid #f5ddc5;
+        }
+
+        .carousel-card {
+            padding: 1rem 1rem 1.2rem;
+        }
+
+        .carousel-shell {
+            position: relative;
+            overflow: hidden;
+            border-radius: 14px;
+            background: #fff4e9;
+            width: 100%;
+            max-height: 70vh;
+        }
+
+        .carousel-track {
+            display: flex;
+            align-items: center;
+            transition: transform 0.35s ease;
+        }
+
+        .slide {
+            min-width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 180px;
+            padding: 0.6rem;
+        }
+
+        .slide img {
+            width: auto;
+            height: auto;
+            max-width: 100%;
+            max-height: 70vh;
+            object-fit: contain;
+            border-radius: 10px;
+            background: #fff;
+        }
+
+        .empty-slide {
+            color: #8b6b60;
+            font-weight: 600;
+            text-align: center;
+            padding: 1.5rem;
+            max-width: 620px;
+        }
+
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            border-radius: 999px;
+            width: 40px;
+            height: 40px;
+            background: rgba(93, 64, 55, 0.75);
+            color: #fff;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .carousel-btn:hover { background: rgba(93, 64, 55, 0.9); }
+        .carousel-btn.prev { left: 10px; }
+        .carousel-btn.next { right: 10px; }
+
+        .dots {
+            margin-top: 0.9rem;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            border: none;
+            background: #e2c9b3;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .dot.active { background: var(--primary); }
+
+        .intro-card {
+            margin-top: 1.5rem;
+            text-align: left;
+            padding: 1.2rem 1.3rem;
+        }
+
+        .intro-card h2 {
+            margin: 0 0 0.5rem;
+            color: var(--primary);
+        }
+
+        .intro-card p { margin: 0.6rem 0; }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 1.8rem 0.9rem 2.2rem;
+            }
+
+            h1 {
+                font-size: clamp(2rem, 9vw, 2.8rem);
+            }
+
+            nav {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 8px;
+                padding: 0.7rem;
+            }
+
+            nav a {
+                margin: 0;
+                font-size: 0.92rem;
+                padding: 0.4rem 0.7rem;
+            }
+
+            .lang-switch {
+                justify-content: flex-end;
+            }
+
+            .slide { min-height: 160px; }
+
+            .slide img {
+                max-height: 55vh;
+            }
+
+            .carousel-btn {
+                width: 34px;
+                height: 34px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 data-i18n="title">Specific Learning Difficulties</h1>
+        <p class="siteTagline" data-i18n="tagline">When letters, numbers, and writing feel harder than they look.</p>
+        <div class="lang-switch" aria-label="Language switcher">
+            <button class="lang-btn" id="lang-en" type="button">English</button>
+            <button class="lang-btn" id="lang-zh" type="button">繁體中文</button>
+        </div>
+    </header>
+
+    <nav>
+        <a href="../index.html" data-i18n="navHome">Home</a>
+        <a href="../stories.html" data-i18n="navStories">Through Their Eyes</a>
+        <a href="../help.html" data-i18n="navHelp">Seek For Help!!</a>
+        <a href="../community.html" data-i18n="navCommunity">Community Events</a>
+    </nav>
+
+    <main class="main-wrap">
+        <section class="carousel-card" aria-label="Story image carousel">
+            <div style="text-align: left; padding: 0.5rem 0 0.5rem 0;">
+                <a href="../stories.html" data-i18n="backButton" style="display: inline-block; padding: 0.6rem 1.2rem; background: linear-gradient(135deg, #f39c3d 0%, #e67e22 100%); color: #fff; text-decoration: none; border-radius: 25px; font-weight: 700; transition: transform 0.15s ease, box-shadow 0.15s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 14px rgba(230, 126, 34, 0.25)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">← Back to Through Their Eyes</a>
+            </div>
+            <div class="carousel-shell" id="carousel-shell">
+                <div class="carousel-track" id="carousel-track"></div>
+                <button class="carousel-btn prev" type="button" id="prev-btn" aria-label="Previous slide">&#10094;</button>
+                <button class="carousel-btn next" type="button" id="next-btn" aria-label="Next slide">&#10095;</button>
+            </div>
+            <div class="dots" id="dots"></div>
+        </section>
+
+        <section class="intro-card">
+            <h2 data-i18n="intro">Introduction</h2>
+            <p data-i18n="senP1">Specific Learning Difficulties (SpLDs) are neurodevelopmental differences that affect specific learning processes such as reading, writing, spelling, or arithmetic, even when intelligence is in the typical range. SpLDs are not a reflection of ability. They are differences in how the brain processes information, which can make school tasks more demanding without reducing potential.</p>
+            <p data-i18n="typesHeading">Common Types of SpLDs:</p>
+            <ul>
+                <li data-i18n="li1">Dyslexia: The most common type, causing difficulties with reading, spelling, and writing.</li>
+                <li data-i18n="li2">Dyscalculia: Involves challenges with mathematical calculations and understanding numerical concepts.</li>
+                <li data-i18n="li3">Dysgraphia: Impacts written expression, resulting in poor handwriting and spelling.</li>
+                <li data-i18n="li4">Dyspraxia: Affects coordination and planning, making it difficult to perform motor tasks.</li>
+                <li data-i18n="li5">Auditory or visual processing differences: These involve challenges in interpreting sounds or visual information.</li>
+            </ul>
+            <p data-i18n="helpSection">How Parents Can Help:</p>
+            <ul>
+                <li data-i18n="li6">Focus on your child's strengths and celebrate their achievements.</li>
+                <li data-i18n="li7">Use assistive technology and tools to support learning.</li>
+                <li data-i18n="li8">Break large tasks into smaller, manageable steps.</li>
+                <li data-i18n="li9">Maintain open and honest communication about their experiences and feelings.</li>
+            </ul>
+            <p data-i18n="studentNote">A Note to Students!!!</p>
+            <p data-i18n="studentText">Your brain works differently and that is okay. Some of the world's greatest scientists, artists, and entrepreneurs (like Albert Einstein and Richard Branson) have SpLDs. A different way of thinking is often a superpower in disguise once you find the right tools.</p>
+        </section>
+    </main>
+
+    <script>
+        const I18N = {
+            en: {
+                title: 'Specific Learning Difficulties',
+                tagline: 'When letters, numbers, and writing feel harder than they look.',
+                navHome: 'Home',
+                navStories: 'Through Their Eyes',
+                navHelp: 'Seek For Help!!',
+                navCommunity: 'Community Events',
+                backButton: '\u2190 Back to Through Their Eyes',
+                intro: 'Introduction',
+                senP1: 'Specific Learning Difficulties (SpLDs) are neurodevelopmental differences that affect specific learning processes such as reading, writing, spelling, or arithmetic, even when intelligence is in the typical range. SpLDs are not a reflection of ability. They are differences in how the brain processes information, which can make school tasks more demanding without reducing potential.',
+                typesHeading: 'Common Types of SpLDs:',
+                li1: 'Dyslexia: The most common type, causing difficulties with reading, spelling, and writing.',
+                li2: 'Dyscalculia: Involves challenges with mathematical calculations and understanding numerical concepts.',
+                li3: 'Dysgraphia: Impacts written expression, resulting in poor handwriting and spelling.',
+                li4: 'Dyspraxia: Affects coordination and planning, making it difficult to perform motor tasks.',
+                li5: 'Auditory or visual processing differences: These involve challenges in interpreting sounds or visual information.',
+                helpSection: 'How Parents Can Help:',
+                li6: 'Focus on your child\'s strengths and celebrate their achievements.',
+                li7: 'Use assistive technology and tools to support learning.',
+                li8: 'Break large tasks into smaller, manageable steps.',
+                li9: 'Maintain open and honest communication about their experiences and feelings.',
+                studentNote: 'A Note to Students!!!',
+                studentText: 'Your brain works differently and that is okay. Some of the world\'s greatest scientists, artists, and entrepreneurs (like Albert Einstein and Richard Branson) have SpLDs. A different way of thinking is often a superpower in disguise once you find the right tools.'
+            },
+            zh: {
+                title: '特殊學習障礙',
+                tagline: '當文字、數字與書寫比看起來更難時。',
+                navHome: '首頁',
+                navStories: '他們的故事',
+                navHelp: '需要支援',
+                navCommunity: '社區活動',
+                backButton: '\u2190 返回他們的故事',
+                intro: '介紹',
+                senP1: '特殊學習障礙（Specific Learning Difficulties） 是一種神經發育差異。即便智力處於正常範圍，它仍會影響特定的學習過程，如閱讀、寫作、拼字或算術。必須強調的是，SpLD 並非能力的體現，而是大腦處理資訊的方式有所不同；這會使校園任務變得更具挑戰性，但絕不會降低學生的潛力。',
+                typesHeading: '常見的特殊學習困難類型：',
+                li1: '讀寫障礙（Dyslexia）： 最常見的類型，會導致閱讀、拼字及寫作方面的困難。',
+                li2: '數學障礙（Dyscalculia）： 涉及數學計算及理解數字概念方面的挑戰。',
+                li3: '書寫障礙（Dysgraphia）： 影響文字表達，導致書寫困難及拼字錯誤。',
+                li4: '協調障礙（Dyspraxia）： 影響動作協調與規劃，難以執行大肌肉或精細動作任務。',
+                li5: '聽覺或視覺處理差異： 涉及在解讀聲音或視覺資訊時面臨的挑戰。',
+                helpSection: '家長可以如何協助：',
+                li6: '聚焦孩子的長處： 關注孩子具備優勢的領域，並慶祝他們所取得的每一項成就。',
+                li7: '運用輔助科技： 善用科技產品與工具（如語音轉文字、電子字典）來支援學習。',
+                li8: '拆解任務步驟： 將大型任務拆解成細小、易於管理的步驟。',
+                li9: '保持開放溝通： 與孩子針對他們的經歷與感受進行誠實且開放的對話。',
+                studentNote: '給學生的小提示！！！',
+                studentText: '你的大腦運作方式與眾不同——這完全沒問題。世界上許多偉大的科學家、藝術家和企業家（如愛因斯坦和理查·布蘭森）都患有特殊學習障礙。一旦你找到了適合自己的工具，這種「與眾不同」的思考方式往往會成為你隱藏的「超能力」。'
+            }
+        };
+
+        function applyLanguage(lang) {
+            const elements = document.querySelectorAll('[data-i18n]');
+            elements.forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (I18N[lang] && I18N[lang][key]) {
+                    el.textContent = I18N[lang][key];
+                }
+            });
+            updateSlidesForLanguage(lang);
+            localStorage.setItem('senergy_lang', lang);
+            updateButtonStates(lang);
+        }
+
+        function updateButtonStates(lang) {
+            document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+            document.getElementById('lang-zh').classList.toggle('active', lang === 'zh');
+        }
+
+        document.getElementById('lang-en').addEventListener('click', () => applyLanguage('en'));
+        document.getElementById('lang-zh').addEventListener('click', () => applyLanguage('zh'));
+
+        const SLIDES_BY_LANG = {
+            en: [
+                'spl 1.jpg',
+                'spl 2.jpg',
+                'spl 3.jpg',
+                'spl 4.jpg',
+                'spl 5.jpg',
+                'spl 6.jpg',
+                'spl 7.jpg'
+            ],
+            zh: [
+                'SpLD stories Chin/spl 1 chin.jpg',
+                'SpLD stories Chin/spl 2 chin.jpg',
+                'SpLD stories Chin/spl 3 chin.jpg',
+                'SpLD stories Chin/spl 4 chin.jpg',
+                'SpLD stories Chin/spl 5 chin.jpg',
+                'SpLD stories Chin/spl 6 chin.jpg',
+                'SpLD stories Chin/spl 7 chin.jpg'
+            ]
+        };
+        let slides = [];
+
+        const track = document.getElementById('carousel-track');
+        const dotsWrap = document.getElementById('dots');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        let current = 0;
+
+        function updateSlidesForLanguage(lang) {
+            const nextSlides = (SLIDES_BY_LANG[lang] || SLIDES_BY_LANG.en).slice();
+            const hasChanged = nextSlides.length !== slides.length || nextSlides.some((src, i) => src !== slides[i]);
+            slides = nextSlides;
+            if (current >= slides.length) current = 0;
+            if (hasChanged) buildCarousel();
+        }
+
+        function buildCarousel() {
+            track.innerHTML = '';
+            dotsWrap.innerHTML = '';
+
+            if (slides.length === 0) {
+                const empty = document.createElement('div');
+                empty.className = 'slide';
+                empty.innerHTML = '<div class="empty-slide">Upload images into this folder, then add their file names to the <code>slides</code> list in this page to show them here.</div>';
+                track.appendChild(empty);
+                prevBtn.style.display = 'none';
+                nextBtn.style.display = 'none';
+                return;
+            }
+
+            slides.forEach((src, index) => {
+                const slide = document.createElement('div');
+                slide.className = 'slide';
+                const img = document.createElement('img');
+                img.src = src;
+                img.alt = 'Specific Learning Difficulties image ' + (index + 1);
+                slide.appendChild(img);
+                track.appendChild(slide);
+
+                const dot = document.createElement('button');
+                dot.className = 'dot';
+                dot.type = 'button';
+                dot.setAttribute('aria-label', 'Go to slide ' + (index + 1));
+                dot.addEventListener('click', () => {
+                    current = index;
+                    updateCarousel();
+                });
+                dotsWrap.appendChild(dot);
+            });
+
+            prevBtn.style.display = '';
+            nextBtn.style.display = '';
+            updateCarousel();
+        }
+
+        function updateCarousel() {
+            track.style.transform = 'translateX(' + (-current * 100) + '%)';
+            const dots = dotsWrap.querySelectorAll('.dot');
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === current);
+            });
+        }
+
+        prevBtn.addEventListener('click', () => {
+            if (!slides.length) return;
+            current = (current - 1 + slides.length) % slides.length;
+            updateCarousel();
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (!slides.length) return;
+            current = (current + 1) % slides.length;
+            updateCarousel();
+        });
+
+        applyLanguage(localStorage.getItem('senergy_lang') || 'en');
+    </script>
+    <script src="../story-memo.js"></script>
+    <script src="../nav-active.js"></script>
+</body>
+</html>
+

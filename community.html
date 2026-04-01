@@ -1,0 +1,437 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SENERGY | Community Events</title>
+    <script>
+        (function () {
+            const storedLang = localStorage.getItem("senergy_lang");
+            if (storedLang === "zh") {
+                document.documentElement.lang = "zh-Hant";
+                document.documentElement.setAttribute("data-lang-pending", "zh");
+            }
+        })();
+    </script>
+    <style>
+        html[data-lang-pending="zh"] body {
+            display: none !important;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <link rel="stylesheet" href="community.css">
+</head>
+<body>
+
+    <!-- ══════════════ HEADER ══════════════ -->
+    <header>
+        <h1 data-i18n="siteName">SENERGY</h1>
+        <p class="siteTagline" data-i18n="siteTagline">A WEBSITE FOR SEN PARENTS AND STUDENTS</p>
+        <div class="lang-switch" aria-label="Language switcher">
+            <button class="lang-btn" id="lang-en" type="button">English</button>
+            <button class="lang-btn" id="lang-zh" type="button">繁體中文</button>
+        </div>
+    </header>
+
+    <!-- ══════════════ NAV ══════════════ -->
+    <nav>
+        <a href="index.html" data-i18n="navHome">Home</a>
+        <a href="stories.html" data-i18n="navStories">Through Their Eyes</a>
+        <a href="help.html" data-i18n="navHelp">Seek For Help!!</a>
+        <a href="community.html" data-i18n="navCommunity">Community Events</a>
+    </nav>
+
+    <!-- ══════════════ MAIN CONTENT ══════════════ -->
+    <div class="page-wrap">
+
+        <div class="page-title">
+            <h2 data-i18n="pageTitle">Community Events</h2>
+            <p data-i18n="pageSubtitle">Upcoming events hosted by SEN community centres.</p>
+        </div>
+
+        <!-- Auth Bar + Post Button -->
+        <div class="action-bar">
+            <div id="auth-bar">
+                <!-- Logged-out state -->
+                <div id="auth-logged-out">
+                    <button class="btn btn-outline" onclick="openModal('login-modal')" data-i18n="loginBtn">Log In</button>
+                    <button class="btn btn-primary" onclick="openModal('signup-modal')" data-i18n="signupBtn">Sign Up</button>
+                </div>
+                <!-- Logged-in state (hidden until login) -->
+                <div id="auth-logged-in" style="display:none; align-items:center; gap:10px; flex-wrap:wrap;">
+                    <span id="logged-in-info"></span>
+                    <button class="btn btn-outline btn-sm" onclick="logout()" data-i18n="logoutBtn">Log Out</button>
+                </div>
+            </div>
+
+            <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                <!-- Post Event button (only visible when approved) -->
+                <button id="post-btn" class="btn btn-primary" style="display:none;" onclick="openModal('post-modal')">
+                    <span data-i18n="postEventBtn">✏️ Post an Event</span>
+                </button>
+            </div>
+        </div>
+
+        <div id="approval-note"></div>
+
+        <!-- ── Feed ── -->
+        <div id="feed">
+            <div id="empty-state">
+                <div class="empty-icon">🗓️</div>
+                <p data-i18n="emptyFeed">No events yet. Community centres, log in and share your upcoming events!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════ MODAL: ENTER APPROVAL CODE ══════════════ -->
+    <div class="modal-backdrop" id="approval-code-modal">
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="approval-code-title">
+            <button class="modal-close" onclick="closeModal('approval-code-modal')" aria-label="Close">×</button>
+            <h3 id="approval-code-title" data-i18n="approvalCodeTitle">Unlock Account Approval</h3>
+            <div id="approval-code-alert" class="alert alert-error" style="display:none;"></div>
+            <form id="approval-code-form" novalidate onsubmit="handleApprovalCode(event)">
+                <div class="form-group">
+                    <label for="approval-code-input" data-i18n="approvalCodeLabel">Approval Code</label>
+                    <input type="text" id="approval-code-input" placeholder="Enter the code sent to you" data-i18n-placeholder="approvalCodePlaceholder">
+                    <span class="form-error" id="approval-code-err"></span>
+                </div>
+                <div class="form-footer">
+                    <button type="submit" class="btn btn-primary" data-i18n="approvalCodeActivateBtn">Activate Account</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ══════════════ TOAST ══════════════ -->
+    <div id="toast"></div>
+
+    <!-- ══════════════ MODAL: LOG IN ══════════════ -->
+    <div class="modal-backdrop" id="login-modal">
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="login-title">
+            <button class="modal-close" onclick="closeModal('login-modal')" aria-label="Close">×</button>
+            <h3 id="login-title" data-i18n="loginModalTitle">🔑 Log In</h3>
+            <div id="login-alert" class="alert alert-error" style="display:none;"></div>
+            <form id="login-form" novalidate onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="login-email" data-i18n="loginEmailLabel">Email Address</label>
+                    <input type="email" id="login-email" placeholder="centre@example.com" autocomplete="email" data-i18n-placeholder="loginEmailPlaceholder">
+                    <span class="form-error" id="login-email-err"></span>
+                </div>
+                <div class="form-group">
+                    <label for="login-password" data-i18n="loginPasswordLabel">Password</label>
+                    <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password">
+                    <span class="form-error" id="login-password-err"></span>
+                </div>
+                <div class="form-footer">
+                    <button type="submit" class="btn btn-primary" data-i18n="loginModalSubmitBtn">Log In</button>
+                    <p class="form-switch"><a onclick="switchModal('login-modal','forgot-password-modal')" data-i18n="forgotPasswordLink">Forgot password?</a></p>
+                    <p class="form-switch"><span data-i18n="noAccountText">Don't have an account?</span> <a onclick="switchModal('login-modal','signup-modal')" data-i18n="signUpLink">Sign Up</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ══════════════ MODAL: FORGOT PASSWORD ══════════════ -->
+    <div class="modal-backdrop" id="forgot-password-modal">
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="forgot-password-title">
+            <button class="modal-close" onclick="closeModal('forgot-password-modal')" aria-label="Close">×</button>
+            <h3 id="forgot-password-title" data-i18n="forgotPasswordTitle">Reset Password</h3>
+            <div id="forgot-password-alert" class="alert alert-error" style="display:none;"></div>
+            <form id="forgot-password-form" novalidate onsubmit="handleForgotPassword(event)">
+                <div class="form-group">
+                    <label for="forgot-email" data-i18n="forgotEmailLabel">Account Email</label>
+                    <input type="email" id="forgot-email" placeholder="centre@example.com" autocomplete="email" data-i18n-placeholder="forgotEmailPlaceholder">
+                    <span class="form-error" id="forgot-email-err"></span>
+                </div>
+                <p data-i18n="forgotPasswordHint">If you can't find the email, please check your spam or junk folder.</p>
+                <div class="form-footer">
+                    <button type="button" class="btn btn-outline" onclick="sendPasswordResetCode()" data-i18n="sendResetCodeBtn">Send Reset Code</button>
+                    <p class="form-switch"><span data-i18n="rememberedPasswordText">Remembered it?</span> <a onclick="switchModal('forgot-password-modal','login-modal')" data-i18n="backToLoginText">Back to Log In</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ══════════════ MODAL: SIGN UP ══════════════ -->
+    <div class="modal-backdrop" id="signup-modal">
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="signup-title">
+            <button class="modal-close" onclick="closeModal('signup-modal')" aria-label="Close">×</button>
+            <h3 id="signup-title" data-i18n="signupTitle">🏫 Create Centre Account</h3>
+            <div id="signup-alert" class="alert alert-error" style="display:none;"></div>
+            <form id="signup-form" novalidate onsubmit="handleSignup(event)">
+                <div class="form-group">
+                    <label for="signup-name" data-i18n="signupNameLabel">Community Centre Name</label>
+                    <input type="text" id="signup-name" placeholder="e.g. Sunshine SEN Centre" autocomplete="organization" data-i18n-placeholder="signupNamePlaceholder">
+                    <span class="form-error" id="signup-name-err"></span>
+                </div>
+                <div class="form-group">
+                    <label for="signup-email" data-i18n="signupEmailLabel">Email Address</label>
+                    <input type="email" id="signup-email" placeholder="centre@example.com" autocomplete="email" data-i18n-placeholder="signupEmailPlaceholder">
+                    <span class="form-error" id="signup-email-err"></span>
+                </div>
+                <div class="form-group">
+                    <label for="signup-password"><span data-i18n="signupPasswordLabel">Password</span> <small style="font-weight:400;color:var(--muted);" data-i18n="signupPasswordHint">(min. 6 characters)</small></label>
+                    <input type="password" id="signup-password" placeholder="••••••••" autocomplete="new-password">
+                    <span class="form-error" id="signup-password-err"></span>
+                </div>
+                <div class="form-group">
+                    <label for="signup-confirm" data-i18n="signupConfirmLabel">Confirm Password</label>
+                    <input type="password" id="signup-confirm" placeholder="••••••••" autocomplete="new-password">
+                    <span class="form-error" id="signup-confirm-err"></span>
+                </div>
+                <div class="form-footer">
+                    <button type="submit" class="btn btn-primary" data-i18n="createAccountBtn">Create Account</button>
+                    <p class="form-switch"><span data-i18n="alreadyHaveAccountText">Already have an account?</span> <a onclick="switchModal('signup-modal','login-modal')" data-i18n="logInLink">Log In</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ══════════════ MODAL: POST EVENT ══════════════ -->
+    <div class="modal-backdrop" id="post-modal">
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="post-title">
+            <button class="modal-close" onclick="closeModal('post-modal')" aria-label="Close">×</button>
+            <h3 id="post-title" data-i18n="postModalTitle">📢 Share an Event</h3>
+            <form id="post-form" novalidate onsubmit="handlePost(event)">
+                <div class="form-group">
+                    <label for="post-title-input" data-i18n="postTitleLabel">Event Title *</label>
+                    <input type="text" id="post-title-input" placeholder="e.g. Sensory Play Morning" data-i18n-placeholder="postTitlePlaceholder">
+                    <span class="form-error" id="post-title-err"></span>
+                </div>
+                <div class="form-group">
+                    <label for="post-desc"><span data-i18n="postDescriptionLabel">Description</span> <small style="font-weight:400;color:var(--muted);" data-i18n="optionalLabel">(optional)</small></label>
+                    <textarea id="post-desc" rows="3" placeholder="Tell families what to expect…" data-i18n-placeholder="postDescriptionPlaceholder"></textarea>
+                    <span class="form-error" id="post-desc-err"></span>
+                </div>
+                <div class="form-group">
+                    <label for="post-date"><span data-i18n="postDateLabel">Event Date</span> <small style="font-weight:400;color:var(--muted);" data-i18n="optionalLabel">(optional)</small></label>
+                    <input type="date" id="post-date">
+                    <span class="form-error" id="post-date-err"></span>
+                </div>
+                <div class="form-group">
+                    <label for="post-expire-date" data-i18n="postExpireDateLabel">Expire Date *</label>
+                    <input type="date" id="post-expire-date">
+                    <span class="form-error" id="post-expire-date-err"></span>
+                </div>
+                <div class="form-group">
+                    <label for="post-location"><span data-i18n="postLocationLabel">Location</span> <small style="font-weight:400;color:var(--muted);" data-i18n="optionalLabel">(optional)</small></label>
+                    <input type="text" id="post-location" placeholder="e.g. Room 3, Sunshine Centre, Sham Shui Po" data-i18n-placeholder="postLocationPlaceholder">
+                    <span class="form-error" id="post-location-err"></span>
+                </div>
+                <div class="form-group">
+                    <label for="post-link"><span data-i18n="postLinkLabel">Event Link</span> <small style="font-weight:400;color:var(--muted);" data-i18n="optionalLabel">(optional)</small></label>
+                    <input type="url" id="post-link" placeholder="https://example.com/event-page" data-i18n-placeholder="postLinkPlaceholder">
+                    <span class="form-error" id="post-link-err"></span>
+                </div>
+                <div class="form-group">
+                    <label for="post-image"><span data-i18n="postImageLabel">Event Image</span> <small style="font-weight:400;color:var(--muted);" data-i18n="postImageHint">(optional JPEG or PNG, max 2 MB)</small></label>
+                    <input type="file" id="post-image" accept="image/jpeg,image/png">
+                    <span class="form-error" id="post-image-err"></span>
+                </div>
+                <div class="form-footer">
+                    <button type="submit" class="btn btn-primary" data-i18n="postSubmitBtn">Post Event</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ══════════════ DELETE CONFIRM MODAL ══════════════ -->
+    <div class="modal-backdrop" id="delete-modal">
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="delete-title" style="max-width:360px; text-align:center;">
+            <h3 id="delete-title" style="color:var(--danger);" data-i18n="deleteModalTitle">🗑️ Delete Event?</h3>
+            <p style="color:var(--muted); font-size:0.9rem; margin:0 0 1.2rem;" data-i18n="deleteModalBody">This action cannot be undone.</p>
+            <div style="display:flex; gap:10px; justify-content:center;">
+                <button class="btn btn-outline" onclick="closeModal('delete-modal')" data-i18n="cancelBtn">Cancel</button>
+                <button class="btn btn-danger" id="confirm-delete-btn" data-i18n="deleteBtn">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════ MODAL: EVENT DETAILS ══════════════ -->
+    <div class="modal-backdrop" id="event-detail-modal">
+        <div class="modal event-detail-modal" role="dialog" aria-modal="true" aria-labelledby="event-detail-title">
+            <button class="modal-close" onclick="closeModal('event-detail-modal')" aria-label="Close" style="z-index:2;">×</button>
+            <div id="event-detail-content" class="event-detail-body"></div>
+        </div>
+    </div>
+
+    <!-- ══════════════ JAVASCRIPT ══════════════ -->
+    <script type="module" src="community.js"></script>
+
+    <script>
+        const COMMUNITY_TRANSLATIONS = {
+            en: {
+                pageHeadTitle: "SENERGY | Community Events",
+                siteName: "SENERGY",
+                siteTagline: "A WEBSITE FOR SEN PARENTS AND STUDENTS",
+                navHome: "Home",
+                navStories: "Through Their Eyes",
+                navHelp: "Seek For Help!!",
+                navCommunity: "Community Events",
+                pageTitle: "Community Events",
+                pageSubtitle: "Upcoming events hosted by SEN community centres.",
+                loginBtn: "Log In",
+                signupBtn: "Sign Up",
+                logoutBtn: "Log Out",
+                postEventBtn: "✏️ Post an Event",
+                emptyFeed: "No events yet. Community centres, log in and share your upcoming events!",
+                approvalCodeTitle: "Unlock Account Approval",
+                approvalCodeLabel: "Approval Code",
+                approvalCodePlaceholder: "Enter the code sent to you",
+                approvalCodeActivateBtn: "Activate Account",
+                loginModalTitle: "🔑 Log In",
+                loginEmailLabel: "Email Address",
+                loginEmailPlaceholder: "centre@example.com",
+                loginPasswordLabel: "Password",
+                loginModalSubmitBtn: "Log In",
+                forgotPasswordLink: "Forgot password?",
+                noAccountText: "Don't have an account?",
+                signUpLink: "Sign Up",
+                forgotPasswordTitle: "Reset Password",
+                forgotEmailLabel: "Account Email",
+                forgotEmailPlaceholder: "centre@example.com",
+                forgotPasswordHint: "If you can't find the email, please check your spam or junk folder.",
+                sendResetCodeBtn: "Send Reset Code",
+                rememberedPasswordText: "Remembered it?",
+                backToLoginText: "Back to Log In",
+                signupTitle: "🏫 Create Centre Account",
+                signupNameLabel: "Community Centre Name",
+                signupNamePlaceholder: "e.g. Sunshine SEN Centre",
+                signupEmailLabel: "Email Address",
+                signupEmailPlaceholder: "centre@example.com",
+                signupPasswordLabel: "Password",
+                signupPasswordHint: "(min. 6 characters)",
+                signupConfirmLabel: "Confirm Password",
+                createAccountBtn: "Create Account",
+                alreadyHaveAccountText: "Already have an account?",
+                logInLink: "Log In",
+                postModalTitle: "📢 Share an Event",
+                postTitleLabel: "Event Title *",
+                postTitlePlaceholder: "e.g. Sensory Play Morning",
+                postDescriptionLabel: "Description",
+                optionalLabel: "(optional)",
+                postDescriptionPlaceholder: "Tell families what to expect…",
+                postDateLabel: "Event Date",
+                postExpireDateLabel: "Expire Date *",
+                postLocationLabel: "Location",
+                postLocationPlaceholder: "e.g. Room 3, Sunshine Centre, Sham Shui Po",
+                postLinkLabel: "Event Link",
+                postLinkPlaceholder: "https://example.com/event-page",
+                postImageLabel: "Event Image",
+                postImageHint: "(optional JPEG or PNG, max 2 MB)",
+                postSubmitBtn: "Post Event",
+                deleteModalTitle: "🗑️ Delete Event?",
+                deleteModalBody: "This action cannot be undone.",
+                cancelBtn: "Cancel",
+                deleteBtn: "Delete"
+            },
+            zh: {
+                pageHeadTitle: "SENERGY | 社區活動",
+                siteName: "SENERGY",
+                siteTagline: "A WEBSITE FOR SEN PARENTS AND STUDENTS",
+                navHome: "首頁",
+                navStories: "他們的故事",
+                navHelp: "需要支援",
+                navCommunity: "社區活動",
+                pageTitle: "社區活動",
+                pageSubtitle: "由 SEN 社區中心舉辦的最新活動。",
+                loginBtn: "登入",
+                signupBtn: "註冊",
+                logoutBtn: "登出",
+                postEventBtn: "✏️ 發佈活動",
+                emptyFeed: "暫時未有活動。歡迎社區中心登入並分享最新活動！",
+                approvalCodeTitle: "啟用帳戶審核",
+                approvalCodeLabel: "審核代碼",
+                approvalCodePlaceholder: "請輸入寄給你的代碼",
+                approvalCodeActivateBtn: "啟用帳戶",
+                loginModalTitle: "🔑 登入",
+                loginEmailLabel: "電郵地址",
+                loginEmailPlaceholder: "centre@example.com",
+                loginPasswordLabel: "密碼",
+                loginModalSubmitBtn: "登入",
+                forgotPasswordLink: "忘記密碼？",
+                noAccountText: "還沒有帳戶？",
+                signUpLink: "註冊",
+                forgotPasswordTitle: "重設密碼",
+                forgotEmailLabel: "帳戶電郵",
+                forgotEmailPlaceholder: "centre@example.com",
+                forgotPasswordHint: "如果你在收件匣找不到郵件，請檢查垃圾郵件或促銷郵件匣。",
+                sendResetCodeBtn: "發送重設郵件",
+                rememberedPasswordText: "想起密碼了？",
+                backToLoginText: "返回登入",
+                signupTitle: "🏫 建立中心帳戶",
+                signupNameLabel: "社區中心名稱",
+                signupNamePlaceholder: "例如：陽光 SEN 中心",
+                signupEmailLabel: "電郵地址",
+                signupEmailPlaceholder: "centre@example.com",
+                signupPasswordLabel: "密碼",
+                signupPasswordHint: "（至少 6 個字元）",
+                signupConfirmLabel: "確認密碼",
+                createAccountBtn: "建立帳戶",
+                alreadyHaveAccountText: "已經有帳戶？",
+                logInLink: "登入",
+                postModalTitle: "📢 分享活動",
+                postTitleLabel: "活動標題 *",
+                postTitlePlaceholder: "例如：感官遊戲早晨",
+                postDescriptionLabel: "活動描述",
+                optionalLabel: "（可選）",
+                postDescriptionPlaceholder: "告訴家長這個活動內容⋯",
+                postDateLabel: "活動日期",
+                postExpireDateLabel: "截止日期 *",
+                postLocationLabel: "地點",
+                postLocationPlaceholder: "例如：深水埗陽光中心 3 號室",
+                postLinkLabel: "活動連結",
+                postLinkPlaceholder: "https://example.com/event-page",
+                postImageLabel: "活動圖片",
+                postImageHint: "（可選 JPG 或 PNG，最大 2 MB）",
+                postSubmitBtn: "發佈活動",
+                deleteModalTitle: "🗑️ 刪除活動？",
+                deleteModalBody: "此操作無法還原。",
+                cancelBtn: "取消",
+                deleteBtn: "刪除"
+            }
+        };
+
+        function setLanguage(lang) {
+            const map = COMMUNITY_TRANSLATIONS[lang] || COMMUNITY_TRANSLATIONS.en;
+            document.documentElement.lang = lang === "zh" ? "zh-Hant" : "en";
+            document.title = map.pageHeadTitle;
+
+            document.querySelectorAll("[data-i18n]").forEach((el) => {
+                const key = el.getAttribute("data-i18n");
+                if (map[key]) {
+                    el.textContent = map[key];
+                }
+            });
+
+            document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
+                const key = el.getAttribute("data-i18n-placeholder");
+                if (map[key]) {
+                    el.setAttribute("placeholder", map[key]);
+                }
+            });
+
+            document.getElementById("lang-en").classList.toggle("active", lang === "en");
+            document.getElementById("lang-zh").classList.toggle("active", lang === "zh");
+            localStorage.setItem("senergy_lang", lang);
+
+            if (document.documentElement.getAttribute("data-lang-pending") === "zh") {
+                document.documentElement.removeAttribute("data-lang-pending");
+            }
+
+            if (typeof window.refreshCommunityLanguageView === "function") {
+                window.refreshCommunityLanguageView();
+            }
+        }
+
+        document.getElementById("lang-en").addEventListener("click", () => setLanguage("en"));
+        document.getElementById("lang-zh").addEventListener("click", () => setLanguage("zh"));
+
+        setLanguage(localStorage.getItem("senergy_lang") || "en");
+    </script>
+    <script src="nav-active.js"></script>
+</body>
+</html>
+
+

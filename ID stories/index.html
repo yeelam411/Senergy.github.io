@@ -1,0 +1,476 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intellectual Disability | Through Their Eyes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #E67E22;
+            --peach: #FAD7A0;
+            --bg: #FFF9F0;
+            --text: #5D4037;
+            --card: #FFFFFF;
+            --muted: #7A5A4F;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: 'Atkinson Hyperlegible', sans-serif;
+            background: radial-gradient(circle at top right, #ffe8cc 0%, var(--bg) 40%, #fffdf9 100%);
+            color: var(--text);
+            line-height: 1.75;
+            letter-spacing: 0.01em;
+        }
+
+        header {
+            text-align: center;
+            padding: 2.5rem 1rem 3.2rem;
+            background: linear-gradient(180deg, var(--peach) 0%, var(--bg) 100%);
+        }
+
+        h1 {
+            margin: 0;
+            color: var(--primary);
+            font-size: clamp(2rem, 5vw, 3rem);
+        }
+
+        .siteTagline {
+            margin: 0.6rem auto 0;
+            color: var(--muted);
+            max-width: 760px;
+            padding: 0 1rem;
+        }
+
+        nav {
+            background: linear-gradient(90deg, #CC6B1D 0%, #E98D3A 100%);
+            padding: 0.9rem 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 14px rgba(93, 64, 55, 0.18);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        nav a {
+            margin: 0;
+            text-decoration: none;
+            color: #fff;
+            font-weight: bold;
+            font-size: 1rem;
+            padding: 0.45rem 0.85rem;
+            border-radius: 999px;
+            transition: background-color 0.25s ease, color 0.25s ease;
+        }
+
+        nav a:hover {
+            background-color: rgba(255, 255, 255, 0.22);
+            color: #fff7e8;
+        }
+
+        .lang-switch {
+            margin: 0.9rem auto 0;
+            padding: 0;
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+            max-width: 800px;
+            padding: 0 1rem;
+        }
+
+        .lang-btn {
+            border: 1px solid #e4b98a;
+            background: #fff4e6;
+            color: #7d4b24;
+            border-radius: 999px;
+            padding: 0.28rem 0.75rem;
+            font-family: inherit;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .lang-btn.active {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+
+        .main-wrap {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 1rem 1rem 2.6rem;
+        }
+
+        .carousel-card,
+        .intro-card {
+            background: var(--card);
+            border-radius: 18px;
+            box-shadow: 0 8px 24px rgba(93, 64, 55, 0.12);
+            border: 1px solid #f5ddc5;
+        }
+
+        .carousel-card {
+            padding: 1rem 1rem 1.2rem;
+        }
+
+        .carousel-shell {
+            position: relative;
+            overflow: hidden;
+            border-radius: 14px;
+            background: #fff4e9;
+            width: 100%;
+            max-height: 70vh;
+        }
+
+        .carousel-track {
+            display: flex;
+            align-items: center;
+            transition: transform 0.35s ease;
+        }
+
+        .slide {
+            min-width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 180px;
+            padding: 0.6rem;
+        }
+
+        .slide img {
+            width: auto;
+            height: auto;
+            max-width: 100%;
+            max-height: 70vh;
+            object-fit: contain;
+            border-radius: 10px;
+            background: #fff;
+        }
+
+        .empty-slide {
+            color: #8b6b60;
+            font-weight: 600;
+            text-align: center;
+            padding: 1.5rem;
+            max-width: 620px;
+        }
+
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            border-radius: 999px;
+            width: 40px;
+            height: 40px;
+            background: rgba(93, 64, 55, 0.75);
+            color: #fff;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .carousel-btn:hover { background: rgba(93, 64, 55, 0.9); }
+        .carousel-btn.prev { left: 10px; }
+        .carousel-btn.next { right: 10px; }
+
+        .dots {
+            margin-top: 0.9rem;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            border: none;
+            background: #e2c9b3;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .dot.active { background: var(--primary); }
+
+        .intro-card {
+            margin-top: 1.5rem;
+            text-align: left;
+            padding: 1.2rem 1.3rem;
+        }
+
+        .intro-card h2 {
+            margin: 0 0 0.5rem;
+            color: var(--primary);
+        }
+
+        .intro-card p { margin: 0.6rem 0; }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 1.8rem 0.9rem 2.2rem;
+            }
+
+            h1 {
+                font-size: clamp(2rem, 9vw, 2.8rem);
+            }
+
+            nav {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 8px;
+                padding: 0.7rem;
+            }
+
+            nav a {
+                margin: 0;
+                font-size: 0.92rem;
+                padding: 0.4rem 0.7rem;
+            }
+
+            .lang-switch {
+                justify-content: flex-end;
+            }
+
+            .slide { min-height: 160px; }
+
+            .slide img {
+                max-height: 55vh;
+            }
+
+            .carousel-btn {
+                width: 34px;
+                height: 34px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 data-i18n="title">Intellectual Disability</h1>
+        <p class="siteTagline" data-i18n="tagline">A different pace does not mean less potential.</p>
+        <div class="lang-switch" aria-label="Language switcher">
+            <button class="lang-btn" id="lang-en" type="button">English</button>
+            <button class="lang-btn" id="lang-zh" type="button">繁體中文</button>
+        </div>
+    </header>
+
+    <nav>
+        <a href="../index.html" data-i18n="navHome">Home</a>
+        <a href="../stories.html" data-i18n="navStories">Through Their Eyes</a>
+        <a href="../help.html" data-i18n="navHelp">Seek For Help!!</a>
+        <a href="../community.html" data-i18n="navCommunity">Community Events</a>
+    </nav>
+
+    <main class="main-wrap">
+        <section class="carousel-card" aria-label="Story image carousel">
+            <div style="text-align: left; padding: 0.5rem 0 0.5rem 0;">
+                <a href="../stories.html" data-i18n="backButton" style="display: inline-block; padding: 0.6rem 1.2rem; background: linear-gradient(135deg, #f39c3d 0%, #e67e22 100%); color: #fff; text-decoration: none; border-radius: 25px; font-weight: 700; transition: transform 0.15s ease, box-shadow 0.15s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 14px rgba(230, 126, 34, 0.25)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">← Back to Through Their Eyes</a>
+            </div>
+            <div class="carousel-shell" id="carousel-shell">
+                <div class="carousel-track" id="carousel-track"></div>
+                <button class="carousel-btn prev" type="button" id="prev-btn" aria-label="Previous slide">&#10094;</button>
+                <button class="carousel-btn next" type="button" id="next-btn" aria-label="Next slide">&#10095;</button>
+            </div>
+            <div class="dots" id="dots"></div>
+        </section>
+
+        <section class="intro-card">
+            <h2 data-i18n="intro">Introduction</h2>
+            <p data-i18n="senP1">Intellectual Disability is a neurodevelopmental condition that begins during childhood. Children with intellectual disabilities may take longer to speak, walk, or take care of their personal needs, for example like dressing or eating. It is not a mental illness, but a lifelong condition that varies in severity from mild to profound, requiring varying levels of support for independent living.</p>
+            <p data-i18n="severityHeading">Levels of Severity:</p>
+            <ul>
+                <li data-i18n="li1">Mild (approx. 85%): May live independently with minimal support.</li>
+                <li data-i18n="li2">Moderate (approx. 10%): Require more daily support and supervision.</li>
+                <li data-i18n="li3">Severe/Profound (approx. 5-6%): Require significant, daily support and care.</li>
+            </ul>
+            <p data-i18n="helpSection">How Parents Can Help:</p>
+            <ul>
+                <li data-i18n="li4">Focus on Life Skills, while academics are important, teaching "adaptive skills" (like managing a small budget or following a schedule) builds long-term independence.</li>
+                <li data-i18n="li5">Be Patient and Repetitive, new skills may need to be practiced many times. Use the "Tell, Show, Do" method: explain the task, demonstrate it, and then help them do it.</li>
+                <li data-i18n="li6">Use Visual Aids, like charts, picture schedules, and color-coded systems often work better than long verbal instructions.</li>
+                <li data-i18n="li7">Seek Early Intervention, the earlier a child receives specialized support (like speech therapy or occupational therapy), the more progress they can make.</li>
+            </ul>
+            <p data-i18n="studentNote">A Note to Students!!!</p>
+            <p data-i18n="studentText">Everyone learns at their own pace, and your pace is exactly where you need to be. You have talents that grades cannot measure, perhaps you are a kind friend, a great helper, or a talented artist. Learning might feel like climbing a steeper hill for you than for others, but every step you take is a huge achievement. Be proud of how hard you work!</p>
+        </section>
+    </main>
+
+    <script>
+        const I18N = {
+            en: {
+                title: 'Intellectual Disability',
+                tagline: 'A different pace does not mean less potential.',
+                navHome: 'Home',
+                navStories: 'Through Their Eyes',
+                navHelp: 'Seek For Help!!',
+                navCommunity: 'Community Events',
+                backButton: '\u2190 Back to Through Their Eyes',
+                intro: 'Introduction',
+                senP1: 'Intellectual Disability is a neurodevelopmental condition that begins during childhood. Children with intellectual disabilities may take longer to speak, walk, or take care of their personal needs, for example like dressing or eating. It is not a mental illness, but a lifelong condition that varies in severity from mild to profound, requiring varying levels of support for independent living.',
+                severityHeading: 'Levels of Severity:',
+                li1: 'Mild (approx. 85%): May live independently with minimal support.',
+                li2: 'Moderate (approx. 10%): Require more daily support and supervision.',
+                li3: 'Severe/Profound (approx. 5-6%): Require significant, daily support and care.',
+                helpSection: 'How Parents Can Help:',
+                li4: 'Focus on Life Skills, while academics are important, teaching "adaptive skills" (like managing a small budget or following a schedule) builds long-term independence.',
+                li5: 'Be Patient and Repetitive, new skills may need to be practiced many times. Use the "Tell, Show, Do" method: explain the task, demonstrate it, and then help them do it.',
+                li6: 'Use Visual Aids, like charts, picture schedules, and color-coded systems often work better than long verbal instructions.',
+                li7: 'Seek Early Intervention, the earlier a child receives specialized support (like speech therapy or occupational therapy), the more progress they can make.',
+                studentNote: 'A Note to Students!!!',
+                studentText: 'Everyone learns at their own pace, and your pace is exactly where you need to be. You have talents that grades cannot measure, perhaps you are a kind friend, a great helper, or a talented artist. Learning might feel like climbing a steeper hill for you than for others, but every step you take is a huge achievement. Be proud of how hard you work!'
+            },
+            zh: {
+                title: '智力障礙 (ID)',
+                tagline: '不同步伐不代表潛能較少。',
+                navHome: '首頁',
+                navStories: '他們的故事',
+                navHelp: '需要支援',
+                navCommunity: '社區活動',
+                backButton: '\u2190 返回他們的故事',
+                intro: '介紹',
+                senP1: '智力障礙 (ID)是一種從童年時期開始出現的神經發育狀況。患有智力障礙的孩子，在學習說話、走路或處理個人生活需求（如穿衣、進食）方面，可能需要比同儕更長的時間。這並非一種心理疾病，而是一種終身的狀況。其影響程度從輕微到極重度不等，因此在獨立生活上所需的支持程度也各不相同。',
+                severityHeading: '嚴重程度分類：',
+                li1: '輕度（約佔 85%）： 在極少量的支援下，通常具備獨立生活的能力。',
+                li2: '中度（約佔 10%）： 在日常生活中需要較多的支援與督導。',
+                li3: '嚴重/極重度（約佔 5-6%）： 需要密集的日常照護與專業支援。',
+                helpSection: '家長可以如何協助：',
+                li4: '重視生活技能： 雖然學術學習很重要，但教導「適應性技能」（如管理小額預算、遵守時間表）能為長遠的獨立生活奠定基礎。',
+                li5: '保持耐心並重複練習： 學習新技能可能需要反覆練習多次。建議使用「說、演、做」法：先口頭解釋任務，再親自示範，最後引導孩子動手完成。',
+                li6: '善用視覺輔助： 圖表、圖片清單和顏色分類系統，通常比冗長的口頭指令更有效。',
+                li7: '尋求早期介入： 孩子越早接受專業支援（如言語治療或職業治療），能取得的進步就越大。',
+                studentNote: '給學生的小提示！！！',
+                studentText: '每個人都有自己的學習節奏，而你的節奏正是最適合你的步調。你擁有的才華是分數無法衡量的——你也許是一位體貼的朋友、得力的小幫手，或是極具天分的藝術家。 對你來說，學習的過程可能像是在爬一座比別人更陡峭的山坡，但你踏出的每一步都是巨大的成就。請為自己付出的每一分努力感到自豪！'
+            }
+        };
+
+        function applyLanguage(lang) {
+            const elements = document.querySelectorAll('[data-i18n]');
+            elements.forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (I18N[lang] && I18N[lang][key]) {
+                    el.textContent = I18N[lang][key];
+                }
+            });
+            updateSlidesForLanguage(lang);
+            localStorage.setItem('senergy_lang', lang);
+            updateButtonStates(lang);
+        }
+
+        function updateButtonStates(lang) {
+            document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+            document.getElementById('lang-zh').classList.toggle('active', lang === 'zh');
+        }
+
+        document.getElementById('lang-en').addEventListener('click', () => applyLanguage('en'));
+        document.getElementById('lang-zh').addEventListener('click', () => applyLanguage('zh'));
+
+        const SLIDES_BY_LANG = {
+            en: [
+                'ID 1.jpg',
+                'ID 2.jpg',
+                'ID 3.jpg',
+                'ID 4.jpg',
+                'ID 5.jpg',
+                'ID 6.jpg'
+            ],
+            zh: [
+                'ID stories Chin/id 1 ch.jpg',
+                'ID stories Chin/id 2 ch.jpg',
+                'ID stories Chin/id 3 ch.jpg',
+                'ID stories Chin/id 4 ch.jpg',
+                'ID stories Chin/id 5 ch.jpg',
+                'ID stories Chin/id 6 ch.jpg'
+            ]
+        };
+        let slides = [];
+
+        const track = document.getElementById('carousel-track');
+        const dotsWrap = document.getElementById('dots');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        let current = 0;
+
+        function updateSlidesForLanguage(lang) {
+            const nextSlides = (SLIDES_BY_LANG[lang] || SLIDES_BY_LANG.en).slice();
+            const hasChanged = nextSlides.length !== slides.length || nextSlides.some((src, i) => src !== slides[i]);
+            slides = nextSlides;
+            if (current >= slides.length) current = 0;
+            if (hasChanged) buildCarousel();
+        }
+
+        function buildCarousel() {
+            track.innerHTML = '';
+            dotsWrap.innerHTML = '';
+
+            if (slides.length === 0) {
+                const empty = document.createElement('div');
+                empty.className = 'slide';
+                empty.innerHTML = '<div class="empty-slide">Upload images into this folder, then add their file names to the <code>slides</code> list in this page to show them here.</div>';
+                track.appendChild(empty);
+                prevBtn.style.display = 'none';
+                nextBtn.style.display = 'none';
+                return;
+            }
+
+            slides.forEach((src, index) => {
+                const slide = document.createElement('div');
+                slide.className = 'slide';
+                const img = document.createElement('img');
+                img.src = src;
+                img.alt = 'Intellectual Disability image ' + (index + 1);
+                slide.appendChild(img);
+                track.appendChild(slide);
+
+                const dot = document.createElement('button');
+                dot.className = 'dot';
+                dot.type = 'button';
+                dot.setAttribute('aria-label', 'Go to slide ' + (index + 1));
+                dot.addEventListener('click', () => {
+                    current = index;
+                    updateCarousel();
+                });
+                dotsWrap.appendChild(dot);
+            });
+
+            prevBtn.style.display = '';
+            nextBtn.style.display = '';
+            updateCarousel();
+        }
+
+        function updateCarousel() {
+            track.style.transform = 'translateX(' + (-current * 100) + '%)';
+            const dots = dotsWrap.querySelectorAll('.dot');
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === current);
+            });
+        }
+
+        prevBtn.addEventListener('click', () => {
+            if (!slides.length) return;
+            current = (current - 1 + slides.length) % slides.length;
+            updateCarousel();
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (!slides.length) return;
+            current = (current + 1) % slides.length;
+            updateCarousel();
+        });
+
+        applyLanguage(localStorage.getItem('senergy_lang') || 'en');
+    </script>
+    <script src="../story-memo.js"></script>
+    <script src="../nav-active.js"></script>
+</body>
+</html>
+
+

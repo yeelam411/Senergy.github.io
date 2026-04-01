@@ -1,0 +1,943 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SENERGY | Seek Help</title>
+    <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+    <script>
+        // Store language choice immediately
+        const storedLang = localStorage.getItem("senergy_lang");
+        
+        // Apply language attribute early to prevent flash
+        if (storedLang === "zh") {
+            document.documentElement.lang = "zh-Hant";
+            document.documentElement.setAttribute("data-lang-pending", "zh");
+        }
+    </script>
+    <style>
+        /* Prevent flash by not rendering Chinese content until translated */
+        html[data-lang-pending="zh"] body {
+            display: none !important;
+        }
+    </style>
+    <style>
+        :root { 
+            --primary: #E67E22; 
+            --peach: #FAD7A0; 
+            --bg: #FFF9F0; 
+            --text: #5D4037; 
+            --nav-dark: #CC6B1D; 
+            --nav-light: #E98D3A; 
+        }
+
+        * { box-sizing: border-box; }
+
+        /* Base Styles */
+        html { scrollbar-gutter: stable; }
+        body { 
+            font-family: 'Atkinson Hyperlegible', sans-serif; 
+            background-color: var(--bg); 
+            color: var(--text); 
+            margin: 0; 
+            text-align: center; 
+            font-size: 18px; 
+            line-height: 1.75; 
+            letter-spacing: 0.01em; 
+        }
+
+        header { 
+            padding: 2.5rem 1rem 3.2rem; 
+            background: linear-gradient(180deg, var(--peach) 0%, var(--bg) 100%); 
+        }
+        h1 { font-size: clamp(2.2rem, 5vw, 3rem); color: var(--primary); margin: 0; }
+        .siteTagline { margin: 0.6rem auto 0; max-width: 760px; padding: 0 1rem; }
+
+        nav { 
+            background: linear-gradient(90deg, var(--nav-dark) 0%, var(--nav-light) 100%); 
+            padding: 0.9rem 1rem; 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000; 
+            box-shadow: 0 4px 14px rgba(93, 64, 55, 0.18);
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        nav a { 
+            text-decoration: none; 
+            color: #fff; 
+            font-weight: bold; 
+            font-size: 1rem; 
+            padding: 0.45rem 0.85rem; 
+            border-radius: 999px; 
+            transition: 0.25s ease; 
+            line-height: 1.25;
+            min-height: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        nav a:hover { background-color: rgba(255, 255, 255, 0.22); color: #fff7e8; }
+
+        /* Language Switcher */
+        .lang-switch { 
+            width: min(100%, 960px); 
+            margin: 0.9rem auto 0; 
+            padding: 0 1rem; 
+            display: flex; 
+            gap: 8px; 
+            justify-content: flex-end; 
+        }
+        .lang-btn { 
+            border: 1px solid #e4b98a; 
+            background: #fff4e6; 
+            color: #7d4b24; 
+            border-radius: 999px; 
+            padding: 0.3rem 0.8rem; 
+            font-family: inherit; 
+            font-weight: 700; 
+            cursor: pointer; 
+            transition: 0.2s;
+        }
+        .lang-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+        .controls { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; align-items: center; max-width: 1100px; margin: 1.5rem auto 0; padding: 0 1rem; }
+        .controls input, .controls select { border: 1px solid #e3b27f; border-radius: 12px; padding: 0.7rem 0.9rem; font-family: inherit; font-size: 1rem; min-width: 230px; background: #fff; color: var(--text); }
+        .controls input { flex: 1; max-width: 440px; }
+        .controls button { border: 1px solid #f0bd83; background: linear-gradient(135deg, #f39c3d 0%, #e67e22 100%); color: #fff; border-radius: 12px; padding: 0.7rem 1.2rem; font-weight: 700; cursor: pointer; transition: transform 0.15s ease, box-shadow 0.15s ease; font-family: inherit; }
+        .controls button:hover { transform: translateY(-2px); box-shadow: 0 6px 14px rgba(230, 126, 34, 0.25); }
+        .controls button:active { transform: translateY(0); }
+        .map-wrap { max-width: 1100px; margin: 1rem auto 0; padding: 0 1rem; }
+        #centersMap { height: 430px; border: 2px solid #f0bd83; border-radius: 14px; overflow: hidden; box-shadow: 0 10px 22px rgba(93, 64, 55, 0.16); }
+        .leaflet-container { font-family: 'Atkinson Hyperlegible', sans-serif; }
+        .leaflet-control-zoom a { color: #5D4037; font-weight: 700; }
+        .leaflet-popup-content-wrapper { border-radius: 12px; border: 1px solid #f0bd83; }
+        .leaflet-popup-tip { background: #fff; }
+
+        .status { margin: 0.9rem auto 0; max-width: 1100px; padding: 0 1rem; font-weight: 700; color: #8d4f1a; }
+        .grid { display: grid; grid-template-columns: 1fr; gap: 20px; padding: 2rem; max-width: 1100px; margin: auto; }
+        .card { background: white; padding: 1.5rem; border-radius: 15px; border: 1px solid var(--peach); text-align: left; }
+        .card.clickable { cursor: pointer; transition: transform 0.15s ease, box-shadow 0.15s ease; }
+        .card.clickable:hover { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(93, 64, 55, 0.16); }
+        .card h3 { margin-top: 0; }
+        .card p { margin: 0.45rem 0; }
+        .card a { overflow-wrap: anywhere; word-break: break-word; }
+        .card-distance { font-size: 0.95rem; color: #e67e22; font-weight: 700; margin-top: 0.6rem; padding-top: 0.6rem; border-top: 1px solid #fad7a0; }
+        .coord-debug { margin-top: 0.7rem; font-size: 0.85rem; color: #7a5a45; background: #fff6ea; border: 1px dashed #efc48f; border-radius: 8px; padding: 0.45rem 0.6rem; word-break: break-word; }
+        .user-location-pin { font-size: 1.6rem; line-height: 1; }
+        .house-pin {
+            width: 34px;
+            height: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: linear-gradient(160deg, #ffd49f 0%, #f08d2f 100%);
+            border: 2px solid #fff;
+            box-shadow: 0 4px 12px rgba(93, 64, 55, 0.25);
+            font-size: 1.05rem;
+            line-height: 1;
+        }
+        .setup-note { max-width: 1100px; margin: 1rem auto 0; background: #fff5e7; border: 1px solid #f2c695; border-radius: 12px; padding: 0.9rem 1rem; text-align: left; }
+        .setup-note strong { color: #8d4f1a; }
+
+        @media (max-width: 768px) {
+            body {
+                font-size: 16px;
+                line-height: 1.65;
+            }
+
+            header { padding: 1.3rem 0.8rem 1.8rem; }
+            h1 { font-size: clamp(1.75rem, 9vw, 2.35rem); }
+            .siteTagline { font-size: 0.9rem; }
+
+            nav {
+                gap: 6px;
+                padding: 0.55rem 0.45rem;
+            }
+            nav a {
+                font-size: 0.88rem;
+                padding: 0.4rem 0.62rem;
+            }
+
+            .lang-switch {
+                margin-top: 0.75rem;
+                padding: 0 0.75rem;
+                justify-content: center;
+            }
+            .lang-btn {
+                min-height: 40px;
+                padding: 0.28rem 0.7rem;
+            }
+
+            .controls {
+                margin-top: 0.85rem;
+                gap: 8px;
+                padding: 0 0.6rem;
+            }
+
+            .map-wrap { padding: 0 0.6rem; }
+            #centersMap { height: min(48vh, 300px); }
+
+            .status { padding: 0 0.75rem; }
+            .grid { padding: 0.75rem 0.6rem 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1 data-i18n="siteName">SENERGY</h1>
+        <p class="siteTagline" data-i18n="siteTagline">A WEBSITE FOR SEN PARENTS AND STUDENTS</p>
+        <div class="lang-switch" aria-label="Language switcher">
+            <button class="lang-btn" id="lang-en" type="button">English</button>
+            <button class="lang-btn" id="lang-zh" type="button">繁體中文</button>
+        </div>
+    </header>
+    <nav>
+        <a href="index.html" data-i18n="navHome">Home</a>
+        <a href="stories.html" data-i18n="navStories">Through Their Eyes</a>
+        <a href="help.html" data-i18n="navHelp">Seek For Help!!</a>
+        <a href="community.html" data-i18n="navCommunity">Community Events</a>
+    </nav>
+    <div class="controls">
+        <input id="searchInput" type="text" placeholder="Search center name or specialty..." aria-label="Search SEN centers" data-i18n-placeholder="searchPlaceholder" data-i18n-aria="searchAria">
+        <select id="districtFilter" aria-label="Filter by district" data-i18n-aria="districtAria">
+            <option value="" data-i18n="allDistricts">All Districts</option>
+        </select>
+        <button id="findNearestBtn" data-i18n="findNearest">📍 Find Nearest Centers</button>
+    </div>
+    <div class="map-wrap">
+        <div id="centersMap" aria-label="Map of SEN centers"></div>
+    </div>
+    <p id="statusText" class="status" data-i18n="loadingCenters">Loading SEN centers...</p>
+    <div id="resultsGrid" class="grid"></div>
+
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-analytics.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDL62dbVwFztRKd8I3g6ozbg-wNo4oNwrI",
+            authDomain: "senergy-dcd69.firebaseapp.com",
+            projectId: "senergy-dcd69",
+            storageBucket: "senergy-dcd69.firebasestorage.app",
+            messagingSenderId: "727155581900",
+            appId: "1:727155581900:web:eb5201a23cc5897241b369",
+            measurementId: "G-KE822ZK449"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getFirestore(app);
+        void analytics;
+        void db;
+
+        const searchInput = document.getElementById("searchInput");
+        const districtFilter = document.getElementById("districtFilter");
+        const resultsGrid = document.getElementById("resultsGrid");
+        const statusText = document.getElementById("statusText");
+        const mapElement = document.getElementById("centersMap");
+        const collectionCandidates = ["Centers", "Senergy", "sen_centers"];
+        const HK_CENTER = [22.3193, 114.1694];
+        const HK_BOUNDS = [[22.15, 113.83], [22.58, 114.45]];
+        const HK_LAT_RANGE = [22.15, 22.58];
+        const HK_LNG_RANGE = [113.83, 114.45];
+        const SHOW_COORD_DEBUG = false;
+        let currentLang = localStorage.getItem("senergy_lang") || "en";
+
+        const TRANSLATIONS = {
+            en: {
+                pageTitle: "SENERGY | Seek Help",
+                siteName: "SENERGY",
+                siteTagline: "A WEBSITE FOR SEN PARENTS AND STUDENTS",
+                navHome: "Home",
+                navStories: "Through Their Eyes",
+                navHelp: "Seek For Help!!",
+                navCommunity: "Community Events",
+                searchPlaceholder: "Search center name or specialty...",
+                searchAria: "Search SEN centers",
+                districtAria: "Filter by district",
+                allDistricts: "All Districts",
+                findNearest: "📍 Find Nearest Centers",
+                loadingCenters: "Loading SEN centers...",
+                noCenters: "No centers found. Try a different keyword or district.",
+                showingCenters: "Showing {count} center(s).",
+                phoneLabel: "Phone",
+                emailLabel: "Email",
+                websiteLabel: "Website",
+                addressLabel: "Address",
+                specialtyLabel: "Specialty",
+                distanceAway: "km away",
+                noChineseCenters: "No Chinese center data found.",
+                unnamedCenter: "Unnamed Center",
+                notAvailable: "N/A",
+                clickToMap: "Click to show this center on map"
+            },
+            zh: {
+                pageTitle: "SENERGY | 尋找支援",
+                siteName: "SENERGY",
+                siteTagline: "A WEBSITE FOR SEN PARENTS AND STUDENTS",
+                navHome: "首頁",
+                navStories: "他們的故事",
+                navHelp: "需要支援",
+                navCommunity: "社區活動",
+                searchPlaceholder: "搜尋中心名稱或服務範疇...",
+                searchAria: "搜尋 SEN 中心",
+                districtAria: "按地區篩選",
+                allDistricts: "所有地區",
+                findNearest: "📍 尋找最近中心",
+                loadingCenters: "正在載入 SEN 中心...",
+                noCenters: "找不到符合的中心，請嘗試其他關鍵字或地區。",
+                showingCenters: "顯示 {count} 個中心",
+                phoneLabel: "電話",
+                emailLabel: "電郵",
+                websiteLabel: "網站",
+                addressLabel: "地址",
+                specialtyLabel: "服務重點",
+                distanceAway: "公里",
+                noChineseCenters: "找不到中文中心資料。",
+                unnamedCenter: "未命名中心",
+                notAvailable: "未提供",
+                clickToMap: "點擊可在地圖顯示此中心"
+            }
+        };
+
+        function t(key, fallback = "") {
+            return (TRANSLATIONS[currentLang] && TRANSLATIONS[currentLang][key]) || fallback;
+        }
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            const map = TRANSLATIONS[currentLang] || TRANSLATIONS.en;
+            document.documentElement.lang = currentLang === "zh" ? "zh-Hant" : "en";
+            document.title = map.pageTitle;
+
+            document.querySelectorAll("[data-i18n]").forEach((el) => {
+                const key = el.getAttribute("data-i18n");
+                if (map[key]) el.textContent = map[key];
+            });
+
+            document.getElementById("lang-en").classList.toggle("active", currentLang === "en");
+            document.getElementById("lang-zh").classList.toggle("active", currentLang === "zh");
+            localStorage.setItem("senergy_lang", lang);
+            
+            // Reveal page after translations applied
+            if (document.documentElement.getAttribute("data-lang-pending") === "zh") {
+                document.documentElement.removeAttribute("data-lang-pending");
+                document.body.style.display = "";
+            }
+            
+            // Map-specific updates
+            if (typeof refreshDistrictOptions === "function") {
+                refreshDistrictOptions();
+                applyFilters();
+            }
+        }
+
+        let centers = [];
+        let map;
+        let markersLayer;
+        let selectedCenterMarker;
+        let userLocation = null;
+        let userMarker = null;
+        const houseIcon = L.divIcon({
+            className: "house-pin",
+            html: "&#127968;",
+            iconSize: [34, 34],
+            iconAnchor: [17, 30],
+            popupAnchor: [0, -20]
+        });
+
+        function readField(fieldObject, fieldName) {
+            const field = fieldObject?.[fieldName] || {};
+            if (field.stringValue !== undefined) return field.stringValue;
+            if (field.doubleValue !== undefined) return Number(field.doubleValue);
+            if (field.integerValue !== undefined) return Number(field.integerValue);
+            return "";
+        }
+
+        function readFirstAvailableField(fieldObject, names) {
+            for (const name of names) {
+                const value = readField(fieldObject, name);
+                if (value !== "") return value;
+            }
+            return "";
+        }
+
+        function readGeoPointField(fieldObject, names) {
+            for (const name of names) {
+                const geoPoint = fieldObject?.[name]?.geoPointValue;
+                if (!geoPoint) continue;
+
+                const latitude = Number(geoPoint.latitude);
+                const longitude = Number(geoPoint.longitude);
+                if (Number.isFinite(latitude) && Number.isFinite(longitude)) {
+                    return { latitude, longitude, sourceField: name };
+                }
+            }
+
+            return { latitude: NaN, longitude: NaN, sourceField: "" };
+        }
+
+        function readDocumentId(documentPath) {
+            if (!documentPath) return "";
+            const parts = documentPath.split("/");
+            const rawId = parts[parts.length - 1] || "";
+            try {
+                return decodeURIComponent(rawId);
+            } catch {
+                return rawId;
+            }
+        }
+
+        function normalizeWebsiteUrl(url) {
+            if (!url) return "";
+            return /^https?:\/\//i.test(url) ? url : `https://${url}`;
+        }
+
+        function parseCoordinateNumber(value) {
+            if (typeof value === "number" && Number.isFinite(value)) return value;
+            if (typeof value !== "string" || value.trim() === "") return NaN;
+
+            const cleaned = value.trim().replace(/,/g, "");
+            const direct = Number(cleaned);
+            if (Number.isFinite(direct) && direct !== 0) return direct;
+            if (direct === 0 && cleaned === "0") return 0;
+
+            const matched = cleaned.match(/-?\d+(?:\.\d+)?/);
+            if (!matched) return NaN;
+
+            let numeric = Number(matched[0]);
+            if (!Number.isFinite(numeric)) return NaN;
+
+            // Support values like "22.30 N" / "114.17 E" / "22.30 S" / "114.17 W".
+            if (/\b[SW]\b/i.test(cleaned)) {
+                numeric = -Math.abs(numeric);
+            }
+
+            return numeric;
+        }
+
+        function parseCoordinatePair(value) {
+            if (typeof value !== "string") {
+                return { latitude: NaN, longitude: NaN };
+            }
+
+            const looksLikeCoordinate = /[,\[\]\(\)°]|\b[NSEW]\b/i.test(value);
+            if (!looksLikeCoordinate) {
+                return { latitude: NaN, longitude: NaN };
+            }
+
+            // Supports formats like:
+            // [22.467828° N, 113.998375° E]
+            // 22.467828 N, 113.998375 E
+            const parts = value.split(",");
+            if (parts.length >= 2) {
+                const lat = parseCoordinateNumber(parts[0]);
+                const lng = parseCoordinateNumber(parts[1]);
+                return { latitude: lat, longitude: lng };
+            }
+
+            const values = value.match(/-?\d+(?:\.\d+)?/g);
+            if (!values || values.length < 2) {
+                return { latitude: NaN, longitude: NaN };
+            }
+
+            return {
+                latitude: Number(values[0]),
+                longitude: Number(values[1])
+            };
+        }
+
+        function findCoordinateFromAnyField(fieldObject) {
+            const entries = Object.entries(fieldObject || {});
+            for (const [fieldName, field] of entries) {
+                if (field?.geoPointValue) {
+                    const latitude = Number(field.geoPointValue.latitude);
+                    const longitude = Number(field.geoPointValue.longitude);
+                    if (Number.isFinite(latitude) && Number.isFinite(longitude)) {
+                        return {
+                            latitude,
+                            longitude,
+                            rawCoordinate: `${latitude}, ${longitude}`,
+                            sourceField: fieldName
+                        };
+                    }
+                }
+
+                const fieldNameLooksLikeCoordinate = /(coord|coordinate|lat|lng|long|geo|location|map)/i.test(fieldName);
+
+                if (field?.stringValue && fieldNameLooksLikeCoordinate) {
+                    const pair = parseCoordinatePair(field.stringValue);
+                    if (Number.isFinite(pair.latitude) && Number.isFinite(pair.longitude)) {
+                        return {
+                            latitude: pair.latitude,
+                            longitude: pair.longitude,
+                            rawCoordinate: field.stringValue,
+                            sourceField: fieldName
+                        };
+                    }
+                }
+
+                if (field?.mapValue?.fields) {
+                    const mapLat = readFirstAvailableField(field.mapValue.fields, ["Latitude", "latitude", "Lat", "lat", "y", "Y"]);
+                    const mapLng = readFirstAvailableField(field.mapValue.fields, ["Longitude", "longitude", "Lng", "lng", "Long", "long", "x", "X"]);
+                    const latitude = parseCoordinateNumber(mapLat);
+                    const longitude = parseCoordinateNumber(mapLng);
+                    if (Number.isFinite(latitude) && Number.isFinite(longitude)) {
+                        return {
+                            latitude,
+                            longitude,
+                            rawCoordinate: `${mapLat}, ${mapLng}`,
+                            sourceField: fieldName
+                        };
+                    }
+                }
+            }
+
+            return { latitude: NaN, longitude: NaN, rawCoordinate: "", sourceField: "" };
+        }
+
+        function normalizeLatLng(latitudeValue, longitudeValue, centerName) {
+            const latitude = Number(latitudeValue);
+            const longitude = Number(longitudeValue);
+
+            if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) {
+                return { latitude: "", longitude: "" };
+            }
+
+            const inRange = (value, [min, max]) => value >= min && value <= max;
+            const validAsIs = inRange(latitude, HK_LAT_RANGE) && inRange(longitude, HK_LNG_RANGE);
+            if (validAsIs) {
+                return { latitude, longitude };
+            }
+
+            const validWhenSwapped = inRange(longitude, HK_LAT_RANGE) && inRange(latitude, HK_LNG_RANGE);
+            if (validWhenSwapped) {
+                console.warn(`Swapped Latitude/Longitude detected for ${centerName || "a center"}. Auto-corrected.`);
+                return { latitude: longitude, longitude: latitude };
+            }
+
+            console.warn(`Invalid HK coordinates for ${centerName || "a center"}:`, latitude, longitude);
+            return { latitude: "", longitude: "" };
+        }
+
+        function containsChinese(text) {
+            return typeof text === "string" && /[\u3400-\u9FFF\uF900-\uFAFF]/.test(text);
+        }
+
+        function toLangValue(raw, lang) {
+            if (!raw) return "";
+            const value = String(raw).trim();
+            if (!value) return "";
+            if (lang === "zh") return containsChinese(value) ? value : "";
+            return containsChinese(value) ? "" : value;
+        }
+
+        function localizeCenterField(center, enKey, zhKey) {
+            return currentLang === "zh" ? (center[zhKey] || "") : (center[enKey] || "");
+        }
+
+        function getCenterName(center) {
+            return localizeCenterField(center, "nameEn", "nameZh");
+        }
+
+        function getCenterDistrict(center) {
+            return localizeCenterField(center, "districtEn", "districtZh");
+        }
+
+        function getCenterSpecialty(center) {
+            return localizeCenterField(center, "specialtyEn", "specialtyZh");
+        }
+
+        function getCenterLocation(center) {
+            return localizeCenterField(center, "locationEn", "locationZh");
+        }
+
+        function hasChineseCenterData(center) {
+            return Boolean(center.nameZh && center.districtZh);
+        }
+
+        function getVisibleCentersByLanguage(items) {
+            if (currentLang !== "zh") return items;
+            return items.filter(hasChineseCenterData);
+        }
+
+        function refreshDistrictOptions() {
+            const previousValue = districtFilter.value;
+            buildDistrictOptions(centers);
+            const stillExists = Array.from(districtFilter.options).some((option) => option.value === previousValue);
+            districtFilter.value = stillExists ? previousValue : "";
+        }
+
+        function buildDistrictOptions(items) {
+            districtFilter.innerHTML = "";
+            const allOption = document.createElement("option");
+            allOption.value = "";
+            allOption.textContent = t("allDistricts", "All Districts");
+            districtFilter.appendChild(allOption);
+
+            const districtSet = new Set(
+                getVisibleCentersByLanguage(items)
+                    .map((item) => getCenterDistrict(item))
+                    .filter(Boolean)
+            );
+            [...districtSet].sort().forEach((district) => {
+                const option = document.createElement("option");
+                option.value = district;
+                option.textContent = district;
+                districtFilter.appendChild(option);
+            });
+        }
+
+        function initMap() {
+            if (!mapElement || map) return;
+
+            map = L.map(mapElement, {
+                maxBounds: HK_BOUNDS,
+                maxBoundsViscosity: 1.0,
+                minZoom: 10
+            }).setView(HK_CENTER, 11);
+            L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
+                maxZoom: 20,
+                subdomains: "abcd",
+                attribution: "&copy; OpenStreetMap contributors &copy; CARTO"
+            }).addTo(map);
+
+            L.control.scale({ imperial: false }).addTo(map);
+
+            markersLayer = L.layerGroup().addTo(map);
+        }
+
+        function updateMapMarkers(items) {
+            if (!map || !markersLayer) return;
+
+            markersLayer.clearLayers();
+            if (selectedCenterMarker) {
+                map.removeLayer(selectedCenterMarker);
+                selectedCenterMarker = null;
+            }
+            const validCenters = items.filter((center) => Number.isFinite(center.latitude) && Number.isFinite(center.longitude));
+
+            if (validCenters.length === 0) {
+                map.setView(HK_CENTER, 11);
+                return;
+            }
+
+            const bounds = [];
+            validCenters.forEach((center) => {
+                const latLng = [center.latitude, center.longitude];
+                bounds.push(latLng);
+
+                const centerName = getCenterName(center) || t("unnamedCenter", "Unnamed Center");
+                const centerDistrict = getCenterDistrict(center);
+                const centerLocation = getCenterLocation(center);
+
+                const marker = L.circleMarker(latLng, {
+                    radius: 7,
+                    color: "#9a4f10",
+                    weight: 2,
+                    fillColor: "#f39c3d",
+                    fillOpacity: 0.95
+                }).addTo(markersLayer);
+                marker.bindPopup(`
+                    <b>${centerName}</b><br>
+                    ${centerDistrict || ""}<br>
+                    ${centerLocation || ""}
+                `);
+            });
+
+            if (bounds.length === 1) {
+                map.setView(bounds[0], 14);
+                return;
+            }
+
+            map.fitBounds(bounds, { padding: [30, 30], maxZoom: 14 });
+        }
+
+        function focusCenterOnMap(center) {
+            if (!map || !Number.isFinite(center.latitude) || !Number.isFinite(center.longitude)) {
+                return;
+            }
+
+            if (selectedCenterMarker) {
+                map.removeLayer(selectedCenterMarker);
+            }
+
+            const latLng = [center.latitude, center.longitude];
+            const centerName = getCenterName(center) || t("unnamedCenter", "Unnamed Center");
+            const centerLocation = getCenterLocation(center);
+            selectedCenterMarker = L.marker(latLng, { icon: houseIcon }).addTo(map);
+            selectedCenterMarker.bindPopup(`
+                <b>${centerName}</b><br>
+                ${centerLocation || ""}
+            `).openPopup();
+
+            map.setView(latLng, 15);
+        }
+
+        function calculateDistance(lat1, lng1, lat2, lng2) {
+            const R = 6371; // Earth's radius in km
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLng = (lng2 - lng1) * Math.PI / 180;
+            const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                      Math.sin(dLng / 2) * Math.sin(dLng / 2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            return R * c;
+        }
+
+        function sortCentersByDistance() {
+            if (!userLocation) return;
+            centers.sort((a, b) => {
+                if (!Number.isFinite(a.latitude) || !Number.isFinite(a.longitude)) return 1;
+                if (!Number.isFinite(b.latitude) || !Number.isFinite(b.longitude)) return -1;
+                const distA = calculateDistance(userLocation.latitude, userLocation.longitude, a.latitude, a.longitude);
+                const distB = calculateDistance(userLocation.latitude, userLocation.longitude, b.latitude, b.longitude);
+                return distA - distB;
+            });
+        }
+
+        function requestUserLocation() {
+            if (!navigator.geolocation) {
+                alert(currentLang === "zh" ? "你的瀏覽器不支援定位功能。" : "Geolocation is not supported by your browser.");
+                return;
+            }
+
+            statusText.textContent = currentLang === "zh" ? "📍 正在取得你的位置..." : "📍 Getting your location...";
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    userLocation = {
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude
+                    };
+
+                    // Add user marker to map
+                    if (userMarker) map.removeLayer(userMarker);
+                    userMarker = L.marker([userLocation.latitude, userLocation.longitude], {
+                        icon: L.divIcon({
+                            className: "user-location-pin",
+                            html: "📍",
+                            iconSize: [30, 30],
+                            iconAnchor: [15, 30]
+                        })
+                    }).addTo(map);
+                    userMarker.bindPopup(currentLang === "zh" ? "你的位置" : "Your location").openPopup();
+
+                    // Sort centers by distance and re-render with filters
+                    sortCentersByDistance();
+                    applyFilters();
+
+                    statusText.textContent = currentLang === "zh" ? "📍 已按距離排序，點擊中心可在地圖查看。" : "📍 Sorted by nearest centers. Click on a center name to view distance.";
+                },
+                (error) => {
+                    console.error("Geolocation error:", error);
+                    let message = currentLang === "zh" ? "無法取得你的位置。" : "Unable to get your location. ";
+                    if (error.code === 1) {
+                        message += currentLang === "zh" ? "你已拒絕定位權限，請在瀏覽器設定中允許。" : "Permission denied. Please enable location access in your browser settings.";
+                    } else if (error.code === 2) {
+                        message += currentLang === "zh" ? "目前無法定位，請稍後再試。" : "Position unavailable. Please try again.";
+                    } else if (error.code === 3) {
+                        message += currentLang === "zh" ? "定位逾時，請再試一次。" : "Request timed out. Please try again.";
+                    }
+                    alert(message);
+                    statusText.textContent = currentLang === "zh" ? "定位失敗，正在顯示所有中心。" : "Geolocation failed. Showing all centers.";
+                }
+            );
+        }
+
+        function renderCenters(items) {
+            resultsGrid.innerHTML = "";
+            const visibleItems = getVisibleCentersByLanguage(items);
+            updateMapMarkers(visibleItems);
+
+            if (visibleItems.length === 0) {
+                statusText.textContent = currentLang === "zh"
+                    ? t("noChineseCenters", "No Chinese center data found.")
+                    : t("noCenters", "No centers found. Try a different keyword or district.");
+                return;
+            }
+
+            statusText.textContent = t("showingCenters", "Showing {count} center(s).").replace("{count}", visibleItems.length);
+            visibleItems.forEach((center) => {
+                const card = document.createElement("div");
+                card.className = "card";
+                if (Number.isFinite(center.latitude) && Number.isFinite(center.longitude)) {
+                    card.classList.add("clickable");
+                    card.title = t("clickToMap", "Click to show this center on map");
+                    card.addEventListener("click", () => focusCenterOnMap(center));
+                }
+                const centerName = getCenterName(center) || t("unnamedCenter", "Unnamed Center");
+                const centerLocation = getCenterLocation(center) || t("notAvailable", "N/A");
+                const centerSpecialty = getCenterSpecialty(center) || t("notAvailable", "N/A");
+                const websiteRow = center.website
+                    ? `<p><b>${t("websiteLabel", "Website")}:</b> <a href="${normalizeWebsiteUrl(center.website)}" target="_blank" rel="noopener noreferrer">${center.website}</a></p>`
+                    : "";
+                const debugRow = SHOW_COORD_DEBUG
+                    ? `<p class="coord-debug"><b>Debug:</b> rawLat=${center.rawLatitude || "(empty)"} | rawLng=${center.rawLongitude || "(empty)"} | rawCoordinate=${center.rawCoordinate || "(empty)"} | geoPoint=(${center.geoPointLatitude || "(empty)"}, ${center.geoPointLongitude || "(empty)"}) | source=${center.coordinateSource || "(none)"} | parsed=(${center.latitude || "NaN"}, ${center.longitude || "NaN"})</p>`
+                    : "";
+                const distanceRow = userLocation && Number.isFinite(center.latitude) && Number.isFinite(center.longitude)
+                    ? `<p class="card-distance">📍 ${calculateDistance(userLocation.latitude, userLocation.longitude, center.latitude, center.longitude).toFixed(1)} ${t("distanceAway", "km away")}</p>`
+                    : "";
+                card.innerHTML = `
+                    <h3>${centerName}</h3>
+                    <p><b>${t("phoneLabel", "Phone")}:</b> ${center.phone || t("notAvailable", "N/A")}</p>
+                    <p><b>${t("emailLabel", "Email")}:</b> ${center.email || t("notAvailable", "N/A")}</p>
+                    ${websiteRow}
+                    <p><b>${t("addressLabel", "Address")}:</b> ${centerLocation}</p>
+                    <p><b>${t("specialtyLabel", "Specialty")}:</b> ${centerSpecialty}</p>
+                    ${distanceRow}
+                    ${debugRow}
+                `;
+                resultsGrid.appendChild(card);
+            });
+        }
+
+        function applyFilters() {
+            const keyword = searchInput.value.trim().toLowerCase();
+            const district = districtFilter.value;
+            const visibleCenters = getVisibleCentersByLanguage(centers);
+            const filtered = visibleCenters.filter((center) => {
+                const text = `${getCenterName(center)} ${getCenterSpecialty(center)} ${getCenterLocation(center)} ${center.phone} ${center.email} ${center.website}`.toLowerCase();
+                const keywordMatch = !keyword || text.includes(keyword);
+                const districtMatch = !district || getCenterDistrict(center) === district;
+                return keywordMatch && districtMatch;
+            });
+            renderCenters(filtered);
+        }
+
+        async function fetchCollectionDocuments(projectId, apiKey, collectionName) {
+            const endpoint = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/${collectionName}?key=${apiKey}`;
+            const response = await fetch(endpoint);
+            if (!response.ok) {
+                return null;
+            }
+            const data = await response.json();
+            return data.documents || [];
+        }
+
+        async function loadCentersFromFirestore() {
+            const projectId = firebaseConfig.projectId;
+            const apiKey = firebaseConfig.apiKey;
+
+            if (!projectId || !apiKey) {
+                statusText.textContent = "Firebase config is missing in help.html.";
+                return;
+            }
+
+            try {
+                let documents = [];
+                for (const collectionName of collectionCandidates) {
+                    const found = await fetchCollectionDocuments(projectId, apiKey, collectionName);
+                    if (found && found.length > 0) {
+                        documents = found;
+                        break;
+                    }
+                }
+
+                if (documents.length === 0) {
+                    statusText.textContent = "No Firestore records found. Check collection name and rules.";
+                    return;
+                }
+
+                centers = documents.map((doc) => {
+                    const rawLatitude = readFirstAvailableField(doc.fields, [
+                        "Latitude", "latitude", "Lat", "lat", "LAT", "y", "Y"
+                    ]);
+                    const rawLongitude = readFirstAvailableField(doc.fields, [
+                        "Longitude", "longitude", "Lng", "lng", "Long", "long", "LNG", "x", "X"
+                    ]);
+                    const rawCoordinate = readFirstAvailableField(doc.fields, [
+                        "coordinate", "Coordinate", "Coordinates", "coordinates"
+                    ]);
+                    const geoPoint = readGeoPointField(doc.fields, [
+                        "coordinate", "Coordinate", "Coordinates", "coordinates", "location", "Location"
+                    ]);
+                    const fallbackAnyField = findCoordinateFromAnyField(doc.fields);
+                    const numericLatitude = parseCoordinateNumber(rawLatitude);
+                    const numericLongitude = parseCoordinateNumber(rawLongitude);
+                    const pairFromCoordinate = parseCoordinatePair(rawCoordinate);
+                    const nameRaw = readFirstAvailableField(doc.fields, ["Name", "name"]) || readDocumentId(doc.name);
+                    const nameZhRaw = readFirstAvailableField(doc.fields, ["中心", "名稱", "中心名稱", "Name_zh", "name_zh", "NameZh", "nameZh", "NameTC", "nameTC", "ChineseName", "nameChinese"]);
+                    const districtRaw = readFirstAvailableField(doc.fields, ["District", "district"]);
+                    const districtZhRaw = readFirstAvailableField(doc.fields, ["地區", "行政區", "District_zh", "district_zh", "DistrictZh", "districtZh", "DistrictTC", "districtTC", "ChineseDistrict"]);
+                    const specialtyRaw = readFirstAvailableField(doc.fields, ["Introduction", "specialty", "Specialty"]);
+                    const specialtyZhRaw = readFirstAvailableField(doc.fields, ["簡介", "介紹", "服務", "服務重點", "Introduction_zh", "introduction_zh", "Specialty_zh", "specialty_zh", "SpecialtyZh", "specialtyZh"]);
+                    const locationRaw = readFirstAvailableField(doc.fields, ["Locations", "location", "Address", "address"]);
+                    const locationZhRaw = readFirstAvailableField(doc.fields, ["地址", "地點", "位置", "Locations_zh", "location_zh", "Address_zh", "address_zh", "LocationZh", "locationZh"]);
+
+                    const centerName = nameRaw || nameZhRaw;
+                    
+                    let finalLatitude, finalLongitude;
+                    if (Number.isFinite(numericLatitude) && Number.isFinite(numericLongitude)) {
+                        finalLatitude = numericLatitude;
+                        finalLongitude = numericLongitude;
+                    } else if (Number.isFinite(geoPoint.latitude) && Number.isFinite(geoPoint.longitude)) {
+                        finalLatitude = geoPoint.latitude;
+                        finalLongitude = geoPoint.longitude;
+                    } else if (Number.isFinite(pairFromCoordinate.latitude) && Number.isFinite(pairFromCoordinate.longitude)) {
+                        finalLatitude = pairFromCoordinate.latitude;
+                        finalLongitude = pairFromCoordinate.longitude;
+                    } else if (Number.isFinite(fallbackAnyField.latitude) && Number.isFinite(fallbackAnyField.longitude)) {
+                        finalLatitude = fallbackAnyField.latitude;
+                        finalLongitude = fallbackAnyField.longitude;
+                    } else {
+                        finalLatitude = "";
+                        finalLongitude = "";
+                    }
+                    
+                    const normalizedPoint = normalizeLatLng(finalLatitude, finalLongitude, centerName);
+
+                    return {
+                        latitude: normalizedPoint.latitude,
+                        longitude: normalizedPoint.longitude,
+                        rawLatitude,
+                        rawLongitude,
+                        geoPointLatitude: Number.isFinite(geoPoint.latitude) ? geoPoint.latitude : "",
+                        geoPointLongitude: Number.isFinite(geoPoint.longitude) ? geoPoint.longitude : "",
+                        rawCoordinate: rawCoordinate || fallbackAnyField.rawCoordinate,
+                        coordinateSource: geoPoint.sourceField || fallbackAnyField.sourceField,
+                        nameEn: toLangValue(nameRaw, "en"),
+                        nameZh: toLangValue(nameZhRaw, "zh") || toLangValue(nameRaw, "zh"),
+                        districtEn: toLangValue(districtRaw, "en"),
+                        districtZh: toLangValue(districtZhRaw, "zh") || toLangValue(districtRaw, "zh"),
+                        specialtyEn: toLangValue(specialtyRaw, "en"),
+                        specialtyZh: toLangValue(specialtyZhRaw, "zh") || toLangValue(specialtyRaw, "zh"),
+                        locationEn: toLangValue(locationRaw, "en"),
+                        locationZh: toLangValue(locationZhRaw, "zh") || toLangValue(locationRaw, "zh"),
+                        phone: readFirstAvailableField(doc.fields, ["phone number", "phone", "phoneNumber"]),
+                        email: readFirstAvailableField(doc.fields, ["Email", "email"]),
+                        website: readFirstAvailableField(doc.fields, ["Website", "website"])
+                    };
+                });
+
+                refreshDistrictOptions();
+                applyFilters();
+            } catch (error) {
+                statusText.textContent = "Could not load data from Firestore. Check config, CORS, and Firestore rules.";
+                console.error("Firestore fetch failed:", error);
+            }
+        }
+
+        searchInput.addEventListener("input", applyFilters);
+        districtFilter.addEventListener("change", applyFilters);
+        document.getElementById("findNearestBtn").addEventListener("click", requestUserLocation);
+        document.getElementById("lang-en").addEventListener("click", () => setLanguage("en"));
+        document.getElementById("lang-zh").addEventListener("click", () => setLanguage("zh"));
+
+        // Initialize language from storage or default
+        setLanguage(localStorage.getItem("senergy_lang") || "en");
+
+        initMap();
+        loadCentersFromFirestore();
+    </script>
+    <script src="nav-active.js"></script>
+</body>
+</html>

@@ -1,0 +1,864 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attention Deficit Hyperactivity Disorder (ADHD) | Through Their Eyes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #E67E22;
+            --peach: #FAD7A0;
+            --bg: #FFF9F0;
+            --text: #5D4037;
+            --card: #FFFFFF;
+            --muted: #7A5A4F;
+            --nav-dark: #CC6B1D;
+            --nav-light: #E98D3A;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: 'Atkinson Hyperlegible', sans-serif;
+            background: radial-gradient(circle at top right, #ffe8cc 0%, var(--bg) 40%, #fffdf9 100%);
+            color: var(--text);
+            line-height: 1.75;
+            letter-spacing: 0.01em;
+        }
+
+        header {
+            text-align: center;
+            padding: 2.5rem 1rem 3.2rem; 
+            background: linear-gradient(180deg, var(--peach) 0%, var(--bg) 100%); 
+        }
+        h1 { font-size: clamp(2.2rem, 5vw, 3rem); color: var(--primary); margin: 0; }
+        .siteTagline { margin: 0.6rem auto 0; max-width: 760px; padding: 0 1rem; color: var(--muted); }
+
+        nav { /*Nav背景*/
+            background: linear-gradient(90deg, var(--nav-dark) 0%, var(--nav-light) 100%); 
+            padding: 0.9rem 1rem; 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000; 
+            box-shadow: 0 4px 14px rgba(93, 64, 55, 0.18);
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        nav a { /*Nav字體大細*/
+            text-decoration: none; 
+            color: #fff; 
+            font-weight: bold; 
+            font-size: 1rem; 
+            padding: 0.45rem 0.85rem; 
+            border-radius: 999px; 
+            transition: 0.25s ease; 
+        }
+        nav a:hover { background-color: rgba(255, 255, 255, 0.22); color: #fff7e8; }
+
+        /* Language Switcher */
+        .lang-switch { 
+            width: min(100%, 960px); 
+            margin: 0.9rem auto 0; 
+            padding: 0 1rem; 
+            display: flex; 
+            gap: 8px; 
+            justify-content: flex-end; 
+        }
+        .lang-btn { 
+            border: 1px solid #e4b98a; 
+            background: #fff4e6; 
+            color: #7d4b24; 
+            border-radius: 999px; 
+            padding: 0.3rem 0.8rem; 
+            font-family: inherit; 
+            font-weight: 700; 
+            cursor: pointer; 
+            transition: 0.2s;
+        }
+        .lang-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+        .main-wrap {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 1rem 1rem 2.6rem;
+        }
+
+        .carousel-card,
+        .intro-card {
+            background: var(--card);
+            border-radius: 18px;
+            box-shadow: 0 8px 24px rgba(93, 64, 55, 0.12);
+            border: 1px solid #f5ddc5;
+        }
+
+        .carousel-card {
+            padding: 1rem 1rem 1.2rem;
+        }
+
+        .carousel-shell {
+            position: relative;
+            overflow: hidden;
+            border-radius: 14px;
+            background: #fff4e9;
+            width: 100%;
+            max-height: 70vh;
+        }
+
+        .carousel-track {
+            display: flex;
+            align-items: center;
+            transition: transform 0.35s ease;
+        }
+
+        .slide {
+            min-width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 180px;
+            padding: 0.6rem;
+        }
+
+        .slide img {
+            width: auto;
+            height: auto;
+            max-width: 100%;
+            max-height: 70vh;
+            object-fit: contain;
+            border-radius: 10px;
+            background: #fff;
+        }
+
+        .empty-slide {
+            color: #8b6b60;
+            font-weight: 600;
+            text-align: center;
+            padding: 1.5rem;
+            max-width: 620px;
+        }
+
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            border-radius: 999px;
+            width: 40px;
+            height: 40px;
+            background: rgba(93, 64, 55, 0.75);
+            color: #fff;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .carousel-btn:hover { background: rgba(93, 64, 55, 0.9); }
+        .carousel-btn.prev { left: 10px; }
+        .carousel-btn.next { right: 10px; }
+
+        .dots {
+            margin-top: 0.9rem;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            border: none;
+            background: #e2c9b3;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .dot.active { background: var(--primary); }
+
+        .intro-card {
+            margin-top: 1.5rem;
+            text-align: left;
+            padding: 1.2rem 1.3rem;
+        }
+
+        .intro-card h2 {
+            margin: 0 0 0.5rem;
+            color: var(--primary);
+        }
+
+        .intro-card p { margin: 0.6rem 0; }
+
+        .memo-card {
+            margin-top: 1.5rem;
+            background: var(--card);
+            border-radius: 18px;
+            box-shadow: 0 8px 24px rgba(93, 64, 55, 0.12);
+            border: 1px solid #f5ddc5;
+            padding: 1.2rem 1.3rem;
+            text-align: left;
+        }
+
+        .memo-card h2 {
+            margin: 0 0 0.45rem;
+            color: var(--primary);
+        }
+
+        .memo-card p {
+            margin: 0.2rem 0 0.9rem;
+            color: var(--muted);
+        }
+
+        .memo-input-wrap {
+            display: grid;
+            gap: 0.7rem;
+        }
+
+        .memo-input {
+            width: 100%;
+            min-height: 120px;
+            resize: vertical;
+            border: 1px solid #e6c7a8;
+            border-radius: 12px;
+            padding: 0.75rem 0.85rem;
+            font: inherit;
+            color: var(--text);
+            background: #fffaf4;
+        }
+
+        .memo-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.2);
+        }
+
+        .memo-add-btn {
+            justify-self: start;
+            border: none;
+            border-radius: 999px;
+            padding: 0.52rem 1rem;
+            font: inherit;
+            font-weight: 700;
+            color: #fff;
+            background: linear-gradient(135deg, #f39c3d 0%, #e67e22 100%);
+            cursor: pointer;
+        }
+
+        .memo-list {
+            list-style: none;
+            margin: 1rem 0 0;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(12, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .memo-item {
+            border: 1px solid rgba(121, 104, 90, 0.16);
+            border-radius: 8px;
+            padding: 0.75rem 0.85rem;
+            display: grid;
+            gap: 0.55rem;
+            min-height: 150px;
+            box-shadow: 0 8px 18px rgba(74, 60, 52, 0.14);
+            position: relative;
+            grid-column: span 4;
+        }
+
+        .memo-item::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            width: 42px;
+            height: 11px;
+            transform: translateX(-50%) rotate(-2deg);
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(180, 170, 160, 0.35);
+            border-radius: 3px;
+            pointer-events: none;
+        }
+
+        .memo-item.memo-large {
+            grid-column: span 8;
+            min-height: 210px;
+            padding-top: 1.05rem;
+        }
+
+        .memo-item.memo-wide {
+            grid-column: span 6;
+        }
+
+        .memo-item.memo-yellow { background: #fff4a8; }
+        .memo-item.memo-cream { background: #f8f0cf; }
+        .memo-item.memo-lilac { background: #ece9ff; }
+        .memo-item.memo-mint { background: #dff5df; }
+        .memo-item.memo-pink { background: #ffdfe4; }
+        .memo-item.memo-blue { background: #dcebff; }
+
+        .memo-item.tilt-left { transform: rotate(-1deg); }
+        .memo-item.tilt-right { transform: rotate(1.2deg); }
+
+        .memo-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .memo-date {
+            font-size: 0.8rem;
+            color: rgba(96, 76, 63, 0.82);
+            font-weight: 700;
+        }
+
+        .memo-text {
+            white-space: pre-wrap;
+            word-break: break-word;
+            color: #5a4137;
+            font-weight: 700;
+            line-height: 1.5;
+            padding-top: 0.2rem;
+        }
+
+        .memo-delete-btn {
+            border: 1px solid rgba(125, 95, 78, 0.3);
+            background: rgba(255, 255, 255, 0.6);
+            color: #7d4f37;
+            border-radius: 999px;
+            padding: 0.18rem 0.62rem;
+            font: inherit;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .memo-empty {
+            margin-top: 0.9rem;
+            color: #8b6b60;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 1.8rem 0.9rem 2.2rem;
+            }
+
+            h1 {
+                font-size: clamp(2rem, 9vw, 2.8rem);
+            }
+
+            nav {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 8px;
+                padding: 0.7rem;
+            }
+
+            nav a {
+                margin: 0;
+                font-size: 0.92rem;
+                padding: 0.4rem 0.7rem;
+            }
+
+            .lang-switch {
+                margin-top: 0.75rem;
+                padding: 0 0.75rem;
+                justify-content: center;
+            }
+            .lang-btn {
+                min-height: 40px;
+                padding: 0.28rem 0.7rem;
+            }
+
+            .memo-add-btn {
+                width: 100%;
+                justify-self: stretch;
+            }
+
+            .memo-list {
+                grid-template-columns: repeat(1, minmax(0, 1fr));
+            }
+
+            .memo-item,
+            .memo-item.memo-large,
+            .memo-item.memo-wide {
+                grid-column: span 1;
+                min-height: 140px;
+                transform: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 data-i18n="title">Attention Deficit Hyperactivity Disorder (ADHD)</h1>
+        <p class="siteTagline" data-i18n="tagline">A fast mind that may need structure to stay on track.</p>
+        <div class="lang-switch" aria-label="Language switcher">
+            <button class="lang-btn" id="lang-en" type="button">English</button>
+            <button class="lang-btn" id="lang-zh" type="button">繁體中文</button>
+        </div>
+    </header>
+
+    <nav>
+        <a href="../index.html" data-i18n="navHome">Home</a>
+        <a href="../stories.html" data-i18n="navStories">Through Their Eyes</a>
+        <a href="../help.html" data-i18n="navHelp">Seek For Help!!</a>
+        <a href="../community.html" data-i18n="navCommunity">Community Events</a>
+    </nav>
+
+    <main class="main-wrap">
+        <section class="carousel-card" aria-label="Story image carousel">
+            <div style="text-align: left; padding: 0.5rem 0 0.5rem 0;">
+                <a href="../stories.html" data-i18n="backButton" style="display: inline-block; padding: 0.6rem 1.2rem; background: linear-gradient(135deg, #f39c3d 0%, #e67e22 100%); color: #fff; text-decoration: none; border-radius: 25px; font-weight: 700; transition: transform 0.15s ease, box-shadow 0.15s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 14px rgba(230, 126, 34, 0.25)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">← Back to Through Their Eyes</a>
+            </div>
+            <div class="carousel-shell" id="carousel-shell">
+                <div class="carousel-track" id="carousel-track"></div>
+                <button class="carousel-btn prev" type="button" id="prev-btn" aria-label="Previous slide">&#10094;</button>
+                <button class="carousel-btn next" type="button" id="next-btn" aria-label="Next slide">&#10095;</button>
+            </div>
+            <div class="dots" id="dots"></div>
+        </section>
+
+        <section class="intro-card">
+            <h2 data-i18n="intro">Introduction</h2>
+            <p data-i18n="senP1">ADHD (Attention-Deficit/Hyperactivity Disorder) is a neurodevelopmental disorder that affects a person's ability to regulate their attention, emotions, and impulses. It is not a choice, and it is not the result of "bad parenting." It is caused by differences in how the brain's chemical messengers, like dopamine help us focus and stay organized. </p>
+            <p data-i18n="senP2">It is not a choice, and it is not the result of "bad parenting." It is caused by differences in how the brain's chemical messengers, like dopamine help us focus and stay organized.</p>
+            <p data-i18n="threeFaces">The Three Faces of ADHD:</p>
+            <ul>
+                <li data-i18n="li1">Inattentive: Often called "daydreamers." They may struggle to follow long instructions, lose their belongings frequently, or get easily distracted by unrelated thoughts.</li>
+                <li data-i18n="li2">Hyperactive-Impulsive: These students feel an internal "motor" that won't stop. They may fidget, talk excessively, or act before thinking about the consequences.</li>
+                <li data-i18n="li3">Combined: This is the most common type, where the student shows a mix of both inattention and hyperactivity.</li>
+            </ul>
+            <p data-i18n="keyChars">Key Characteristics of ADHD:</p>
+            <ul>
+                <li data-i18n="li4">Working Memory: Holding information in mind while doing a task.</li>
+                <li data-i18n="li5">Emotional Control: Managing frustrations when things get difficult.</li>
+                <li data-i18n="li6">Task Initiation: Starting a project without procrastinating.</li>
+                <li data-i18n="li7">Time Management: Understanding how long a task will actually take.</li>
+            </ul>
+            <p data-i18n="helpSection">How Parents Can Help:</p>
+            <ul>
+                <li data-i18n="li8">Externalize Time: Use physical timers, clocks, or alarms. Students with ADHD often have "time blindness" and need visual cues to see time passing.</li>
+                <li data-i18n="li9">The "Power of Now": Give instructions one at a time. Long lists of chores or homework tasks can feel like a "wall of noise" to an ADHD brain.</li>
+                <li data-i18n="li10">Positive Reinforcement: ADHD students receive significantly more "corrections" than their peers. Focus on catching them doing something right to build their self-esteem.</li>
+                <li data-i18n="li11">Movement is Fuel: Allow for "heavy work" or movement breaks. For many with ADHD, moving their body actually helps their brain concentrate.</li>
+            </ul>
+            <p data-i18n="studentNote">A Note to Students!!!</p>
+            <p data-i18n="studentText">Your brain is built for speed. Many people with ADHD are "out-of-the-box" thinkers, high-energy creators, and excellent crisis managers. While sitting still in a classroom might feel like a struggle right now, your ability to hyper-focus on things you love is a major strength. You aren't "broken"—you just have a "Ferrari engine" for a brain with "bicycle brakes." Learning to use those brakes takes practice, but your engine will take you amazing places!</p>
+        </section>
+
+        <section class="memo-card" aria-label="Personal memo section">
+            <h2 data-i18n="memoTitle">Memo Board</h2>
+            <p data-i18n="memoDesc">Write anything you want to remember here.</p>
+            <div class="memo-input-wrap">
+                <textarea id="memo-input" class="memo-input" data-i18n-placeholder="memoPlaceholder" placeholder="Write your memo here..."></textarea>
+                <button id="memo-add-btn" class="memo-add-btn" type="button" data-i18n="memoAdd">Add Memo</button>
+            </div>
+            <p id="memo-empty" class="memo-empty" data-i18n="memoEmpty">No memos yet.</p>
+            <ul id="memo-list" class="memo-list" aria-live="polite"></ul>
+        </section>
+    </main>
+
+    <script>
+        const TRANSLATIONS = {
+            en: {
+                title: "Attention Deficit Hyperactivity Disorder (ADHD)",
+                tagline: "A fast mind that may need structure to stay on track.",
+                navHome: "Home",
+                navStories: "Through Their Eyes",
+                navHelp: "Seek For Help!!",
+                navCommunity: "Community Events",
+                backButton: "← Back to Through Their Eyes",
+                intro: "Introduction",
+                senP1: "ADHD (Attention-Deficit/Hyperactivity Disorder) is a neurodevelopmental disorder that affects a person's ability to regulate their attention, emotions, and impulses. It is not a choice, and it is not the result of \"bad parenting.\" It is caused by differences in how the brain's chemical messengers, like dopamine help us focus and stay organized.",
+                senP2: "It is not a choice, and it is not the result of \"bad parenting.\" It is caused by differences in how the brain's chemical messengers, like dopamine help us focus and stay organized.",
+                threeFaces: "The Three Faces of ADHD:",
+                li1:"Inattentive: Often called daydreamers. They may struggle to follow long instructions, lose their belongings frequently, or get easily distracted by unrelated thoughts",
+                li2: "Hyperactive-Impulsive: These students feel an internal motor that won't stop. They may fidget, talk excessively, or act before thinking about the consequences.",
+                li3: "Combined: This is the most common type, where the student shows a mix of both inattention and hyperactivity.",
+                keyChars: "Key Characteristics of ADHD:",
+                li4: "Working Memory: Holding information in mind while doing a task.",
+                li5: "Emotional Control: Managing frustrations when things get difficult.",
+                li6: "Task Initiation: Starting a project without procrastinating.",
+                li7: "Time Management: Understanding how long a task will actually take.",
+                helpSection: "How Parents Can Help:",
+                li8: "Externalize Time: Use physical timers, clocks, or alarms. Students with ADHD often have \"time blindness\" and need visual cues to see time passing.",
+                li9: "The \"Power of Now\": Give instructions one at a time. Long lists of chores or homework tasks can feel like a \"wall of noise\" to an ADHD brain.", 
+                li10: "Positive Reinforcement: ADHD students receive significantly more \"corrections\" than their peers. Focus on catching them doing something right to build their self-esteem.",
+                li11: "Movement is Fuel: Allow for \"heavy work\" or movement breaks.",
+                studentNote: "A Note to Students!!!",
+                studentText: "Your brain is built for speed. Many people with ADHD are \"out-of-the-box\" thinkers, high-energy creators, and excellent crisis managers. While sitting still in a classroom might feel like a struggle right now, your ability to hyper-focus on things you love is a major strength. You aren't \"broken\"—you just have a \"Ferrari engine\" for a brain with \"bicycle brakes.\" Learning to use those brakes takes practice, but your engine will take you amazing places!",
+                memoTitle: "Memo Board",
+                memoDesc: "Write anything you want to remember here.",
+                memoPlaceholder: "Write your memo here...",
+                memoAdd: "Add Memo",
+                memoEmpty: "No memos yet.",
+                memoDelete: "Delete",
+                memoLoading: "Loading memos...",
+                memoLoadFailed: "Could not load memos.",
+                memoSaveFailed: "Could not save memo.",
+                memoDeleteFailed: "Could not delete memo."
+            },
+            zh: {
+                title: "過度活躍症 (ADHD)",
+                tagline: "思維敏捷但需要結構來保持專注。",
+                navHome: "首頁",
+                navStories: "他們的故事",
+                navHelp: "需要支援",
+                navCommunity: "社區活動",
+                backButton: "← 返回他們的故事",
+                intro: "介紹",
+                senP1: "過度活躍症 (ADHD)是一種神經發育障礙，會影響一個人調節注意力、情緒及衝動的能力。",
+                senP2: "這並非患者刻意的選擇，更不是「教養不當」的結果；其成因在於大腦中負責傳遞訊息的化學物質（如多巴胺）運作方式有所不同，進而影響了專注力與組織規劃能力。",
+                threeFaces: "過度活躍症的三種表現：",
+                li1: "注意力不集中型（Inattentive）： 常被稱為「白日夢者」。他們可能難以執行冗長的指令、經常弄丟隨身物品，或容易被腦中浮現的雜念干擾。",
+                li2: "過動/衝動型（Hyperactive-Impulsive）： 這些學生體內彷彿裝了一個停不下來的「馬達」。他們可能經常扭動身體、話很多，或在思考後果前就先採取行動。",
+                li3: "混合型（Combined）： 這是最常見的類型，學生同時表現出注意力不集中與過動/衝動的特徵。",
+                keyChars: "過度活躍症的關鍵特徵：",
+                li4: "工作記憶： 在執行任務的過程中，難以同時記住相關資訊。",
+                li5: "情緒控制： 面對困難或挫折時，較難管理負面情緒。",
+                li6: "任務啟動： 難以即刻動手執行計畫，常有拖延傾向。",
+                li7: "時間管理： 難以準確評估完成一項任務實際所需的時間。",
+                helpSection: "家長可以如何協助：",
+                li8: "外化時間：使用實體計時器、時鐘或鬧鐘。ADHD學生常有「時間盲點」，需要視覺提示來感知時間的流逝。",
+                li9: "「當下的力量」：一次給予一個指令。冗長的家務或作業清單對ADHD大腦來說可能就像一堵「噪音牆」。",
+                li10: "正向強化：ADHD學生比同齡人收到更多的「糾正」。專注於發現他們做對的事情來建立自尊心。",
+                li11: "運動是燃料：允許「重體力工作」或運動休息。對許多ADHD患者來說，動一動身體實際上有助於大腦集中注意力。",
+                studentNote: "給學生的小提醒！！！",
+                studentText: "你的大腦是為了「速度」而設計的。許多 ADHD 患者都是具備框架外思維的創意家、充滿能量的創造者，更是傑出的危機處理高手。雖然目前在教室裡安靜坐著對你來說可能很辛苦，但你對熱愛事物展現出的「高度專注力（Hyper-focus）」是一項強大的優勢。你並不是「壞掉了」，你只是擁有一顆「法拉利等級的引擎」，卻暫時配備了「腳踏車等級的煞車」。學習操控這些煞車需要時間練習，但請相信，你的引擎將會帶你前往非常了不起的地方！",
+                memoTitle: "備忘錄",
+                memoDesc: "寫一些鼓勵他們的話。",
+                memoPlaceholder: "在這裡寫下你的備忘...",
+                memoAdd: "新增備忘",
+                memoEmpty: "尚未有備忘內容。",
+                memoDelete: "刪除",
+                memoLoading: "正在載入備忘...",
+                memoLoadFailed: "無法載入備忘。",
+                memoSaveFailed: "無法儲存備忘。",
+                memoDeleteFailed: "無法刪除備忘。"
+            }
+        };
+
+        function setLanguage(lang) {
+            const elements = document.querySelectorAll('[data-i18n]');
+            elements.forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (TRANSLATIONS[lang] && TRANSLATIONS[lang][key]) {
+                    el.textContent = TRANSLATIONS[lang][key];
+                }
+            });
+            const placeholderElements = document.querySelectorAll('[data-i18n-placeholder]');
+            placeholderElements.forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if (TRANSLATIONS[lang] && TRANSLATIONS[lang][key]) {
+                    el.setAttribute('placeholder', TRANSLATIONS[lang][key]);
+                }
+            });
+            updateSlidesForLanguage(lang);
+            localStorage.setItem('senergy_lang', lang);
+            updateButtonStates(lang);
+            renderMemos();
+        }
+
+        function updateButtonStates(lang) {
+            document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+            document.getElementById('lang-zh').classList.toggle('active', lang === 'zh');
+        }
+
+        document.getElementById('lang-en').addEventListener('click', () => setLanguage('en'));
+        document.getElementById('lang-zh').addEventListener('click', () => setLanguage('zh'));
+
+        const SLIDES_BY_LANG = {
+            en: [
+                'ADHD 1.jpg',
+                'ADHD 2.jpg',
+                'ADHD 3.jpg',
+                'ADHD 4.jpg',
+                'ADHD 5.jpg',
+                'ADHD 6.jpg'
+            ],
+            zh: [
+                'ADHD stories Chin/adhd 1 chin.jpg',
+                'ADHD stories Chin/adhd 2 chin.jpg',
+                'ADHD stories Chin/adhd 3 chin.jpg',
+                'ADHD stories Chin/adhd 4 chin.jpg',
+                'ADHD stories Chin/adhd 5 chin.jpg',
+                'ADHD stories Chin/adhd 6 chin.jpg'
+            ]
+        };
+        let slides = [];
+
+        const track = document.getElementById('carousel-track');
+        const dotsWrap = document.getElementById('dots');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        let current = 0;
+
+        function updateSlidesForLanguage(lang) {
+            const nextSlides = (SLIDES_BY_LANG[lang] || SLIDES_BY_LANG.en).slice();
+            const hasChanged = nextSlides.length !== slides.length || nextSlides.some((src, i) => src !== slides[i]);
+            slides = nextSlides;
+            if (current >= slides.length) current = 0;
+            if (hasChanged) buildCarousel();
+        }
+
+        function buildCarousel() {
+            track.innerHTML = '';
+            dotsWrap.innerHTML = '';
+
+            if (slides.length === 0) {
+                const empty = document.createElement('div');
+                empty.className = 'slide';
+                empty.innerHTML = '<div class="empty-slide">Upload images into this folder, then add their file names to the <code>slides</code> list in this page to show them here.</div>';
+                track.appendChild(empty);
+                prevBtn.style.display = 'none';
+                nextBtn.style.display = 'none';
+                return;
+            }
+
+            slides.forEach((src, index) => {
+                const slide = document.createElement('div');
+                slide.className = 'slide';
+                const img = document.createElement('img');
+                img.src = src;
+                img.alt = 'Attention Deficit Hyperactivity Disorder (ADHD) image ' + (index + 1);
+                slide.appendChild(img);
+                track.appendChild(slide);
+
+                const dot = document.createElement('button');
+                dot.className = 'dot';
+                dot.type = 'button';
+                dot.setAttribute('aria-label', 'Go to slide ' + (index + 1));
+                dot.addEventListener('click', () => {
+                    current = index;
+                    updateCarousel();
+                });
+                dotsWrap.appendChild(dot);
+            });
+
+            prevBtn.style.display = '';
+            nextBtn.style.display = '';
+            updateCarousel();
+        }
+
+        function updateCarousel() {
+            track.style.transform = 'translateX(' + (-current * 100) + '%)';
+            const dots = dotsWrap.querySelectorAll('.dot');
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === current);
+            });
+        }
+
+        prevBtn.addEventListener('click', () => {
+            if (!slides.length) return;
+            current = (current - 1 + slides.length) % slides.length;
+            updateCarousel();
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (!slides.length) return;
+            current = (current + 1) % slides.length;
+            updateCarousel();
+        });
+
+        const FIREBASE_CONFIG = {
+            apiKey: 'AIzaSyA5VaZ24dujHZvYGwF3kTUrsUVS7a0tCMs',
+            authDomain: 'senergy-dcd69.firebaseapp.com',
+            projectId: 'senergy-dcd69',
+            storageBucket: 'senergy-dcd69.firebasestorage.app',
+            messagingSenderId: '822056626355',
+            appId: '1:822056626355:web:4f660ea8e3f95ec6fce4f6',
+            measurementId: 'G-KWYLFMGYPQ'
+        };
+
+        const FIRESTORE_MEMO_COLLECTION = 'storyMemos';
+        const MEMO_STORY_KEY = 'adhd';
+        const FIRESTORE_API_BASE = 'https://firestore.googleapis.com/v1/projects/' + FIREBASE_CONFIG.projectId + '/databases/(default)/documents';
+
+        const memoInput = document.getElementById('memo-input');
+        const memoAddBtn = document.getElementById('memo-add-btn');
+        const memoList = document.getElementById('memo-list');
+        const memoEmpty = document.getElementById('memo-empty');
+        let memoCache = [];
+
+        function getMemoLanguage() {
+            return localStorage.getItem('senergy_lang') || 'en';
+        }
+
+        function getMemoUiText(key, fallback) {
+            const lang = getMemoLanguage();
+            return (TRANSLATIONS[lang] && TRANSLATIONS[lang][key]) || fallback;
+        }
+
+        function memoCollectionUrl() {
+            return FIRESTORE_API_BASE + '/' + encodeURIComponent(FIRESTORE_MEMO_COLLECTION) + '?key=' + encodeURIComponent(FIREBASE_CONFIG.apiKey);
+        }
+
+        function memoDocumentUrl(docId) {
+            return FIRESTORE_API_BASE + '/' + encodeURIComponent(FIRESTORE_MEMO_COLLECTION) + '/' + encodeURIComponent(docId) + '?key=' + encodeURIComponent(FIREBASE_CONFIG.apiKey);
+        }
+
+        function firestoreDocToMemo(doc) {
+            const fields = doc.fields || {};
+            const storyKey = fields.storyKey && fields.storyKey.stringValue ? fields.storyKey.stringValue : '';
+            if (storyKey !== MEMO_STORY_KEY) return null;
+
+            const text = fields.text && fields.text.stringValue ? fields.text.stringValue : '';
+            const createdAt = fields.createdAt && fields.createdAt.timestampValue ? fields.createdAt.timestampValue : '';
+            const nameParts = (doc.name || '').split('/');
+            const id = nameParts[nameParts.length - 1] || '';
+
+            if (!id || !text) return null;
+            return { id, text, createdAt };
+        }
+
+        async function loadMemosFromFirestore() {
+            memoEmpty.textContent = getMemoUiText('memoLoading', 'Loading memos...');
+            memoEmpty.style.display = '';
+            memoList.innerHTML = '';
+
+            const response = await fetch(memoCollectionUrl(), { method: 'GET' });
+            if (!response.ok) {
+                throw new Error('Failed to load memos');
+            }
+
+            const data = await response.json();
+            const docs = Array.isArray(data.documents) ? data.documents : [];
+            memoCache = docs
+                .map(firestoreDocToMemo)
+                .filter(Boolean)
+                .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+            renderMemos();
+        }
+
+        function formatMemoDate(isoString, lang) {
+            const date = new Date(isoString);
+            if (Number.isNaN(date.getTime())) return '';
+            const locale = lang === 'zh' ? 'zh-HK' : 'en-US';
+            return date.toLocaleString(locale, {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        function renderMemos() {
+            const lang = getMemoLanguage();
+            memoList.innerHTML = '';
+
+            if (!memoCache.length) {
+                memoEmpty.textContent = getMemoUiText('memoEmpty', 'No memos yet.');
+                memoEmpty.style.display = '';
+                return;
+            }
+
+            memoEmpty.style.display = 'none';
+            memoCache.forEach((memo) => {
+                const li = document.createElement('li');
+                const colorClasses = ['memo-yellow', 'memo-cream', 'memo-lilac', 'memo-mint', 'memo-pink', 'memo-blue'];
+                const tiltClasses = ['tilt-left', 'tilt-right', ''];
+                const colorClass = colorClasses[Math.abs((memo.id || '').split('').reduce((acc, ch) => acc + ch.charCodeAt(0), 0)) % colorClasses.length];
+                const tiltClass = tiltClasses[Math.abs(memo.id ? memo.id.length : 0) % tiltClasses.length];
+                const sizeClass = memo.text.length > 180 ? 'memo-large' : memo.text.length > 90 ? 'memo-wide' : '';
+                li.className = 'memo-item ' + colorClass + ' ' + tiltClass + ' ' + sizeClass;
+
+                const row = document.createElement('div');
+                row.className = 'memo-row';
+
+                const date = document.createElement('span');
+                date.className = 'memo-date';
+                date.textContent = formatMemoDate(memo.createdAt, lang);
+
+                const del = document.createElement('button');
+                del.className = 'memo-delete-btn';
+                del.type = 'button';
+                del.textContent = (TRANSLATIONS[lang] && TRANSLATIONS[lang].memoDelete) || 'Delete';
+                del.addEventListener('click', async () => {
+                    try {
+                        del.disabled = true;
+                        const response = await fetch(memoDocumentUrl(memo.id), { method: 'DELETE' });
+                        if (!response.ok) {
+                            throw new Error('Delete failed');
+                        }
+                        await loadMemosFromFirestore();
+                    } catch (error) {
+                        memoEmpty.textContent = getMemoUiText('memoDeleteFailed', 'Could not delete memo.');
+                        memoEmpty.style.display = '';
+                    } finally {
+                        del.disabled = false;
+                    }
+                });
+
+                row.appendChild(date);
+                row.appendChild(del);
+
+                const text = document.createElement('div');
+                text.className = 'memo-text';
+                text.textContent = memo.text;
+
+                li.appendChild(row);
+                li.appendChild(text);
+                memoList.appendChild(li);
+            });
+        }
+
+        async function addMemo() {
+            const text = memoInput.value.trim();
+            if (!text) return;
+
+            const body = {
+                fields: {
+                    storyKey: { stringValue: MEMO_STORY_KEY },
+                    text: { stringValue: text.slice(0, 2000) },
+                    createdAt: { timestampValue: new Date().toISOString() }
+                }
+            };
+
+            memoAddBtn.disabled = true;
+            try {
+                const response = await fetch(memoCollectionUrl(), {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+                if (!response.ok) {
+                    throw new Error('Save failed');
+                }
+                memoInput.value = '';
+                await loadMemosFromFirestore();
+            } catch (error) {
+                memoEmpty.textContent = getMemoUiText('memoSaveFailed', 'Could not save memo.');
+                memoEmpty.style.display = '';
+            } finally {
+                memoAddBtn.disabled = false;
+                memoInput.focus();
+            }
+        }
+
+        memoAddBtn.addEventListener('click', addMemo);
+        memoInput.addEventListener('keydown', (event) => {
+            if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') {
+                addMemo();
+            }
+        });
+
+        const savedLang = localStorage.getItem('senergy_lang') || 'en';
+        setLanguage(savedLang);
+        loadMemosFromFirestore().catch(() => {
+            memoEmpty.textContent = getMemoUiText('memoLoadFailed', 'Could not load memos.');
+            memoEmpty.style.display = '';
+        });
+    </script>
+    <script src="../nav-active.js"></script>
+</body>
+</html>
+
+

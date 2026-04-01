@@ -1,0 +1,499 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visual Impairment | Through Their Eyes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #E67E22;
+            --peach: #FAD7A0;
+            --bg: #FFF9F0;
+            --text: #5D4037;
+            --card: #FFFFFF;
+            --muted: #7A5A4F;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: 'Atkinson Hyperlegible', sans-serif;
+            background: radial-gradient(circle at top right, #ffe8cc 0%, var(--bg) 40%, #fffdf9 100%);
+            color: var(--text);
+            line-height: 1.75;
+            letter-spacing: 0.01em;
+        }
+
+        header {
+            text-align: center;
+            padding: 2.5rem 1rem 3.2rem;
+            background: linear-gradient(180deg, var(--peach) 0%, var(--bg) 100%);
+        }
+
+        h1 {
+            margin: 0;
+            color: var(--primary);
+            font-size: clamp(2rem, 5vw, 3rem);
+        }
+
+        .siteTagline {
+            margin: 0.6rem auto 0;
+            color: var(--muted);
+            max-width: 760px;
+            padding: 0 1rem;
+        }
+
+        nav {
+            background: linear-gradient(90deg, #CC6B1D 0%, #E98D3A 100%);
+            padding: 0.9rem 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 14px rgba(93, 64, 55, 0.18);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        nav a {
+            margin: 0;
+            text-decoration: none;
+            color: #fff;
+            font-weight: bold;
+            font-size: 1rem;
+            padding: 0.45rem 0.85rem;
+            border-radius: 999px;
+            transition: background-color 0.25s ease, color 0.25s ease;
+        }
+
+        nav a:hover {
+            background-color: rgba(255, 255, 255, 0.22);
+            color: #fff7e8;
+        }
+
+        .lang-switch {
+            margin: 0.9rem auto 0;
+            padding: 0;
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+            max-width: 800px;
+            padding: 0 1rem;
+        }
+
+        .lang-btn {
+            border: 1px solid #e4b98a;
+            background: #fff4e6;
+            color: #7d4b24;
+            border-radius: 999px;
+            padding: 0.28rem 0.75rem;
+            font-family: inherit;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .lang-btn.active {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+
+        .main-wrap {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 1rem 1rem 2.6rem;
+        }
+
+        .carousel-card,
+        .intro-card {
+            background: var(--card);
+            border-radius: 18px;
+            box-shadow: 0 8px 24px rgba(93, 64, 55, 0.12);
+            border: 1px solid #f5ddc5;
+        }
+
+        .carousel-card {
+            padding: 1rem 1rem 1.2rem;
+        }
+
+        .carousel-shell {
+            position: relative;
+            overflow: hidden;
+            border-radius: 14px;
+            background: #fff4e9;
+            width: 100%;
+            max-height: 70vh;
+        }
+
+        .carousel-track {
+            display: flex;
+            align-items: center;
+            transition: transform 0.35s ease;
+        }
+
+        .slide {
+            min-width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 180px;
+            padding: 0.6rem;
+        }
+
+        .slide img {
+            width: auto;
+            height: auto;
+            max-width: 100%;
+            max-height: 70vh;
+            object-fit: contain;
+            border-radius: 10px;
+            background: #fff;
+        }
+
+        .empty-slide {
+            color: #8b6b60;
+            font-weight: 600;
+            text-align: center;
+            padding: 1.5rem;
+            max-width: 620px;
+        }
+
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            border-radius: 999px;
+            width: 40px;
+            height: 40px;
+            background: rgba(93, 64, 55, 0.75);
+            color: #fff;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .carousel-btn:hover { background: rgba(93, 64, 55, 0.9); }
+        .carousel-btn.prev { left: 10px; }
+        .carousel-btn.next { right: 10px; }
+
+        .dots {
+            margin-top: 0.9rem;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            border: none;
+            background: #e2c9b3;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .dot.active { background: var(--primary); }
+
+        .intro-card {
+            margin-top: 1.5rem;
+            text-align: left;
+            padding: 1.2rem 1.3rem;
+        }
+
+        .intro-card h2 {
+            margin: 0 0 0.5rem;
+            color: var(--primary);
+        }
+
+        .intro-card p { margin: 0.6rem 0; }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 1.8rem 0.9rem 2.2rem;
+            }
+
+            h1 {
+                font-size: clamp(2rem, 9vw, 2.8rem);
+            }
+
+            nav {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 8px;
+                padding: 0.7rem;
+            }
+
+            nav a {
+                margin: 0;
+                font-size: 0.92rem;
+                padding: 0.4rem 0.7rem;
+            }
+
+            .lang-switch {
+                justify-content: flex-end;
+            }
+
+            .slide { min-height: 160px; }
+
+            .slide img {
+                max-height: 55vh;
+            }
+
+            .carousel-btn {
+                width: 34px;
+                height: 34px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 data-i18n="title">Visual Impairment</h1>
+        <p class="siteTagline" data-i18n="tagline">Learning through touch, sound, memory, and adapted access.</p>
+        <div class="lang-switch" aria-label="Language switcher">
+            <button class="lang-btn" id="lang-en" type="button">English</button>
+            <button class="lang-btn" id="lang-zh" type="button">繁體中文</button>
+        </div>
+    </header>
+
+    <nav>
+        <a href="../index.html" data-i18n="navHome">Home</a>
+        <a href="../stories.html" data-i18n="navStories">Through Their Eyes</a>
+        <a href="../help.html" data-i18n="navHelp">Seek For Help!!</a>
+        <a href="../community.html" data-i18n="navCommunity">Community Events</a>
+    </nav>
+
+    <main class="main-wrap">
+        <section class="carousel-card" aria-label="Story image carousel">
+            <div style="text-align: left; padding: 0.5rem 0 0.5rem 0;">
+                <a href="../stories.html" data-i18n="backButton" style="display: inline-block; padding: 0.6rem 1.2rem; background: linear-gradient(135deg, #f39c3d 0%, #e67e22 100%); color: #fff; text-decoration: none; border-radius: 25px; font-weight: 700; transition: transform 0.15s ease, box-shadow 0.15s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 14px rgba(230, 126, 34, 0.25)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">← Back to Through Their Eyes</a>
+            </div>
+            <div class="carousel-shell" id="carousel-shell">
+                <div class="carousel-track" id="carousel-track"></div>
+                <button class="carousel-btn prev" type="button" id="prev-btn" aria-label="Previous slide">&#10094;</button>
+                <button class="carousel-btn next" type="button" id="next-btn" aria-label="Next slide">&#10095;</button>
+            </div>
+            <div class="dots" id="dots"></div>
+        </section>
+
+        <section class="intro-card">
+            <h2 data-i18n="intro">Introduction</h2>
+            <p data-i18n="senP1">Visual Impairment is a term used to describe a loss of sight that cannot be fully corrected by ordinary glasses or contact lenses.</p>
+            <p data-i18n="senP2">Vision loss is not a reflection of intelligence. Students with VI process information differently, often through high-contrast visuals, touch (Braille), or audio, but they have the same capacity to learn and succeed as their sighted peers.</p>
+            <p data-i18n="typesHeading">Types of Visual Impairment:</p>
+            <ul>
+                <li data-i18n="li1">Low Vision: Permanent vision loss that interferes with daily tasks. It may involve tunnel vision, blurred vision, or blind spots.</li>
+                <li data-i18n="li2">Legal Blindness: A level of vision loss significant enough to require specialized support and modifications.</li>
+                <li data-i18n="li3">Total Blindness: A complete lack of light perception and form.</li>
+                <li data-i18n="li4">Color Blindness: Difficulty distinguishing between certain colors (usually red and green), which can impact reading coded maps or charts.</li>
+            </ul>
+            <p data-i18n="toolsHeading">Tools for Learning:</p>
+            <ul>
+                <li data-i18n="li5">Magnification: Using digital magnifiers or large-print books.</li>
+                <li data-i18n="li6">Braille: A system of raised dots that allows students to read and write by touch.</li>
+                <li data-i18n="li7">Screen Readers: Software that reads out loud the text displayed on a computer screen.</li>
+                <li data-i18n="li8">Tactile Graphics: Raised-line drawings that allow students to feel maps or geometric shapes.</li>
+            </ul>
+            <p data-i18n="helpSection">How Parents Can Help:</p>
+            <ul>
+                <li data-i18n="li9">Narrate the world: Describe things clearly. Instead of saying put it over there, say put it on the blue table to your left.</li>
+                <li data-i18n="li10">Organize for consistency: Keep furniture and belongings in the same place. Unexpected obstacles can be a safety hazard for a child with VI.</li>
+                <li data-i18n="li11">High contrast is key: Use black markers on white paper, or light-colored plates on dark placemats to help your child see edges and boundaries.</li>
+                <li data-i18n="li12">Encourage sensory exploration: Involve other senses. Let your child smell ingredients while cooking or feel textures of different leaves in the park.</li>
+            </ul>
+            <p data-i18n="studentNote">A Note to Students!!!</p>
+            <p data-i18n="studentText">You see the world in your own unique way. While others rely mostly on their eyes, you are learning to use your ears, your hands, and your memory in incredibly sharp ways. Having a visual impairment might mean you navigate life with a cane, a guide dog, or a screen reader, but those are just different ways of getting to the same destination. Many brilliant people, from musicians like Stevie Wonder to activists like Helen Keller, have shown that vision is about much more than what your eyes see.</p>
+        </section>
+    </main>
+
+    <script>
+        const I18N = {
+            en: {
+                title: 'Visual Impairment',
+                tagline: 'Learning through touch, sound, memory, and adapted access.',
+                navHome: 'Home',
+                navStories: 'Through Their Eyes',
+                navHelp: 'Seek For Help!!',
+                navCommunity: 'Community Events',
+                backButton: '\u2190 Back to Through Their Eyes',
+                intro: 'Introduction',
+                senP1: 'Visual Impairment is a term used to describe a loss of sight that cannot be fully corrected by ordinary glasses or contact lenses.',
+                senP2: 'Vision loss is not a reflection of intelligence. Students with VI process information differently, often through high-contrast visuals, touch (Braille), or audio, but they have the same capacity to learn and succeed as their sighted peers.',
+                typesHeading: 'Types of Visual Impairment:',
+                li1: 'Low Vision: Permanent vision loss that interferes with daily tasks. It may involve tunnel vision, blurred vision, or blind spots.',
+                li2: 'Legal Blindness: A level of vision loss significant enough to require specialized support and modifications.',
+                li3: 'Total Blindness: A complete lack of light perception and form.',
+                li4: 'Color Blindness: Difficulty distinguishing between certain colors (usually red and green), which can impact reading coded maps or charts.',
+                toolsHeading: 'Tools for Learning:',
+                li5: 'Magnification: Using digital magnifiers or large-print books.',
+                li6: 'Braille: A system of raised dots that allows students to read and write by touch.',
+                li7: 'Screen Readers: Software that reads out loud the text displayed on a computer screen.',
+                li8: 'Tactile Graphics: Raised-line drawings that allow students to feel maps or geometric shapes.',
+                helpSection: 'How Parents Can Help:',
+                li9: 'Narrate the world: Describe things clearly. Instead of saying put it over there, say put it on the blue table to your left.',
+                li10: 'Organize for consistency: Keep furniture and belongings in the same place. Unexpected obstacles can be a safety hazard for a child with VI.',
+                li11: 'High contrast is key: Use black markers on white paper, or light-colored plates on dark placemats to help your child see edges and boundaries.',
+                li12: 'Encourage sensory exploration: Involve other senses. Let your child smell ingredients while cooking or feel textures of different leaves in the park.',
+                studentNote: 'A Note to Students!!!',
+                studentText: 'You see the world in your own unique way. While others rely mostly on their eyes, you are learning to use your ears, your hands, and your memory in incredibly sharp ways. Having a visual impairment might mean you navigate life with a cane, a guide dog, or a screen reader, but those are just different ways of getting to the same destination. Many brilliant people, from musicians like Stevie Wonder to activists like Helen Keller, have shown that vision is about much more than what your eyes see.'
+            },
+            zh: {
+                title: '視覺障礙',
+                tagline: '透過觸覺、聲音、記憶與調適化方式學習。',
+                navHome: '首頁',
+                navStories: '他們的故事',
+                navHelp: '需要支援',
+                navCommunity: '社區活動',
+                backButton: '\u2190 返回他們的故事',
+                intro: '介紹',
+                senP1: '視覺障礙是一個術語，用以描述無法透過一般眼鏡或隱形眼鏡完全矯正的視力喪失。',
+                senP2: '視力受損並不代表智力受損。患有視障的學生處理資訊的方式有所不同——通常透過高對比視覺、觸覺（點字）或聽覺來學習——但他們具備與視力正常同儕相同的學習與成功潛力。',
+                typesHeading: '視覺障礙的類型：',
+                li1: '低視能（Low Vision）： 指會干擾日常任務的永久性視力喪失。可能表現為「隧道視野（視野狹窄）」、影像模糊或中心盲點。',
+                li2: '法定失明（Legal Blindness）： 視力喪失程度已達到需要特殊支援與環境調整的標準。',
+                li3: '全盲（Total Blindness）： 完全失去光感，無法辨識任何形狀。',
+                li4: '色盲/色弱（Color Blindness）： 難以辨別特定顏色（通常是紅綠色），這可能影響閱讀地圖或顏色標示的圖表。',
+                toolsHeading: '學習工具：',
+                li5: '放大設備： 使用數位放大鏡或大字體書籍。',
+                li6: '點字（Braille）： 一種凸點系統，讓學生能透過觸覺進行閱讀與寫作。',
+                li7: '螢幕閱讀器： 朗讀電腦螢幕上顯示內容的專業軟體。',
+                li8: '觸覺圖形： 具備突起線條的製圖，讓學生能透過「觸摸」來理解地圖或幾何圖形。',
+                helpSection: '家長可以如何協助：',
+                li9: '用口語描述世界： 清晰地描述事物。與其說「把東西放在那裡」，不如說「把東西放在你左手邊的藍色桌子上」。',
+                li10: '維持環境的一致性： 固定家具與物品擺放的位置。對於視障孩子來說，突如其來的障礙物可能會造成安全隱患。',
+                li11: '高對比度是關鍵： 在白紙上使用黑色粗筆，或在深色餐墊上放置淺色盤子，幫助孩子辨識邊緣與界線。',
+                li12: '鼓勵感官探索： 善用其他感官！讓孩子在烹飪時聞食材的味道，或在公園裡觸摸不同葉片的質地。',
+                studentNote: '給學生的小提示！！！',
+                studentText: '你正以獨特的方式觀察這個世界。雖然他人大多依賴眼睛，但你正在學習以極其敏銳的方式運用聽覺、觸覺與記憶力。視覺障礙可能意味著你需要依靠手杖、導盲犬或螢幕閱讀器來生活，但這些只是抵達目的地點的不同方式。從音樂家史提夫·汪達（Stevie Wonder）到社會活動家海倫·凱勒（Helen Keller），許多傑出人物都向世人證明了：所謂的「願景（Vision）」，遠比眼睛所見的更深遠！'
+            }
+        };
+
+        function applyLanguage(lang) {
+            const elements = document.querySelectorAll('[data-i18n]');
+            elements.forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (I18N[lang] && I18N[lang][key]) {
+                    el.textContent = I18N[lang][key];
+                }
+            });
+            updateSlidesForLanguage(lang);
+            localStorage.setItem('senergy_lang', lang);
+            updateButtonStates(lang);
+        }
+
+        function updateButtonStates(lang) {
+            document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+            document.getElementById('lang-zh').classList.toggle('active', lang === 'zh');
+        }
+
+        document.getElementById('lang-en').addEventListener('click', () => applyLanguage('en'));
+        document.getElementById('lang-zh').addEventListener('click', () => applyLanguage('zh'));
+
+        const SLIDES_BY_LANG = {
+            en: [
+                'VI 1.jpg',
+                'VI 2.jpg',
+                'VI 3.jpg',
+                'VI 4.jpg',
+                'VI 5.jpg',
+                'VI 6.jpg'
+            ],
+            zh: [
+                'VI stories Chin/VI 1 Chin.jpg',
+                'VI stories Chin/VI 2 Chin.jpg',
+                'VI stories Chin/VI 3 Chin.jpg',
+                'VI stories Chin/VI 4 Chin.jpg',
+                'VI stories Chin/VI 5 Chin.jpg',
+                'VI stories Chin/VI 6 Chin.jpg'
+            ]
+        };
+        let slides = [];
+
+        const track = document.getElementById('carousel-track');
+        const dotsWrap = document.getElementById('dots');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        let current = 0;
+
+        function updateSlidesForLanguage(lang) {
+            const nextSlides = (SLIDES_BY_LANG[lang] || SLIDES_BY_LANG.en).slice();
+            const hasChanged = nextSlides.length !== slides.length || nextSlides.some((src, i) => src !== slides[i]);
+            slides = nextSlides;
+            if (current >= slides.length) current = 0;
+            if (hasChanged) buildCarousel();
+        }
+
+        function buildCarousel() {
+            track.innerHTML = '';
+            dotsWrap.innerHTML = '';
+
+            if (slides.length === 0) {
+                const empty = document.createElement('div');
+                empty.className = 'slide';
+                empty.innerHTML = '<div class="empty-slide">Upload images into this folder, then add their file names to the <code>slides</code> list in this page to show them here.</div>';
+                track.appendChild(empty);
+                prevBtn.style.display = 'none';
+                nextBtn.style.display = 'none';
+                return;
+            }
+
+            slides.forEach((src, index) => {
+                const slide = document.createElement('div');
+                slide.className = 'slide';
+                const img = document.createElement('img');
+                img.src = src;
+                img.alt = 'Visual Impairment image ' + (index + 1);
+                slide.appendChild(img);
+                track.appendChild(slide);
+
+                const dot = document.createElement('button');
+                dot.className = 'dot';
+                dot.type = 'button';
+                dot.setAttribute('aria-label', 'Go to slide ' + (index + 1));
+                dot.addEventListener('click', () => {
+                    current = index;
+                    updateCarousel();
+                });
+                dotsWrap.appendChild(dot);
+            });
+
+            prevBtn.style.display = '';
+            nextBtn.style.display = '';
+            updateCarousel();
+        }
+
+        function updateCarousel() {
+            track.style.transform = 'translateX(' + (-current * 100) + '%)';
+            const dots = dotsWrap.querySelectorAll('.dot');
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === current);
+            });
+        }
+
+        prevBtn.addEventListener('click', () => {
+            if (!slides.length) return;
+            current = (current - 1 + slides.length) % slides.length;
+            updateCarousel();
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (!slides.length) return;
+            current = (current + 1) % slides.length;
+            updateCarousel();
+        });
+
+        applyLanguage(localStorage.getItem('senergy_lang') || 'en');
+    </script>
+    <script src="../story-memo.js"></script>
+    <script src="../nav-active.js"></script>
+</body>
+</html>
+
+

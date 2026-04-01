@@ -1,0 +1,486 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autism Spectrum Disorder (ASD) | Through Their Eyes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #E67E22;
+            --peach: #FAD7A0;
+            --bg: #FFF9F0;
+            --text: #5D4037;
+            --card: #FFFFFF;
+            --muted: #7A5A4F;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: 'Atkinson Hyperlegible', sans-serif;
+            background: radial-gradient(circle at top right, #ffe8cc 0%, var(--bg) 40%, #fffdf9 100%);
+            color: var(--text);
+            line-height: 1.75;
+            letter-spacing: 0.01em;
+        }
+
+        header {
+            text-align: center;
+            padding: 2.5rem 1rem 3.2rem;
+            background: linear-gradient(180deg, var(--peach) 0%, var(--bg) 100%);
+        }
+
+        h1 {
+            margin: 0;
+            color: var(--primary);
+            font-size: clamp(2rem, 5vw, 3rem);
+        }
+
+        .siteTagline {
+            margin: 0.6rem auto 0;
+            color: var(--muted);
+            max-width: 760px;
+            padding: 0 1rem;
+        }
+
+        nav {
+            background: linear-gradient(90deg, #CC6B1D 0%, #E98D3A 100%);
+            padding: 0.9rem 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 14px rgba(93, 64, 55, 0.18);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        nav a {
+            margin: 0;
+            text-decoration: none;
+            color: #fff;
+            font-weight: bold;
+            font-size: 1rem;
+            padding: 0.45rem 0.85rem;
+            border-radius: 999px;
+            transition: background-color 0.25s ease, color 0.25s ease;
+        }
+
+        nav a:hover {
+            background-color: rgba(255, 255, 255, 0.22);
+            color: #fff7e8;
+        }
+
+        .lang-switch {
+            margin: 0.9rem auto 0;
+            padding: 0;
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+            max-width: 800px;
+            padding: 0 1rem;
+        }
+
+        .lang-btn {
+            border: 1px solid #e4b98a;
+            background: #fff4e6;
+            color: #7d4b24;
+            border-radius: 999px;
+            padding: 0.28rem 0.75rem;
+            font-family: inherit;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .lang-btn.active {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+
+        .main-wrap {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 1rem 1rem 2.6rem;
+        }
+
+        .carousel-card,
+        .intro-card {
+            background: var(--card);
+            border-radius: 18px;
+            box-shadow: 0 8px 24px rgba(93, 64, 55, 0.12);
+            border: 1px solid #f5ddc5;
+        }
+
+        .carousel-card {
+            padding: 1rem 1rem 1.2rem;
+        }
+
+        .carousel-shell {
+            position: relative;
+            overflow: hidden;
+            border-radius: 14px;
+            background: #fff4e9;
+            width: 100%;
+            max-height: 70vh;
+        }
+
+        .carousel-track {
+            display: flex;
+            align-items: center;
+            transition: transform 0.35s ease;
+        }
+
+        .slide {
+            min-width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 180px;
+            padding: 0.6rem;
+        }
+
+        .slide img {
+            width: auto;
+            height: auto;
+            max-width: 100%;
+            max-height: 70vh;
+            object-fit: contain;
+            border-radius: 10px;
+            background: #fff;
+        }
+
+        .empty-slide {
+            color: #8b6b60;
+            font-weight: 600;
+            text-align: center;
+            padding: 1.5rem;
+            max-width: 620px;
+        }
+
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            border-radius: 999px;
+            width: 40px;
+            height: 40px;
+            background: rgba(93, 64, 55, 0.75);
+            color: #fff;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .carousel-btn:hover { background: rgba(93, 64, 55, 0.9); }
+        .carousel-btn.prev { left: 10px; }
+        .carousel-btn.next { right: 10px; }
+
+        .dots {
+            margin-top: 0.9rem;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            border: none;
+            background: #e2c9b3;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .dot.active { background: var(--primary); }
+
+        .intro-card {
+            margin-top: 1.5rem;
+            text-align: left;
+            padding: 1.2rem 1.3rem;
+        }
+
+        .intro-card h2 {
+            margin: 0 0 0.5rem;
+            color: var(--primary);
+        }
+
+        .intro-card p { margin: 0.6rem 0; }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 1.8rem 0.9rem 2.2rem;
+            }
+
+            h1 {
+                font-size: clamp(2rem, 9vw, 2.8rem);
+            }
+
+            nav {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 8px;
+                padding: 0.7rem;
+            }
+
+            nav a {
+                margin: 0;
+                font-size: 0.92rem;
+                padding: 0.4rem 0.7rem;
+            }
+
+            .lang-switch {
+                justify-content: flex-end;
+            }
+
+            .slide { min-height: 160px; }
+
+            .slide img {
+                max-height: 55vh;
+            }
+
+            .carousel-btn {
+                width: 34px;
+                height: 34px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 data-i18n="title">Autism Spectrum Disorder (ASD)</h1>
+        <p class="siteTagline" data-i18n="tagline">Experiencing the world through a unique sensory and social lens.</p>
+        <div class="lang-switch" aria-label="Language switcher">
+            <button class="lang-btn" id="lang-en" type="button">English</button>
+            <button class="lang-btn" id="lang-zh" type="button">繁體中文</button>
+        </div>
+    </header>
+
+    <nav>
+        <a href="../index.html" data-i18n="navHome">Home</a>
+        <a href="../stories.html" data-i18n="navStories">Through Their Eyes</a>
+        <a href="../help.html" data-i18n="navHelp">Seek For Help!!</a>
+        <a href="../community.html" data-i18n="navCommunity">Community Events</a>
+    </nav>
+
+    <main class="main-wrap">
+        <section class="carousel-card" aria-label="Story image carousel">
+            <div style="text-align: left; padding: 0.5rem 0 0.5rem 0;">
+                <a href="../stories.html" data-i18n="backButton" style="display: inline-block; padding: 0.6rem 1.2rem; background: linear-gradient(135deg, #f39c3d 0%, #e67e22 100%); color: #fff; text-decoration: none; border-radius: 25px; font-weight: 700; transition: transform 0.15s ease, box-shadow 0.15s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 14px rgba(230, 126, 34, 0.25)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">← Back to Through Their Eyes</a>
+            </div>
+            <div class="carousel-shell" id="carousel-shell">
+                <div class="carousel-track" id="carousel-track"></div>
+                <button class="carousel-btn prev" type="button" id="prev-btn" aria-label="Previous slide">&#10094;</button>
+                <button class="carousel-btn next" type="button" id="next-btn" aria-label="Next slide">&#10095;</button>
+            </div>
+            <div class="dots" id="dots"></div>
+        </section>
+
+        <section class="intro-card">
+            <h2 data-i18n="intro">Introduction</h2>
+            <p data-i18n="senP1">Autism Spectrum Disorder (ASD) is a disorder caused by abnormal brain development. Even after growing up, the intellectual level of autistic individuals differs from that of their peers, primarily affecting their social, language communication, and behavioral patterns. It is called a "spectrum" because it affects every person differently. Some students may need significant support in their daily lives, while others may live entirely independently but struggle with social nuances or sensory overload. </p>
+            <p data-i18n="keyChars">Key Characteristics of Autism:</p>
+            <p data-i18n="senP2">While every autistic person is unique, these are common areas where they may experience the world differently:</p>
+            <ul>
+                <li data-i18n="li1">Social interaction and communication difficulties: Difficulty understanding others' emotions; inability to perceive others' thoughts, intentions, and feelings. Difficulty mastering emotion-related learning, such as lyrical writing.</li>
+                <li data-i18n="li2">Restricted, repetitive, and stubborn behaviors: Limited language expression, frequent use of repetitive or stereotyped phrases. Paranoid behavioral patterns, such as insisting on taking a specific route or seat when traveling, and refusing to change current habits.</li>
+                <li data-i18n="li3">Short attention span.</li>
+                <li data-i18n="li4">Sensory abnormalities: Hypersensitivity or hyposensitivity to sound, smell, light, or touch.</li>
+                <li data-i18n="li5">Specialized Interests: Developing a deep, intense focus on specific topics, e.g., space, trains, coding, or art.</li>
+            </ul>
+            <p data-i18n="helpSection">How Parents Can Help:</p>
+            <ul>
+                <li data-i18n="li6">Create Predictability: Use visual schedules or "First/Then" boards to show what is happening next. This lowers anxiety by removing the "unknown."</li>
+                <li data-i18n="li7">Honor the "Sensory Battery": Understand that social interaction and loud environments drain an autistic child's energy. Provide a "quiet zone" at home where they can recharge.</li>
+                <li data-i18n="li8">Be Literal and Clear: Avoid metaphors or idioms (like "pull yourself together") that can be confusing. Say exactly what you mean.</li>
+                <li data-i18n="li9">Support Self-Advocacy: Help your child understand their own needs. If a pair of noise-canceling headphones helps them concentrate, encourage them to use them.</li>
+            </ul>
+            <p data-i18n="studentNote">A Note to Students!!!</p>
+            <p data-i18n="studentText">Your brain is wired for a different perspective. Being autistic means you might see details that others miss or think about problems in a way no one else has considered. While the world can sometimes feel too loud or confusing, your way of seeing things is valuable. Your "different" way of thinking is exactly what will change the world.</p>
+        </section>
+    </main>
+
+    <script>
+        const TRANSLATIONS = {
+            en: {
+                title: "Autism Spectrum Disorder (ASD)",
+                tagline: "Experiencing the world through a unique sensory and social lens.",
+                navHome: "Home",
+                navStories: "Through Their Eyes",
+                navHelp: "Seek For Help!!",
+                navCommunity: "Community Events",
+                backButton: "← Back to Through Their Eyes",
+                intro: "Introduction",
+                senP1: "Autism Spectrum Disorder (ASD) is a disorder caused by abnormal brain development. Even after growing up, the intellectual level of autistic individuals differs from that of their peers, primarily affecting their social, language communication, and behavioral patterns. It is called a \"spectrum\" because it affects every person differently. Some students may need significant support in their daily lives, while others may live entirely independently but struggle with social nuances or sensory overload.",
+                senP2: "While every autistic person is unique, these are common areas where they may experience the world differently:",
+                keyChars: "Key Characteristics of Autism:",
+                li1: "Social interaction and communication difficulties: Difficulty understanding others' emotions; inability to perceive others' thoughts, intentions, and feelings. Difficulty mastering emotion-related learning, such as lyrical writing.",
+                li2: "Restricted, repetitive, and stubborn behaviors: Limited language expression, frequent use of repetitive or stereotyped phrases. Paranoid behavioral patterns, such as insisting on taking a specific route or seat when traveling, and refusing to change current habits.",
+                li3: "Short attention span.",
+                li4: "Sensory abnormalities: Hypersensitivity or hyposensitivity to sound, smell, light, or touch.",
+                li5: "Specialized Interests: Developing a deep, intense focus on specific topics, e.g., space, trains, coding, or art.",
+                helpSection: "How Parents Can Help:",
+                li6: "Create Predictability: Use visual schedules or \"First/Then\" boards to show what is happening next. This lowers anxiety by removing the \"unknown.\"",
+                li7: "Honor the \"Sensory Battery\": Understand that social interaction and loud environments drain an autistic child's energy. Provide a \"quiet zone\" at home where they can recharge.",
+                li8: "Be Literal and Clear: Avoid metaphors or idioms (like \"pull yourself together\") that can be confusing. Say exactly what you mean.",
+                li9: "Support Self-Advocacy: Help your child understand their own needs. If a pair of noise-canceling headphones helps them concentrate, encourage them to use them.",
+                studentNote: "A Note to Students!!!",
+                studentText: "Your brain is wired for a different perspective. Being autistic means you might see details that others miss or think about problems in a way no one else has considered. While the world can sometimes feel too loud or confusing, your way of seeing things is valuable. Your \"different\" way of thinking is exactly what will change the world."
+            },
+            zh: {
+                title: "自閉症譜系障礙 (ASD)",
+                tagline: "通過獨特的感官和社交視角體驗世界。",
+                navHome: "首頁",
+                navStories: "他們的故事",
+                navHelp: "需要支援",
+                navCommunity: "社區活動",
+                backButton: "← 返回他們的故事",
+                intro: "介紹",
+                senP1: "自閉症譜系障礙（ASD）是一種因大腦發育差異所引起的發展障礙。即便在成年後，自閉症人士在社交互動、語言溝通及行為模式上，仍可能與同儕有所不同。之所以稱為「譜系（Spectrum）」，是因為它對每個人的影響程度不一：有些學生在日常生活中需要大量支援，而有些學生則能完全獨立生活，僅在社交細微末節或感官負荷上感到挑戰。",
+                senP2: "雖然每位自閉症人士都是獨一無二的，但以下是他們在感知世界時常見的差異領域：",
+                keyChars: "自閉症的核心特徵:",
+                li1: "社交互動與溝通困難： 難以理解他人的情緒，或無法精確察覺他人的想法與意圖。在涉及情感表達的學習（如抒情文創作）上可能感到吃力。",
+                li2: "侷限、重複且固著的行為： 語言表達較為受限，常重複特定字詞或陳腔濫調。擁有較為固執的行為模式，例如堅持行走固定路線、坐固定座位，且難以接受生活常規的變動。",
+                li3: "注意力集中時間較短。",
+                li4: "感官異常： 對聲音、氣味、光線或觸覺過於敏感（高敏感）或反應遲鈍（低敏感）。",
+                li5: "特殊興趣： 對特定領域（如太空、火車、程式碼或藝術）展現出極度深厚且專一的興趣。",
+                helpSection: "家長可以如何協助：",
+                li6: "建立可預測性： 利用視覺化行程表或「先……然後……」圖卡來預告後續行程。消除「未知」能有效降低孩子的焦慮感。",
+                li7: "尊重「感官電池」： 社交互動與嘈雜環境會迅速消耗自閉症孩子的能量。請在室內安排一個「安靜區」，讓他們能在此重新充電。",
+                li8: "指令具體直接： 避免使用隱喻或成語（如「振作一點」），這類表達常令他們困惑。請直接說出你的真實要求。",
+                li9: "支持自我倡導： 幫助孩子了解自己的需求。如果戴上抗噪耳機有助於他們集中注意力，請鼓勵他們積極使用。",
+                studentNote: "給學生的小提示！！！",
+                studentText: "你的大腦擁有與眾不同的「內建迴路」。身為自閉症人士，意味著你能看見他人忽略的細節，或以全新的角度去思考問題。雖然這個世界有時顯得太過嘈雜或令人困惑，但你觀察事物的視角極具價值。你那「與眾不同」的思考方式，正是改變世界的關鍵力量。"
+            }
+        };
+
+        function setLanguage(lang) {
+            const elements = document.querySelectorAll('[data-i18n]');
+            elements.forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (TRANSLATIONS[lang] && TRANSLATIONS[lang][key]) {
+                    el.textContent = TRANSLATIONS[lang][key];
+                }
+            });
+            updateSlidesForLanguage(lang);
+            localStorage.setItem('senergy_lang', lang);
+            updateButtonStates(lang);
+        }
+
+        function updateButtonStates(lang) {
+            document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+            document.getElementById('lang-zh').classList.toggle('active', lang === 'zh');
+        }
+
+        document.getElementById('lang-en').addEventListener('click', () => setLanguage('en'));
+        document.getElementById('lang-zh').addEventListener('click', () => setLanguage('zh'));
+
+        const SLIDES_BY_LANG = {
+            en: [
+                'ASD 1.jpg',
+                'ASD 2.jpg',
+                'ASD 3.jpg',
+                'ASD 4.jpg',
+                'ASD 5.jpg',
+                'ASD 6.jpg'
+            ],
+            zh: [
+                'ASD stories Chin/Asd 1 chin.jpg',
+                'ASD stories Chin/Asd 2 chin.jpg',
+                'ASD stories Chin/Asd 3 chin.jpg',
+                'ASD stories Chin/Asd 4 chin.jpg',
+                'ASD stories Chin/Asd 5 chin.jpg',
+                'ASD stories Chin/Asd 6 chin.jpg'
+            ]
+        };
+        let slides = [];
+
+        const track = document.getElementById('carousel-track');
+        const dotsWrap = document.getElementById('dots');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        let current = 0;
+
+        function updateSlidesForLanguage(lang) {
+            const nextSlides = (SLIDES_BY_LANG[lang] || SLIDES_BY_LANG.en).slice();
+            const hasChanged = nextSlides.length !== slides.length || nextSlides.some((src, i) => src !== slides[i]);
+            slides = nextSlides;
+            if (current >= slides.length) current = 0;
+            if (hasChanged) buildCarousel();
+        }
+
+        function buildCarousel() {
+            track.innerHTML = '';
+            dotsWrap.innerHTML = '';
+
+            if (slides.length === 0) {
+                const empty = document.createElement('div');
+                empty.className = 'slide';
+                empty.innerHTML = '<div class="empty-slide">Upload images into this folder, then add their file names to the <code>slides</code> list in this page to show them here.</div>';
+                track.appendChild(empty);
+                prevBtn.style.display = 'none';
+                nextBtn.style.display = 'none';
+                return;
+            }
+
+            slides.forEach((src, index) => {
+                const slide = document.createElement('div');
+                slide.className = 'slide';
+                const img = document.createElement('img');
+                img.src = src;
+                img.alt = 'Autism Spectrum Disorder (ASD) image ' + (index + 1);
+                slide.appendChild(img);
+                track.appendChild(slide);
+
+                const dot = document.createElement('button');
+                dot.className = 'dot';
+                dot.type = 'button';
+                dot.setAttribute('aria-label', 'Go to slide ' + (index + 1));
+                dot.addEventListener('click', () => {
+                    current = index;
+                    updateCarousel();
+                });
+                dotsWrap.appendChild(dot);
+            });
+
+            prevBtn.style.display = '';
+            nextBtn.style.display = '';
+            updateCarousel();
+        }
+
+        function updateCarousel() {
+            track.style.transform = 'translateX(' + (-current * 100) + '%)';
+            const dots = dotsWrap.querySelectorAll('.dot');
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === current);
+            });
+        }
+
+        prevBtn.addEventListener('click', () => {
+            if (!slides.length) return;
+            current = (current - 1 + slides.length) % slides.length;
+            updateCarousel();
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (!slides.length) return;
+            current = (current + 1) % slides.length;
+            updateCarousel();
+        });
+
+        const savedLang = localStorage.getItem('senergy_lang') || 'en';
+        setLanguage(savedLang);
+    </script>
+    <script src="../story-memo.js"></script>
+    <script src="../nav-active.js"></script>
+</body>
+</html>
+
+

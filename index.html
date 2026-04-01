@@ -1,0 +1,265 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="pageTitle">SENERGY | Home</title>
+    <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { 
+            --primary: #E67E22; 
+            --peach: #FAD7A0; 
+            --bg: #FFF9F0; 
+            --text: #5D4037; 
+            --nav-dark: #CC6B1D; 
+            --nav-light: #E98D3A; 
+        }
+
+        /* Base Styles */
+        html { scrollbar-gutter: stable; }
+        body { 
+            font-family: 'Atkinson Hyperlegible', sans-serif; 
+            background-color: var(--bg); 
+            color: var(--text); 
+            margin: 0; 
+            text-align: center; 
+            font-size: 18px; 
+            line-height: 1.75; 
+            letter-spacing: 0.01em; 
+        }
+
+        /* Header & Navigation */
+        header { 
+            padding: 2.5rem 1rem 3.2rem; 
+            background: linear-gradient(180deg, var(--peach) 0%, var(--bg) 100%); 
+        }
+        h1 { font-size: clamp(2.2rem, 5vw, 3rem); color: var(--primary); margin: 0; }
+        .siteTagline { margin: 0.6rem auto 0; max-width: 760px; padding: 0 1rem; }
+
+        nav { /*Nav背景*/
+            background: linear-gradient(90deg, var(--nav-dark) 0%, var(--nav-light) 100%); 
+            padding: 0.9rem 1rem; 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000; 
+            box-shadow: 0 4px 14px rgba(93, 64, 55, 0.18);
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        nav a { /*Nav字體大細*/
+            text-decoration: none; 
+            color: #fff; 
+            font-weight: bold; 
+            font-size: 1rem; 
+            padding: 0.45rem 0.85rem; 
+            border-radius: 999px; 
+            transition: 0.25s ease; 
+        }
+        nav a:hover { background-color: rgba(255, 255, 255, 0.22); color: #fff7e8; }
+
+        /* Language Switcher */
+        .lang-switch { 
+            width: min(100%, 960px); 
+            margin: 0.9rem auto 0; 
+            padding: 0 1rem; 
+            display: flex; 
+            gap: 8px; 
+            justify-content: flex-end; 
+        }
+        .lang-btn { 
+            border: 1px solid #e4b98a; 
+            background: #fff4e6; 
+            color: #7d4b24; 
+            border-radius: 999px; 
+            padding: 0.3rem 0.8rem; 
+            font-family: inherit; 
+            font-weight: 700; 
+            cursor: pointer; 
+            transition: 0.2s;
+        }
+        .lang-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+        /* Content Area */
+        .content { max-width: 850px; margin: auto; padding: 3rem 2rem; text-align: left; }
+        .main-img { 
+            display: block; 
+            margin: 0 auto 2.5rem auto; 
+            max-width: 100%; 
+            height: auto; 
+            border-radius: 20px; 
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1); 
+        }
+        
+        h2 { color: var(--primary); margin-top: 2.5rem; }
+        
+        .btn { 
+            display: inline-block; 
+            padding: 1rem 2rem; 
+            background: var(--primary); 
+            color: white; 
+            text-decoration: none; 
+            border-radius: 30px; 
+            font-weight: bold; 
+            margin-top: 20px; 
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(230, 126, 34, 0.3); }
+
+        /* Mobile Adjustments */
+        @media (max-width: 768px) {
+            body {
+                font-size: 16px;
+                line-height: 1.65;
+            }
+
+            header { padding: 1.3rem 0.8rem 1.8rem; }
+            h1 { font-size: clamp(1.75rem, 9vw, 2.35rem); }
+            .siteTagline { font-size: 0.9rem; }
+
+            nav {
+                gap: 6px;
+                padding: 0.55rem 0.45rem;
+            }
+            nav a {
+                font-size: 0.88rem;
+                padding: 0.4rem 0.62rem;
+            }
+
+            .lang-switch {
+                margin-top: 0.75rem;
+                padding: 0 0.75rem;
+                justify-content: center;
+            }
+            .lang-btn {
+                min-height: 40px;
+                padding: 0.28rem 0.7rem;
+            }
+
+            .controls {
+                margin-top: 0.85rem;
+                gap: 8px;
+                padding: 0 0.6rem;
+            }
+
+            .btn { width: 100%; box-sizing: border-box; text-align: center; }
+            p { font-size: 1rem; }
+            
+            .status { padding: 0 0.75rem; }
+            .grid { padding: 0.75rem 0.6rem 1rem; }
+        }
+
+
+        
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1 data-i18n="siteName">SENERGY</h1>
+        <p class="siteTagline" data-i18n="siteTagline">A WEBSITE FOR SEN PARENTS AND STUDENTS</p>
+        <div class="lang-switch" aria-label="Language switcher">
+            <button class="lang-btn" id="lang-en" type="button">English</button>
+            <button class="lang-btn" id="lang-zh" type="button">繁體中文</button>
+        </div>
+    </header>
+
+    <nav>
+        <a href="index.html" data-i18n="navHome">Home</a>
+        <a href="stories.html" data-i18n="navStories">Through Their Eyes</a>
+        <a href="help.html" data-i18n="navHelp">Seek For Help!!</a>
+        <a href="community.html" data-i18n="navCommunity">Community Events</a>
+    </nav>
+    
+    <main class="content">
+        <img src="main pic.jpeg" alt="SEN Students Support" class="main-img">
+        
+        <h2 data-i18n="senTitle">What is SEN?</h2>
+        <p data-i18n="senP1">Students with Special Educational Needs (SEN) are those who may face difficulties in their studies or daily lives and require additional educational support. These difficulties can stem from a variety of causes, including physical or mental illnesses, disabilities, or impairments.</p>
+        
+        <p data-i18n="senP2">The number of students with Special Educational Needs (SEN) in Hong Kong has experienced a steep upward trajectory, far exceeding previous estimates. While there were approximately 60,000 students in the 2021/22 school year, recent data from the Education Bureau reveals that by the 2023/24 school year, the number of SEN students in public sector ordinary schools alone has surged.</p>
+        
+        <p data-i18n="senP3">Primary student numbers rose by 32.2% and secondary students by 37.9% compared to just five years prior, with current estimates for the 2025/26 cycle suggesting that over 10% of the total student population now requires specialized support.</p>
+        
+        <p data-i18n="senP4">Despite this growth, deep-seated negative stereotypes and stigmatizations persist, creating a perception gap that hinders effective intervention. For parents, these social pressures lead to a measurable lack of confidence; many fear that a formal diagnosis will label their child for life, limiting future academic and career opportunities.</p>
+        
+        <h2 data-i18n="missionTitle">Our Mission</h2>
+        <p data-i18n="missionP">SENERGY is dedicated to bridging the gap between SEN students, their parents, and the support they need. We aim to foster empathy through storytelling and provide a clear roadmap for families seeking professional assistance in Hong Kong. We want to centralize the resources of community centers so that parents and students can more easily learn about the activities offered by different community centers and make it easier for them to participate.</p>
+        
+        <hr style="border: 0; border-top: 1px solid var(--peach); margin: 2.5rem 0;">
+        
+        <p data-i18n="ctaQuestion" style="font-weight: bold;">Do you want to know more about SEN students and their experiences?</p>
+        <a href="stories.html" class="btn" data-i18n="ctaButton">Enter Through Their Eyes</a>
+    </main>
+
+    <script>
+        const TRANSLATIONS = {
+            en: {
+                pageTitle: "SENERGY | Home",
+                siteName: "SENERGY",
+                siteTagline: "A WEBSITE FOR SEN PARENTS AND STUDENTS",
+                navHome: "Home",
+                navStories: "Through Their Eyes",
+                navHelp: "Seek For Help!!",
+                navCommunity: "Community Events",
+                senTitle: "What is SEN?",
+                senP1: "Students with Special Educational Needs (SEN) are those who may face difficulties in their studies or daily lives and require additional educational support. These difficulties can stem from a variety of causes, including physical or mental illnesses, disabilities, or impairments.",
+                senP2: "The number of students with Special Educational Needs (SEN) in Hong Kong has experienced a steep upward trajectory, far exceeding previous estimates. While there were approximately 60,000 students in the 2021/22 school year, recent data from the Education Bureau reveals that by the 2023/24 school year, the number of SEN students in public sector ordinary schools alone has surged.",
+                senP3: "Primary student numbers rose by 32.2% and secondary students by 37.9% compared to just five years prior, with current estimates for the 2025/26 cycle suggesting that over 10% of the total student population now requires specialized support.",
+                senP4: "Despite this growth, deep-seated negative stereotypes and stigmatizations persist, creating a perception gap that hinders effective intervention. For parents, these social pressures lead to a measurable lack of confidence; many fear that a formal diagnosis will label their child for life, limiting future academic and career opportunities.",
+                missionTitle: "Our Mission",
+                missionP: "SENERGY is dedicated to bridging the gap between SEN students, their parents, and the support they need. We aim to foster empathy through storytelling and provide a clear roadmap for families seeking professional assistance in Hong Kong. We want to centralize the resources of community centers so that parents and students can more easily learn about the activities offered by different community centers and make it easier for them to participate.",
+                ctaQuestion: "Do you want to know more about SEN students and their experiences?",
+                ctaButton: "Enter Through Their Eyes"
+            },
+            zh: {
+                pageTitle: "SENERGY | 首頁",
+                siteName: "SENERGY",
+                siteTagline: "A WEBSITE FOR SEN PARENTS AND STUDENTS",
+                navHome: "首頁",
+                navStories: "他們的故事",
+                navHelp: "需要支援",
+                navCommunity: "社區活動",
+                senTitle: "甚麼是 SEN？",
+                senP1: "特殊教育需要（SEN）學生是指在學習或日常生活中可能遇到困難，並需要額外教育支援的學生。這些困難可能源於身體或精神疾病、殘障或其他障礙。",
+                senP2: "香港 SEN 學生人數近年顯著上升，增幅遠超以往估算。2021/22 學年約有 60,000 名 SEN 學生，而教育局最新資料顯示，到 2023/24 學年，僅公立普通學校的 SEN 學生數目已大幅增加。",
+                senP3: "與五年前比較，小學 SEN 學生增加約 32.2%，中學 SEN 學生增加約 37.9%。按 2025/26 學年推算，現時可能已有超過一成學生需要特殊支援。",
+                senP4: "即使需求持續上升，社會上對 SEN 的負面標籤仍然存在，形成認知落差，妨礙及早介入。對家長而言，這些壓力亦會影響信心，很多人擔心正式診斷會令孩子被標籤，限制未來升學及發展機會。",
+                missionTitle: "我們的使命",
+                missionP: "SENERGY 致力連結 SEN 學生、家長與所需支援。我們希望透過真實故事建立同理心，並為香港家庭提供清晰、實用的求助路線。同時，我們整合不同社區中心的資源與活動資訊，讓家長和學生更容易找到合適服務並參與其中。",
+                ctaQuestion: "想更深入了解 SEN 學生的真實經歷嗎？",
+                ctaButton: "進入「他們的故事」"
+            }
+        };
+
+        function setLanguage(lang) {
+            const map = TRANSLATIONS[lang] || TRANSLATIONS.en;
+            document.documentElement.lang = lang === "zh" ? "zh-Hant" : "en";
+            
+            // Set Page Title
+            document.title = map.pageTitle;
+
+            // Update all elements with data-i18n
+            document.querySelectorAll("[data-i18n]").forEach((el) => {
+                const key = el.getAttribute("data-i18n");
+                if (map[key]) {
+                    el.textContent = map[key];
+                }
+            });
+
+            // Update UI State
+            document.getElementById("lang-en").classList.toggle("active", lang === "en");
+            document.getElementById("lang-zh").classList.toggle("active", lang === "zh");
+            localStorage.setItem("senergy_lang", lang);
+        }
+
+        document.getElementById("lang-en").addEventListener("click", () => setLanguage("en"));
+        document.getElementById("lang-zh").addEventListener("click", () => setLanguage("zh"));
+
+        // Initialize from storage or default
+        setLanguage(localStorage.getItem("senergy_lang") || "en");
+    </script>
+    <script src="nav-active.js"></script>
+</body>
+</html>

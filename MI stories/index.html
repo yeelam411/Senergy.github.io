@@ -1,0 +1,502 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mental Illness | Through Their Eyes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #E67E22;
+            --peach: #FAD7A0;
+            --bg: #FFF9F0;
+            --text: #5D4037;
+            --card: #FFFFFF;
+            --muted: #7A5A4F;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: 'Atkinson Hyperlegible', sans-serif;
+            background: radial-gradient(circle at top right, #ffe8cc 0%, var(--bg) 40%, #fffdf9 100%);
+            color: var(--text);
+            line-height: 1.75;
+            letter-spacing: 0.01em;
+        }
+
+        header {
+            text-align: center;
+            padding: 2.5rem 1rem 3.2rem;
+            background: linear-gradient(180deg, var(--peach) 0%, var(--bg) 100%);
+        }
+
+        h1 {
+            margin: 0;
+            color: var(--primary);
+            font-size: clamp(2rem, 5vw, 3rem);
+        }
+
+        .siteTagline {
+            margin: 0.6rem auto 0;
+            color: var(--muted);
+            max-width: 760px;
+            padding: 0 1rem;
+        }
+
+        nav {
+            background: linear-gradient(90deg, #CC6B1D 0%, #E98D3A 100%);
+            padding: 0.9rem 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 14px rgba(93, 64, 55, 0.18);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        nav a {
+            margin: 0;
+            text-decoration: none;
+            color: #fff;
+            font-weight: bold;
+            font-size: 1rem;
+            padding: 0.45rem 0.85rem;
+            border-radius: 999px;
+            transition: background-color 0.25s ease, color 0.25s ease;
+        }
+
+        nav a:hover {
+            background-color: rgba(255, 255, 255, 0.22);
+            color: #fff7e8;
+        }
+
+        .lang-switch {
+            margin: 0.9rem auto 0;
+            padding: 0;
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+            max-width: 800px;
+            padding: 0 1rem;
+        }
+
+        .lang-btn {
+            border: 1px solid #e4b98a;
+            background: #fff4e6;
+            color: #7d4b24;
+            border-radius: 999px;
+            padding: 0.28rem 0.75rem;
+            font-family: inherit;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .lang-btn.active {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+
+        .main-wrap {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 1rem 1rem 2.6rem;
+        }
+
+        .carousel-card,
+        .intro-card {
+            background: var(--card);
+            border-radius: 18px;
+            box-shadow: 0 8px 24px rgba(93, 64, 55, 0.12);
+            border: 1px solid #f5ddc5;
+        }
+
+        .carousel-card {
+            padding: 1rem 1rem 1.2rem;
+        }
+
+        .carousel-shell {
+            position: relative;
+            overflow: hidden;
+            border-radius: 14px;
+            background: #fff4e9;
+            width: 100%;
+            max-height: 70vh;
+        }
+
+        .carousel-track {
+            display: flex;
+            align-items: center;
+            transition: transform 0.35s ease;
+        }
+
+        .slide {
+            min-width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 180px;
+            padding: 0.6rem;
+        }
+
+        .slide img {
+            width: auto;
+            height: auto;
+            max-width: 100%;
+            max-height: 70vh;
+            object-fit: contain;
+            border-radius: 10px;
+            background: #fff;
+        }
+
+        .empty-slide {
+            color: #8b6b60;
+            font-weight: 600;
+            text-align: center;
+            padding: 1.5rem;
+            max-width: 620px;
+        }
+
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            border-radius: 999px;
+            width: 40px;
+            height: 40px;
+            background: rgba(93, 64, 55, 0.75);
+            color: #fff;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .carousel-btn:hover { background: rgba(93, 64, 55, 0.9); }
+        .carousel-btn.prev { left: 10px; }
+        .carousel-btn.next { right: 10px; }
+
+        .dots {
+            margin-top: 0.9rem;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            border: none;
+            background: #e2c9b3;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .dot.active { background: var(--primary); }
+
+        .intro-card {
+            margin-top: 1.5rem;
+            text-align: left;
+            padding: 1.2rem 1.3rem;
+        }
+
+        .intro-card h2 {
+            margin: 0 0 0.5rem;
+            color: var(--primary);
+        }
+
+        .intro-card p { margin: 0.6rem 0; }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 1.8rem 0.9rem 2.2rem;
+            }
+
+            h1 {
+                font-size: clamp(2rem, 9vw, 2.8rem);
+            }
+
+            nav {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 8px;
+                padding: 0.7rem;
+            }
+
+            nav a {
+                margin: 0;
+                font-size: 0.92rem;
+                padding: 0.4rem 0.7rem;
+            }
+
+            .lang-switch {
+                justify-content: flex-end;
+            }
+
+            .slide { min-height: 160px; }
+
+            .slide img {
+                max-height: 55vh;
+            }
+
+            .carousel-btn {
+                width: 34px;
+                height: 34px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 data-i18n="title">Mental Illness</h1>
+        <p class="siteTagline" data-i18n="tagline">Invisible struggles are real and deserve compassionate support.</p>
+        <div class="lang-switch" aria-label="Language switcher">
+            <button class="lang-btn" id="lang-en" type="button">English</button>
+            <button class="lang-btn" id="lang-zh" type="button">繁體中文</button>
+        </div>
+    </header>
+
+    <nav>
+        <a href="../index.html" data-i18n="navHome">Home</a>
+        <a href="../stories.html" data-i18n="navStories">Through Their Eyes</a>
+        <a href="../help.html" data-i18n="navHelp">Seek For Help!!</a>
+        <a href="../community.html" data-i18n="navCommunity">Community Events</a>
+    </nav>
+
+    <main class="main-wrap">
+        <section class="carousel-card" aria-label="Story image carousel">
+            <div style="text-align: left; padding: 0.5rem 0 0.5rem 0;">
+                <a href="../stories.html" data-i18n="backButton" style="display: inline-block; padding: 0.6rem 1.2rem; background: linear-gradient(135deg, #f39c3d 0%, #e67e22 100%); color: #fff; text-decoration: none; border-radius: 25px; font-weight: 700; transition: transform 0.15s ease, box-shadow 0.15s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 14px rgba(230, 126, 34, 0.25)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">← Back to Through Their Eyes</a>
+            </div>
+            <div class="carousel-shell" id="carousel-shell">
+                <div class="carousel-track" id="carousel-track"></div>
+                <button class="carousel-btn prev" type="button" id="prev-btn" aria-label="Previous slide">&#10094;</button>
+                <button class="carousel-btn next" type="button" id="next-btn" aria-label="Next slide">&#10095;</button>
+            </div>
+            <div class="dots" id="dots"></div>
+        </section>
+
+        <section class="intro-card">
+            <h2 data-i18n="intro">Introduction</h2>
+            <p data-i18n="senP1">Mental Health Issues refer to a wide range of conditions that affect a person's mood, thinking, and behavior. Just as our bodies can get sick, our minds can face challenges that require care and support.</p>
+            <p data-i18n="senP2">Mental health struggles are not a choice or a sign of weakness. Students with MI are often highly capable, but their "internal weather" can sometimes make it difficult to focus, attend school, or interact with others as they usually would.</p>
+            <p data-i18n="typesHeading">Common Types of Mental Health Issues:</p>
+            <ul>
+                <li data-i18n="li1">Anxiety Disorders: Intense, persistent worry or fear about everyday situations. This can lead to "school refusal" or physical symptoms like stomach aches.</li>
+                <li data-i18n="li2">Depression: Persistent feelings of sadness, low energy, or a loss of interest in activities they once enjoyed.</li>
+                <li data-i18n="li3">OCD (Obsessive-Compulsive Disorder): Recurring, unwanted thoughts (obsessions) or behaviors (compulsions) that a student feels the urge to repeat.</li>
+                <li data-i18n="li4">Eating Disorders: Unhealthy relationships with food and body image that impact physical and mental health.</li>
+                <li data-i18n="li5">PTSD: Emotional distress following a traumatic event, which can lead to "flashbacks" or being easily startled in class.</li>
+            </ul>
+            <p data-i18n="impactHeading">The "Invisible" Impact on Learning:</p>
+            <p data-i18n="impactText">Mental health does not just affect emotions; it affects the brain's ability to learn:</p>
+            <ul>
+                <li data-i18n="li6">Brain Fog: Anxiety and depression can make it hard to process information or remember facts.</li>
+                <li data-i18n="li7">Low Stamina: Fighting an internal battle is exhausting, often leading to "burnout" by mid-afternoon.</li>
+                <li data-i18n="li8">Hyper-vigilance: A student who feels unsafe or anxious may be constantly scanning the room for "threats" instead of looking at the board.</li>
+            </ul>
+            <p data-i18n="helpSection">How Parents Can Help:</p>
+            <ul>
+                <li data-i18n="li9">Validate Feelings: Instead of saying "Do not worry," try "I can see you are feeling really overwhelmed right now, and I am here for you."</li>
+                <li data-i18n="li10">Maintain a Routine: While flexibility is needed, a predictable home routine provides a sense of safety when the "internal world" feels chaotic.</li>
+                <li data-i18n="li11">Encourage "Low-Pressure" Activities: Provide opportunities for hobbies that do not involve grading or competition, like drawing, walking, or listening to music.</li>
+                <li data-i18n="li12">Open the Door to Professional Help: Normalize talking to a counselor or doctor. Just like a broken arm needs a cast, a struggling mind sometimes needs professional support.</li>
+            </ul>
+            <p data-i18n="studentNote">A Note to Students!!!</p>
+            <p data-i18n="studentText">Your mental health is just as important as your physical health. Having a hard time with your emotions does not mean you are not smart or capable; it means you are navigating a difficult season. You are not your diagnosis. It is okay to ask for help, it is okay to take a break, and it is okay to put your well-being first.</p>
+        </section>
+    </main>
+
+    <script>
+        const I18N = {
+            en: {
+                title: 'Mental Illness',
+                tagline: 'Invisible struggles are real and deserve compassionate support.',
+                navHome: 'Home',
+                navStories: 'Through Their Eyes',
+                navHelp: 'Seek For Help!!',
+                navCommunity: 'Community Events',
+                backButton: '\u2190 Back to Through Their Eyes',
+                intro: 'Introduction',
+                senP1: 'Mental Health Issues refer to a wide range of conditions that affect a person\'s mood, thinking, and behavior. Just as our bodies can get sick, our minds can face challenges that require care and support.',
+                senP2: 'Mental health struggles are not a choice or a sign of weakness. Students with MI are often highly capable, but their "internal weather" can sometimes make it difficult to focus, attend school, or interact with others as they usually would.',
+                typesHeading: 'Common Types of Mental Health Issues:',
+                li1: 'Anxiety Disorders: Intense, persistent worry or fear about everyday situations. This can lead to "school refusal" or physical symptoms like stomach aches.',
+                li2: 'Depression: Persistent feelings of sadness, low energy, or a loss of interest in activities they once enjoyed.',
+                li3: 'OCD (Obsessive-Compulsive Disorder): Recurring, unwanted thoughts (obsessions) or behaviors (compulsions) that a student feels the urge to repeat.',
+                li4: 'Eating Disorders: Unhealthy relationships with food and body image that impact physical and mental health.',
+                li5: 'PTSD: Emotional distress following a traumatic event, which can lead to "flashbacks" or being easily startled in class.',
+                impactHeading: 'The "Invisible" Impact on Learning:',
+                impactText: 'Mental health does not just affect emotions; it affects the brain\'s ability to learn:',
+                li6: 'Brain Fog: Anxiety and depression can make it hard to process information or remember facts.',
+                li7: 'Low Stamina: Fighting an internal battle is exhausting, often leading to "burnout" by mid-afternoon.',
+                li8: 'Hyper-vigilance: A student who feels unsafe or anxious may be constantly scanning the room for "threats" instead of looking at the board.',
+                helpSection: 'How Parents Can Help:',
+                li9: 'Validate Feelings: Instead of saying "Do not worry," try "I can see you are feeling really overwhelmed right now, and I am here for you."',
+                li10: 'Maintain a Routine: While flexibility is needed, a predictable home routine provides a sense of safety when the "internal world" feels chaotic.',
+                li11: 'Encourage "Low-Pressure" Activities: Provide opportunities for hobbies that do not involve grading or competition, like drawing, walking, or listening to music.',
+                li12: 'Open the Door to Professional Help: Normalize talking to a counselor or doctor. Just like a broken arm needs a cast, a struggling mind sometimes needs professional support.',
+                studentNote: 'A Note to Students!!!',
+                studentText: 'Your mental health is just as important as your physical health. Having a hard time with your emotions does not mean you are not smart or capable; it means you are navigating a difficult season. You are not your diagnosis. It is okay to ask for help, it is okay to take a break, and it is okay to put your well-being first.'
+            },
+            zh: {
+                title: '精神健康困擾',
+                tagline: '看不見的掙扎是真實的，值得被同理與支持。',
+                navHome: '首頁',
+                navStories: '他們的故事',
+                navHelp: '需要支援',
+                navCommunity: '社區活動',
+                backButton: '\u2190 返回他們的故事',
+                intro: '介紹',
+                senP1: '精神健康問題涵蓋了多種影響情緒、思考與行為的狀況。就像身體會生病一樣，我們的心靈也可能面臨需要細心照料與支持的挑戰。',
+                senP2: '心理健康並非個人的選擇，更不是軟弱的表現。患有心理健康問題的學生通常極具潛力，但他們的「內心天氣」有時會變幻莫測，導致難以像往常一樣專注學業、穩定出席或與他人互動。',
+                typesHeading: '常見的精神健康問題類型：',
+                li1: '焦慮症（Anxiety Disorders）： 對日常生活感到強烈且持續的憂慮或恐懼。這可能導致「拒學」現象，或出現腹痛等生理症狀。',
+                li2: '憂鬱症（Depression）： 持續感到悲傷、缺乏活力，或對曾經喜愛的活動失去興趣。',
+                li3: '強迫症（OCD）： 反覆出現揮之不去的念頭（強迫觀念），或感到必須重複某些行為（強迫行為）的衝動。',
+                li4: '飲食障礙（Eating Disorders）： 對食物或體態有不健康的認知與關係，進而影響身心健康。',
+                li5: '創傷後壓力症候群（PTSD）： 在經歷創傷事件後產生的情緒困擾，可能導致「閃回（再現當時情景）」或在課堂上容易受到驚嚇。',
+                impactHeading: '對學習的「隱形」影響：',
+                impactText: '精神健康不只影響情緒，也會影響大腦學習能力：',
+                li6: '腦霧（Brain Fog）： 焦慮與憂鬱可能導致處理資訊或記憶事實變得困難。',
+                li7: '體力下降： 與內心的掙扎對抗是極其耗能的，這常導致學生在午過後便陷入「精疲力竭」的狀態。',
+                li8: '過度警覺： 感到不安或焦慮的學生可能會不斷掃視環境中的「威脅」，而非專注於黑板上的教材。',
+                helpSection: '家長可以如何協助：',
+                li9: '接納並認可感受： 與其說「別擔心」，不如嘗試說：「我看得出你現在感到壓力很大，我會在這裡陪著你。」',
+                li10: '維持規律作息： 雖然需要保持彈性，但當「內心世界」感到混亂時，可預測的居家作息能提供安全感。',
+                li11: '鼓勵「低壓力」活動： 提供不涉及評分或競爭的興趣機會，例如畫畫、散步或聽音樂。',
+                li12: '開啟尋求專業協助之門： 將諮詢輔導員或醫生視為正常行為。就像骨折需要石膏固定，受傷的心靈有時也需要專業支持。',
+                studentNote: '給學生的小提示！！！',
+                studentText: '你的心理健康與生理健康同樣重要。情緒上的困擾並不代表你不夠聰明或沒能力，而是代表你正在度過一段艱難的時期。你並不等於你的診斷結果。尋求幫助是沒問題的，適時休息也是沒問題的；將你的身心健康放在首位，絕對是正確的決定。'
+            }
+        };
+
+        function applyLanguage(lang) {
+            const elements = document.querySelectorAll('[data-i18n]');
+            elements.forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (I18N[lang] && I18N[lang][key]) {
+                    el.textContent = I18N[lang][key];
+                }
+            });
+            updateSlidesForLanguage(lang);
+            localStorage.setItem('senergy_lang', lang);
+            updateButtonStates(lang);
+        }
+
+        function updateButtonStates(lang) {
+            document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+            document.getElementById('lang-zh').classList.toggle('active', lang === 'zh');
+        }
+
+        document.getElementById('lang-en').addEventListener('click', () => applyLanguage('en'));
+        document.getElementById('lang-zh').addEventListener('click', () => applyLanguage('zh'));
+
+        const SLIDES_BY_LANG = {
+            en: [
+                'MI 1.jpg',
+                'MI 2.jpg',
+                'MI 3.jpg',
+                'MI 4.jpg',
+                'MI 5.jpg',
+                'MI 6.jpg'
+            ],
+            zh: [
+                'MI stories Chin/MI 1 Chin.jpg',
+                'MI stories Chin/MI 2 Chin.jpg',
+                'MI stories Chin/MI 3 Chin.jpg',
+                'MI stories Chin/MI 4 Chin.jpg',
+                'MI stories Chin/MI 5 Chin.jpg',
+                'MI stories Chin/MI 6 Chin.jpg'
+            ]
+        };
+        let slides = [];
+
+        const track = document.getElementById('carousel-track');
+        const dotsWrap = document.getElementById('dots');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        let current = 0;
+
+        function updateSlidesForLanguage(lang) {
+            const nextSlides = (SLIDES_BY_LANG[lang] || SLIDES_BY_LANG.en).slice();
+            const hasChanged = nextSlides.length !== slides.length || nextSlides.some((src, i) => src !== slides[i]);
+            slides = nextSlides;
+            if (current >= slides.length) current = 0;
+            if (hasChanged) buildCarousel();
+        }
+
+        function buildCarousel() {
+            track.innerHTML = '';
+            dotsWrap.innerHTML = '';
+
+            if (slides.length === 0) {
+                const empty = document.createElement('div');
+                empty.className = 'slide';
+                empty.innerHTML = '<div class="empty-slide">Upload images into this folder, then add their file names to the <code>slides</code> list in this page to show them here.</div>';
+                track.appendChild(empty);
+                prevBtn.style.display = 'none';
+                nextBtn.style.display = 'none';
+                return;
+            }
+
+            slides.forEach((src, index) => {
+                const slide = document.createElement('div');
+                slide.className = 'slide';
+                const img = document.createElement('img');
+                img.src = src;
+                img.alt = 'Mental Illness image ' + (index + 1);
+                slide.appendChild(img);
+                track.appendChild(slide);
+
+                const dot = document.createElement('button');
+                dot.className = 'dot';
+                dot.type = 'button';
+                dot.setAttribute('aria-label', 'Go to slide ' + (index + 1));
+                dot.addEventListener('click', () => {
+                    current = index;
+                    updateCarousel();
+                });
+                dotsWrap.appendChild(dot);
+            });
+
+            prevBtn.style.display = '';
+            nextBtn.style.display = '';
+            updateCarousel();
+        }
+
+        function updateCarousel() {
+            track.style.transform = 'translateX(' + (-current * 100) + '%)';
+            const dots = dotsWrap.querySelectorAll('.dot');
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === current);
+            });
+        }
+
+        prevBtn.addEventListener('click', () => {
+            if (!slides.length) return;
+            current = (current - 1 + slides.length) % slides.length;
+            updateCarousel();
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (!slides.length) return;
+            current = (current + 1) % slides.length;
+            updateCarousel();
+        });
+
+        applyLanguage(localStorage.getItem('senergy_lang') || 'en');
+    </script>
+    <script src="../story-memo.js"></script>
+    <script src="../nav-active.js"></script>
+</body>
+</html>
+
+

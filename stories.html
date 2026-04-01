@@ -1,0 +1,271 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="pageTitle">Through Their Eyes | SENERGY</title>
+    <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { 
+            --primary: #E67E22; 
+            --peach: #FAD7A0; 
+            --bg: #FFF9F0; 
+            --text: #5D4037; 
+            --nav-dark: #CC6B1D; 
+            --nav-light: #E98D3A; 
+        }
+
+        /* Base Styles */
+        html { scrollbar-gutter: stable; }
+        body { 
+            font-family: 'Atkinson Hyperlegible', sans-serif; 
+            background-color: var(--bg); 
+            color: var(--text); 
+            margin: 0; 
+            text-align: center; 
+            font-size: 18px; 
+            line-height: 1.75; 
+            letter-spacing: 0.01em; 
+        }
+
+        header { 
+            padding: 2.5rem 1rem 3.2rem; 
+            background: linear-gradient(180deg, var(--peach) 0%, var(--bg) 100%); 
+        }
+        h1 { font-size: clamp(2.2rem, 5vw, 3rem); color: var(--primary); margin: 0; }
+        .siteTagline { margin: 0.6rem auto 0; max-width: 760px; padding: 0 1rem; }
+
+        nav { 
+            background: linear-gradient(90deg, var(--nav-dark) 0%, var(--nav-light) 100%); 
+            padding: 0.9rem 1rem; 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000; 
+            box-shadow: 0 4px 14px rgba(93, 64, 55, 0.18);
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        nav a { 
+            text-decoration: none; 
+            color: #fff; 
+            font-weight: bold; 
+            font-size: 1rem; 
+            padding: 0.45rem 0.85rem; 
+            border-radius: 999px; 
+            transition: 0.25s ease; 
+        }
+        nav a:hover { background-color: rgba(255, 255, 255, 0.22); color: #fff7e8; }
+
+        /* Language Switcher */
+        .lang-switch { 
+            width: min(100%, 960px); 
+            margin: 0.9rem auto 0; 
+            padding: 0 1rem; 
+            display: flex; 
+            gap: 8px; 
+            justify-content: flex-end; 
+        }
+        .lang-btn { 
+            border: 1px solid #e4b98a; 
+            background: #fff4e6; 
+            color: #7d4b24; 
+            border-radius: 999px; 
+            padding: 0.3rem 0.8rem; 
+            font-family: inherit; 
+            font-weight: 700; 
+            cursor: pointer; 
+            transition: 0.2s;
+        }
+        .lang-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+
+        .intro-text { padding: 2.5rem 1.5rem; max-width: 800px; margin: auto; }
+
+        /* The 2-Column Grid */
+        .icon-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr; 
+            gap: 30px;
+            padding: 2rem;
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .category-card {
+            background: white; border-radius: 25px; padding: 2rem; 
+            cursor: pointer; transition: 0.3s ease; border: 2px solid transparent;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .category-card:hover { transform: translateY(-8px); border-color: var(--primary); background: var(--card-hover); }
+        
+        .watercolor-icon { width: 160px; height: 120px; object-fit: contain; margin-bottom: 1rem; }
+        .category-card h3 { color: var(--primary); margin: 0.5rem 0; font-size: 1.2rem; }
+
+        @media (max-width: 768px) {
+            body {
+                font-size: 16px;
+                line-height: 1.65;
+            }
+
+            header { padding: 1.3rem 0.8rem 1.8rem; }
+            h1 { font-size: clamp(1.75rem, 9vw, 2.35rem); }
+            .siteTagline { font-size: 0.9rem; }
+
+            nav {
+                gap: 6px;
+                padding: 0.55rem 0.45rem;
+            }
+            nav a {
+                font-size: 0.88rem;
+                padding: 0.4rem 0.62rem;
+            }
+
+            .lang-switch {
+                margin-top: 0.75rem;
+                padding: 0 0.75rem;
+                justify-content: center;
+            }
+            .lang-btn {
+                min-height: 40px;
+                padding: 0.28rem 0.7rem;
+            }
+
+            .controls {
+                margin-top: 0.85rem;
+                gap: 8px;
+                padding: 0 0.6rem;
+            }
+            .icon-grid { grid-template-columns: 1fr; max-width: 450px; gap: 20px; padding: 1rem; }
+            .category-card { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1 data-i18n="siteName">SENERGY</h1>
+        <p class="siteTagline" data-i18n="siteTagline">A WEBSITE FOR SEN PARENTS AND STUDENTS</p>
+        <div class="lang-switch" aria-label="Language switcher">
+            <button class="lang-btn" id="lang-en" type="button">English</button>
+            <button class="lang-btn" id="lang-zh" type="button">繁體中文</button>
+        </div>
+    </header>
+
+    <nav>
+        <a href="index.html" data-i18n="navHome">Home</a>
+        <a href="stories.html" data-i18n="navStories">Through Their Eyes</a>
+        <a href="help.html" data-i18n="navHelp">Seek For Help!!</a>
+        <a href="community.html" data-i18n="navCommunity">Community Events</a>
+    </nav>
+
+    <div class="intro-text">
+        <p data-i18n="introText">Every student perceives the world differently. These stories are written from a first-person perspective to help you understand the challenges and strengths of different SEN types.</p>
+    </div>
+
+    <div class="icon-grid">
+        <div class="category-card" onclick="location.href='SpLD stories Eng/index.html'">
+            <img src="icon png/SpLD.png" alt="" class="watercolor-icon">
+            <h3 data-i18n="c1Title">Specific Learning Difficulties</h3>
+            <p data-i18n="c1Desc">When Letters Take Flight</p>
+        </div>
+        <div class="category-card" onclick="location.href='ID stories/index.html'">
+            <img src="icon png/ID.png" alt="" class="watercolor-icon">
+            <h3 data-i18n="c2Title">Intellectual Disability (ID)</h3>
+            <p data-i18n="c2Desc">A Different Pace of Learning</p>
+        </div>
+        <div class="category-card" onclick="location.href='ASD stories/index.html'">
+            <img src="icon png/ASD.png" alt="" class="watercolor-icon">
+            <h3 data-i18n="c3Title">Autism Spectrum Disorder (ASD)</h3>
+            <p data-i18n="c3Desc">A Unique Inner World</p>
+        </div>
+        <div class="category-card" onclick="location.href='ADHD stories/index.html'">
+            <img src="icon png/ADHD.png" alt="" class="watercolor-icon">
+            <h3 data-i18n="c4Title">Attention Deficit Hyperactivity Disorder (ADHD)</h3>
+            <p data-i18n="c4Desc">The Fast-Moving Mind</p>
+        </div>
+        <div class="category-card" onclick="location.href='PD stories/index.html'">
+            <img src="icon png/PD.png" alt="" class="watercolor-icon">
+            <h3 data-i18n="c5Title">Physical Disability</h3>
+            <p data-i18n="c5Desc">Navigating the World Differently</p>
+        </div>
+        <div class="category-card" onclick="location.href='HI stories/index.html'">
+            <img src="icon png/HI.png" alt="" class="watercolor-icon">
+            <h3 data-i18n="c6Title">Hearing Impairment</h3>
+            <p data-i18n="c6Desc">The Sound of Silence & Signs</p>
+        </div>
+        <div class="category-card" onclick="location.href='VI stories/index.html'">
+            <img src="icon png/VI.png" alt="" class="watercolor-icon">
+            <h3 data-i18n="c7Title">Visual Impairment</h3>
+            <p data-i18n="c7Desc">Seeing with the Heart</p>
+        </div>
+        <div class="category-card" onclick="location.href='SLI stories/index.html'">
+            <img src="icon png/SLI.png" alt="" class="watercolor-icon">
+            <h3 data-i18n="c8Title">Speech & Language</h3>
+            <p data-i18n="c8Desc">Finding the Right Words</p>
+        </div>
+        <div class="category-card" onclick="location.href='MI stories/index.html'">
+            <img src="icon png/MI.png" alt="" class="watercolor-icon">
+            <h3 data-i18n="c9Title">Mental Illness</h3>
+            <p data-i18n="c9Desc">Healing the Invisible Waves</p>
+        </div>
+    </div>
+
+    <script>
+        const TRANSLATIONS = {
+            en: {
+                pageTitle: "Through Their Eyes | SENERGY", siteName: "SENERGY",
+                siteTagline: "A WEBSITE FOR SEN PARENTS AND STUDENTS",
+                navHome: "Home", navStories: "Through Their Eyes",
+                navHelp: "Seek For Help!!", navCommunity: "Community Events",
+                introText: "Every student perceives the world differently. These stories are written from a first-person perspective to help you understand the challenges and strengths of different SEN types.",
+                c1Title: "Specific Learning Difficulties", c1Desc: "When Letters Take Flight",
+                c2Title: "Intellectual Disability (ID)", c2Desc: "A Different Pace of Learning",
+                c3Title: "Autism Spectrum Disorder (ASD)", c3Desc: "A Unique Inner World",
+                c4Title: "Attention Deficit Hyperactivity Disorder (ADHD)", c4Desc: "The Fast-Moving Mind",
+                c5Title: "Physical Disability", c5Desc: "Navigating the World Differently",
+                c6Title: "Hearing Impairment", c6Desc: "The Sound of Silence & Signs",
+                c7Title: "Visual Impairment", c7Desc: "Seeing with the Heart",
+                c8Title: "Speech & Language", c8Desc: "Finding the Right Words",
+                c9Title: "Mental Illness", c9Desc: "Healing the Invisible Waves"
+            },
+            zh: {
+                pageTitle: "走進他們的世界 | SENERGY", siteName: "SENERGY",
+                siteTagline: "A WEBSITE FOR SEN PARENTS AND STUDENTS",
+                navHome: "首頁", navStories: "他們的故事",
+                navHelp: "需要支援", navCommunity: "社區活動",
+                introText: "每位學生感受世界的方式都不同。希望這些故事以第一身形式，令你們可以更加理解SEN的學生。",
+                c1Title: "特殊學習困難", c1Desc: "當文字在我腦海中飛走",
+                c2Title: "智力障礙 (ID)", c2Desc: "以不同步伐學習",
+                c3Title: "自閉症譜系障礙 (ASD)", c3Desc: "獨特的內在世界",
+                c4Title: "專由力不足/過度活躍症 (ADHD)", c4Desc: "高速運轉的思維",
+                c5Title: "肢體傷殘", c5Desc: "以不同方式走進世界",
+                c6Title: "聽覺障礙", c6Desc: "寂靜與手語的聲音",
+                c7Title: "視覺障礙", c7Desc: "用心去看見",
+                c8Title: "言語及語言障礙", c8Desc: "尋找合適的表達",
+                c9Title: "精神健康問題", c9Desc: "療癒看不見的波動"
+            }
+        };
+
+        function setLanguage(lang) {
+            const map = TRANSLATIONS[lang] || TRANSLATIONS.en;
+            document.documentElement.lang = lang === "zh" ? "zh-Hant" : "en";
+            document.title = map.pageTitle;
+            document.querySelectorAll("[data-i18n]").forEach(el => {
+                const key = el.getAttribute("data-i18n");
+                if (map[key]) el.textContent = map[key];
+            });
+            document.getElementById("lang-en").classList.toggle("active", lang === "en");
+            document.getElementById("lang-zh").classList.toggle("active", lang === "zh");
+            localStorage.setItem("senergy_lang", lang);
+        }
+
+        document.getElementById("lang-en").onclick = () => setLanguage("en");
+        document.getElementById("lang-zh").onclick = () => setLanguage("zh");
+        setLanguage(localStorage.getItem("senergy_lang") || "en");
+    </script>
+    <script src="nav-active.js"></script>
+</body>
+</html>

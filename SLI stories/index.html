@@ -1,0 +1,496 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech and Language | Through Their Eyes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #E67E22;
+            --peach: #FAD7A0;
+            --bg: #FFF9F0;
+            --text: #5D4037;
+            --card: #FFFFFF;
+            --muted: #7A5A4F;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: 'Atkinson Hyperlegible', sans-serif;
+            background: radial-gradient(circle at top right, #ffe8cc 0%, var(--bg) 40%, #fffdf9 100%);
+            color: var(--text);
+            line-height: 1.75;
+            letter-spacing: 0.01em;
+        }
+
+        header {
+            text-align: center;
+            padding: 2.5rem 1rem 3.2rem;
+            background: linear-gradient(180deg, var(--peach) 0%, var(--bg) 100%);
+        }
+
+        h1 {
+            margin: 0;
+            color: var(--primary);
+            font-size: clamp(2rem, 5vw, 3rem);
+        }
+
+        .siteTagline {
+            margin: 0.6rem auto 0;
+            color: var(--muted);
+            max-width: 760px;
+            padding: 0 1rem;
+        }
+
+        nav {
+            background: linear-gradient(90deg, #CC6B1D 0%, #E98D3A 100%);
+            padding: 0.9rem 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 14px rgba(93, 64, 55, 0.18);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        nav a {
+            margin: 0;
+            text-decoration: none;
+            color: #fff;
+            font-weight: bold;
+            font-size: 1rem;
+            padding: 0.45rem 0.85rem;
+            border-radius: 999px;
+            transition: background-color 0.25s ease, color 0.25s ease;
+        }
+
+        nav a:hover {
+            background-color: rgba(255, 255, 255, 0.22);
+            color: #fff7e8;
+        }
+
+        .lang-switch {
+            margin: 0.9rem auto 0;
+            padding: 0;
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+            max-width: 800px;
+            padding: 0 1rem;
+        }
+
+        .lang-btn {
+            border: 1px solid #e4b98a;
+            background: #fff4e6;
+            color: #7d4b24;
+            border-radius: 999px;
+            padding: 0.28rem 0.75rem;
+            font-family: inherit;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .lang-btn.active {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+
+        .main-wrap {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 1rem 1rem 2.6rem;
+        }
+
+        .carousel-card,
+        .intro-card {
+            background: var(--card);
+            border-radius: 18px;
+            box-shadow: 0 8px 24px rgba(93, 64, 55, 0.12);
+            border: 1px solid #f5ddc5;
+        }
+
+        .carousel-card {
+            padding: 1rem 1rem 1.2rem;
+        }
+
+        .carousel-shell {
+            position: relative;
+            overflow: hidden;
+            border-radius: 14px;
+            background: #fff4e9;
+            width: 100%;
+            max-height: 70vh;
+        }
+
+        .carousel-track {
+            display: flex;
+            align-items: center;
+            transition: transform 0.35s ease;
+        }
+
+        .slide {
+            min-width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 180px;
+            padding: 0.6rem;
+        }
+
+        .slide img {
+            width: auto;
+            height: auto;
+            max-width: 100%;
+            max-height: 70vh;
+            object-fit: contain;
+            border-radius: 10px;
+            background: #fff;
+        }
+
+        .empty-slide {
+            color: #8b6b60;
+            font-weight: 600;
+            text-align: center;
+            padding: 1.5rem;
+            max-width: 620px;
+        }
+
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            border-radius: 999px;
+            width: 40px;
+            height: 40px;
+            background: rgba(93, 64, 55, 0.75);
+            color: #fff;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .carousel-btn:hover { background: rgba(93, 64, 55, 0.9); }
+        .carousel-btn.prev { left: 10px; }
+        .carousel-btn.next { right: 10px; }
+
+        .dots {
+            margin-top: 0.9rem;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            border: none;
+            background: #e2c9b3;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .dot.active { background: var(--primary); }
+
+        .intro-card {
+            margin-top: 1.5rem;
+            text-align: left;
+            padding: 1.2rem 1.3rem;
+        }
+
+        .intro-card h2 {
+            margin: 0 0 0.5rem;
+            color: var(--primary);
+        }
+
+        .intro-card p { margin: 0.6rem 0; }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 1.8rem 0.9rem 2.2rem;
+            }
+
+            h1 {
+                font-size: clamp(2rem, 9vw, 2.8rem);
+            }
+
+            nav {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 8px;
+                padding: 0.7rem;
+            }
+
+            nav a {
+                margin: 0;
+                font-size: 0.92rem;
+                padding: 0.4rem 0.7rem;
+            }
+
+            .lang-switch {
+                justify-content: flex-end;
+            }
+
+            .slide { min-height: 160px; }
+
+            .slide img {
+                max-height: 55vh;
+            }
+
+            .carousel-btn {
+                width: 34px;
+                height: 34px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 data-i18n="title">Speech and Language Impairment</h1>
+        <p class="siteTagline" data-i18n="tagline">Finding and expressing words can take extra effort.</p>
+        <div class="lang-switch" aria-label="Language switcher">
+            <button class="lang-btn" id="lang-en" type="button">English</button>
+            <button class="lang-btn" id="lang-zh" type="button">繁體中文</button>
+        </div>
+    </header>
+
+    <nav>
+        <a href="../index.html" data-i18n="navHome">Home</a>
+        <a href="../stories.html" data-i18n="navStories">Through Their Eyes</a>
+        <a href="../help.html" data-i18n="navHelp">Seek For Help!!</a>
+        <a href="../community.html" data-i18n="navCommunity">Community Events</a>
+    </nav>
+
+    <main class="main-wrap">
+        <section class="carousel-card" aria-label="Story image carousel">
+            <div style="text-align: left; padding: 0.5rem 0 0.5rem 0;">
+                <a href="../stories.html" data-i18n="backButton" style="display: inline-block; padding: 0.6rem 1.2rem; background: linear-gradient(135deg, #f39c3d 0%, #e67e22 100%); color: #fff; text-decoration: none; border-radius: 25px; font-weight: 700; transition: transform 0.15s ease, box-shadow 0.15s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 14px rgba(230, 126, 34, 0.25)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">← Back to Through Their Eyes</a>
+            </div>
+            <div class="carousel-shell" id="carousel-shell">
+                <div class="carousel-track" id="carousel-track"></div>
+                <button class="carousel-btn prev" type="button" id="prev-btn" aria-label="Previous slide">&#10094;</button>
+                <button class="carousel-btn next" type="button" id="next-btn" aria-label="Next slide">&#10095;</button>
+            </div>
+            <div class="dots" id="dots"></div>
+        </section>
+
+        <section class="intro-card">
+            <h2 data-i18n="intro">Introduction</h2>
+            <p data-i18n="senP1">Speech and Language Impairment refers to challenges in communication that are not caused by hearing loss or low intelligence. It can affect how a child produces sounds (speech) or how they understand and put words together (language).</p>
+            <p data-i18n="senP2">Communication struggles are not a reflection of intelligence. A student may have brilliant ideas but simply lack the language tools to express them or the processing time to understand others.</p>
+            <p data-i18n="twoSidesHeading">The Two Sides of Language:</p>
+            <p data-i18n="twoSidesText">Language is usually divided into two main areas. A student might struggle with one or both:</p>
+            <ul>
+                <li data-i18n="li1">Receptive Language (Understanding): Difficulty making sense of what others say. It might feel like listening to a foreign language where you only recognize every third word.</li>
+                <li data-i18n="li2">Expressive Language (Speaking): Difficulty using words to share thoughts, name objects, or put sentences together in the right order.</li>
+            </ul>
+            <p data-i18n="typesHeading">Common Types of Impairment:</p>
+            <ul>
+                <li data-i18n="li3">Phonological/Articulation Disorders: Difficulty making specific sounds, e.g., saying "wabbit" instead of "rabbit", making speech hard to understand.</li>
+                <li data-i18n="li4">Stuttering (Disfluency): Interruptions in the flow of speech, such as repeating sounds or getting stuck on words.</li>
+                <li data-i18n="li5">Developmental Language Disorder (DLD): A hidden but common condition where the brain has difficulty learning and using its native language.</li>
+                <li data-i18n="li6">Social Communication Disorder: Difficulty using language for social purposes, like taking turns in a conversation or staying on topic.</li>
+            </ul>
+            <p data-i18n="helpSection">How Parents Can Help:</p>
+            <ul>
+                <li data-i18n="li7">Model, do not correct: If your child says, "I goed to park," do not tell them they are wrong. Instead, model the correct version: "Yes, you went to the park! Was it fun?"</li>
+                <li data-i18n="li8">Use the 10-second rule: Give your child extra time to process what you have said and to formulate their answer. Silence is okay.</li>
+                <li data-i18n="li9">Visual cues: Use gestures, pictures, or objects to help explain what you mean. This provides a visual anchor for the words they hear.</li>
+                <li data-i18n="li10">Narrate your day: Talk about what you are doing while you do it, e.g., "I am stirring the soup with the big wooden spoon". This builds their word bank in a natural way.</li>
+            </ul>
+            <p data-i18n="studentNote">A Note to Students!!!</p>
+            <p data-i18n="studentText">Your words are just one way to share your world. While it might feel frustrating when your tongue gets tied or when people talking sounds like a jumble, your ideas are still important. Many great thinkers and creators struggled to speak clearly as children. Finding your voice takes time and practice, and it is okay to use tools like writing, drawing, or technology to help you get your message across.</p>
+        </section>
+    </main>
+
+    <script>
+        const I18N = {
+            en: {
+                title: 'Speech and Language Impairment',
+                tagline: 'Finding and expressing words can take extra effort.',
+                navHome: 'Home',
+                navStories: 'Through Their Eyes',
+                navHelp: 'Seek For Help!!',
+                navCommunity: 'Community Events',
+                backButton: '\u2190 Back to Through Their Eyes',
+                intro: 'Introduction',
+                senP1: 'Speech and Language Impairment refers to challenges in communication that are not caused by hearing loss or low intelligence. It can affect how a child produces sounds (speech) or how they understand and put words together (language).',
+                senP2: 'Communication struggles are not a reflection of intelligence. A student may have brilliant ideas but simply lack the language tools to express them or the processing time to understand others.',
+                twoSidesHeading: 'The Two Sides of Language:',
+                twoSidesText: 'Language is usually divided into two main areas. A student might struggle with one or both:',
+                li1: 'Receptive Language (Understanding): Difficulty making sense of what others say. It might feel like listening to a foreign language where you only recognize every third word.',
+                li2: 'Expressive Language (Speaking): Difficulty using words to share thoughts, name objects, or put sentences together in the right order.',
+                typesHeading: 'Common Types of Impairment:',
+                li3: 'Phonological/Articulation Disorders: Difficulty making specific sounds, e.g., saying "wabbit" instead of "rabbit", making speech hard to understand.',
+                li4: 'Stuttering (Disfluency): Interruptions in the flow of speech, such as repeating sounds or getting stuck on words.',
+                li5: 'Developmental Language Disorder (DLD): A hidden but common condition where the brain has difficulty learning and using its native language.',
+                li6: 'Social Communication Disorder: Difficulty using language for social purposes, like taking turns in a conversation or staying on topic.',
+                helpSection: 'How Parents Can Help:',
+                li7: 'Model, do not correct: If your child says, "I goed to park," do not tell them they are wrong. Instead, model the correct version: "Yes, you went to the park! Was it fun?"',
+                li8: 'Use the 10-second rule: Give your child extra time to process what you have said and to formulate their answer. Silence is okay.',
+                li9: 'Visual cues: Use gestures, pictures, or objects to help explain what you mean. This provides a visual anchor for the words they hear.',
+                li10: 'Narrate your day: Talk about what you are doing while you do it, e.g., "I am stirring the soup with the big wooden spoon". This builds their word bank in a natural way.',
+                studentNote: 'A Note to Students!!!',
+                studentText: 'Your words are just one way to share your world. While it might feel frustrating when your tongue gets tied or when people talking sounds like a jumble, your ideas are still important. Many great thinkers and creators struggled to speak clearly as children. Finding your voice takes time and practice, and it is okay to use tools like writing, drawing, or technology to help you get your message across.'
+            },
+            zh: {
+                title: '語言及言語障礙',
+                tagline: '尋找與表達詞語可能需要更多時間。',
+                navHome: '首頁',
+                navStories: '他們的故事',
+                navHelp: '需要支援',
+                navCommunity: '社區活動',
+                backButton: '\u2190 返回他們的故事',
+                intro: '介紹',
+                senP1: '語言及言語障礙指的是在非聽力損失或智力問題的情況下，所面臨的溝通挑戰。這可能影響孩子發出聲音的方式（言語），或是他們理解與組織詞彙的能力（語言）。',
+                senP2: '溝通困難並不代表智力高低。一名學生可能擁有極其精闢的想法，只是缺乏將其表達出來的「語言工具」，或是需要較長的「處理時間」來理解他人的話語。',
+                twoSidesHeading: '語言的兩大面向：',
+                twoSidesText: '語言一般可分為兩個主要範疇，學生可能在其中一項或兩項同時遇到困難：',
+                li1: '接收性語言（理解）： 難以理解他人所說的話。這感覺就像在聽外語，每三個單字只能聽懂一個。',
+                li2: '表達性語言（說話）： 難以運用詞彙分享想法、命名物體，或將句子按正確順序組合起來。',
+                typesHeading: '常見障礙類型：',
+                li3: '構音/語音發展障礙： 難以發出特定的聲音，例如將「兔子」說成「肚子」，導致言語難以被他人聽懂。',
+                li4: '口吃（語暢障礙）： 說話流暢度中斷，例如重複音節或在某些字詞上「卡住」。',
+                li5: '發展性語言障礙（DLD）： 一種隱蔽但常見的狀況，大腦在學習與使用母語時存在困難。',
+                li6: '社交溝通障礙： 難以將語言用於社交目的，例如在對話中輪流發言或維持特定主題。',
+                helpSection: '家長可以如何協助：',
+                li7: '示範而非糾正： 如果孩子說「我昨天去公園玩（語法錯誤）」，不要直接指責他錯了。請示範正確版本：「對呀，你昨天『去了』公園！好玩嗎？」',
+                li8: '運用「十秒法則」： 給予孩子額外的時間來處理你說的話，並構思他們的答案。適度的沉默是沒問題的！',
+                li9: '視覺線索： 使用手勢、圖片或實物來輔助解釋你的意思。這能為他們聽到的詞彙提供一個「視覺錨點」。',
+                li10: '描述你的日常生活： 在做事時同步描述你的動作，例如：「我正在用大木匙攪拌這鍋湯。」這能以自然的方式豐富他們的「詞彙庫」。',
+                studentNote: '給學生的小提示！！！',
+                studentText: '言語只是分享你內心世界的其中一種方式。當你感到舌頭打結，或是別人的話聽起來一團混亂時，難免會感到沮喪，但請記住，你的想法依然非常重要。很多偉大的思想家與創作者在童年時也曾面臨口齒不清的困擾。尋找自己的聲音需要時間與練習；在此期間，運用寫作、繪畫或科技工具來傳達你的訊息，都是非常棒的做法！'
+            }
+        };
+
+        function applyLanguage(lang) {
+            const elements = document.querySelectorAll('[data-i18n]');
+            elements.forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (I18N[lang] && I18N[lang][key]) {
+                    el.textContent = I18N[lang][key];
+                }
+            });
+            updateSlidesForLanguage(lang);
+            localStorage.setItem('senergy_lang', lang);
+            updateButtonStates(lang);
+        }
+
+        function updateButtonStates(lang) {
+            document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+            document.getElementById('lang-zh').classList.toggle('active', lang === 'zh');
+        }
+
+        document.getElementById('lang-en').addEventListener('click', () => applyLanguage('en'));
+        document.getElementById('lang-zh').addEventListener('click', () => applyLanguage('zh'));
+
+        const SLIDES_BY_LANG = {
+            en: [
+                'SLI 1.jpg',
+                'SLI 2.jpg',
+                'SLI 3.jpg',
+                'SLI 4.jpg',
+                'SLI 5.jpg',
+                'SLI 6.jpg'
+            ],
+            zh: [
+                'SLI stories Chin/SLI 1 Chin.jpg',
+                'SLI stories Chin/SLI 2 Chin.jpg',
+                'SLI stories Chin/SLI 3 Chin.jpg',
+                'SLI stories Chin/SLI 4 Chin.jpg',
+                'SLI stories Chin/SLI 5 Chin.jpg',
+                'SLI stories Chin/SLI 6 Chin.jpg'
+            ]
+        };
+        let slides = [];
+
+        const track = document.getElementById('carousel-track');
+        const dotsWrap = document.getElementById('dots');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        let current = 0;
+
+        function updateSlidesForLanguage(lang) {
+            const nextSlides = (SLIDES_BY_LANG[lang] || SLIDES_BY_LANG.en).slice();
+            const hasChanged = nextSlides.length !== slides.length || nextSlides.some((src, i) => src !== slides[i]);
+            slides = nextSlides;
+            if (current >= slides.length) current = 0;
+            if (hasChanged) buildCarousel();
+        }
+
+        function buildCarousel() {
+            track.innerHTML = '';
+            dotsWrap.innerHTML = '';
+
+            if (slides.length === 0) {
+                const empty = document.createElement('div');
+                empty.className = 'slide';
+                empty.innerHTML = '<div class="empty-slide">Upload images into this folder, then add their file names to the <code>slides</code> list in this page to show them here.</div>';
+                track.appendChild(empty);
+                prevBtn.style.display = 'none';
+                nextBtn.style.display = 'none';
+                return;
+            }
+
+            slides.forEach((src, index) => {
+                const slide = document.createElement('div');
+                slide.className = 'slide';
+                const img = document.createElement('img');
+                img.src = src;
+                img.alt = 'Speech and Language image ' + (index + 1);
+                slide.appendChild(img);
+                track.appendChild(slide);
+
+                const dot = document.createElement('button');
+                dot.className = 'dot';
+                dot.type = 'button';
+                dot.setAttribute('aria-label', 'Go to slide ' + (index + 1));
+                dot.addEventListener('click', () => {
+                    current = index;
+                    updateCarousel();
+                });
+                dotsWrap.appendChild(dot);
+            });
+
+            prevBtn.style.display = '';
+            nextBtn.style.display = '';
+            updateCarousel();
+        }
+
+        function updateCarousel() {
+            track.style.transform = 'translateX(' + (-current * 100) + '%)';
+            const dots = dotsWrap.querySelectorAll('.dot');
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === current);
+            });
+        }
+
+        prevBtn.addEventListener('click', () => {
+            if (!slides.length) return;
+            current = (current - 1 + slides.length) % slides.length;
+            updateCarousel();
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (!slides.length) return;
+            current = (current + 1) % slides.length;
+            updateCarousel();
+        });
+
+        applyLanguage(localStorage.getItem('senergy_lang') || 'en');
+    </script>
+    <script src="../story-memo.js"></script>
+    <script src="../nav-active.js"></script>
+</body>
+</html>
+
+
