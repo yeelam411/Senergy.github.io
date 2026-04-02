@@ -454,7 +454,7 @@
 
         <section class="memo-card" aria-label="Personal memo section">
             <h2 data-i18n="memoTitle">Memo Board</h2>
-            <p data-i18n="memoDesc">Write anything you want to remember here.</p>
+            <p data-i18n="memoDesc">你可以在這裡寫下一些鼓勵他們的話。</p>
             <div class="memo-input-wrap">
                 <textarea id="memo-input" class="memo-input" data-i18n-placeholder="memoPlaceholder" placeholder="Write your memo here..."></textarea>
                 <button id="memo-add-btn" class="memo-add-btn" type="button" data-i18n="memoAdd">Add Memo</button>
@@ -494,7 +494,7 @@
                 studentNote: "A Note to Students!!!",
                 studentText: "Your brain is built for speed. Many people with ADHD are \"out-of-the-box\" thinkers, high-energy creators, and excellent crisis managers. While sitting still in a classroom might feel like a struggle right now, your ability to hyper-focus on things you love is a major strength. You aren't \"broken\"—you just have a \"Ferrari engine\" for a brain with \"bicycle brakes.\" Learning to use those brakes takes practice, but your engine will take you amazing places!",
                 memoTitle: "Memo Board",
-                memoDesc: "Write anything you want to remember here.",
+                memoDesc: "你可以在這裡寫下一些鼓勵他們的話。",
                 memoPlaceholder: "Write your memo here...",
                 memoAdd: "Add Memo",
                 memoEmpty: "No memos yet.",
@@ -532,7 +532,7 @@
                 studentNote: "給學生的小提醒！！！",
                 studentText: "你的大腦是為了「速度」而設計的。許多 ADHD 患者都是具備框架外思維的創意家、充滿能量的創造者，更是傑出的危機處理高手。雖然目前在教室裡安靜坐著對你來說可能很辛苦，但你對熱愛事物展現出的「高度專注力（Hyper-focus）」是一項強大的優勢。你並不是「壞掉了」，你只是擁有一顆「法拉利等級的引擎」，卻暫時配備了「腳踏車等級的煞車」。學習操控這些煞車需要時間練習，但請相信，你的引擎將會帶你前往非常了不起的地方！",
                 memoTitle: "備忘錄",
-                memoDesc: "寫一些鼓勵他們的話。",
+                memoDesc: "你可以在這裡寫下一些鼓勵他們的話。",
                 memoPlaceholder: "在這裡寫下你的備忘...",
                 memoAdd: "新增備忘",
                 memoEmpty: "尚未有備忘內容。",
@@ -687,7 +687,7 @@
         let memoCache = [];
 
         function getMemoLanguage() {
-            return localStorage.getItem('senergy_lang') || 'en';
+            return localStorage.getItem('senergy_lang') || 'zh';
         }
 
         function getMemoUiText(key, fallback) {
@@ -850,7 +850,7 @@
             }
         });
 
-        const savedLang = localStorage.getItem('senergy_lang') || 'en';
+        const savedLang = localStorage.getItem('senergy_lang') || 'zh';
         setLanguage(savedLang);
         loadMemosFromFirestore().catch(() => {
             memoEmpty.textContent = getMemoUiText('memoLoadFailed', 'Could not load memos.');

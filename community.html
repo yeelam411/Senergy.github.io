@@ -7,7 +7,7 @@
     <script>
         (function () {
             const storedLang = localStorage.getItem("senergy_lang");
-            if (storedLang === "zh") {
+            if (!storedLang || storedLang === "zh") {
                 document.documentElement.lang = "zh-Hant";
                 document.documentElement.setAttribute("data-lang-pending", "zh");
             }
@@ -428,7 +428,7 @@
         document.getElementById("lang-en").addEventListener("click", () => setLanguage("en"));
         document.getElementById("lang-zh").addEventListener("click", () => setLanguage("zh"));
 
-        setLanguage(localStorage.getItem("senergy_lang") || "en");
+        setLanguage(localStorage.getItem("senergy_lang") || "zh");
     </script>
     <script src="nav-active.js"></script>
 </body>

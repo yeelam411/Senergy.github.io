@@ -73,7 +73,7 @@
     };
 
     function getCurrentLanguage() {
-        return localStorage.getItem('senergy_lang') === 'zh' ? 'zh' : 'en';
+        return localStorage.getItem('senergy_lang') === 'en' ? 'en' : 'zh';
     }
 
     function tr(key, params = {}) {

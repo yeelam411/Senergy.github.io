@@ -14,7 +14,7 @@
     const UI_TEXT = {
         en: {
             memoTitle: 'Memo Board',
-            memoDesc: 'Write anything you want to remember here.',
+            memoDesc: '你可以在這裡寫下一些鼓勵他們的話。',
             memoPlaceholder: 'Write your memo here...',
             memoAdd: 'Add Memo',
             memoEmpty: 'No memos yet.',
@@ -26,7 +26,7 @@
         },
         zh: {
             memoTitle: '備忘錄',
-            memoDesc: '把你想記下的任何內容寫在這裡。',
+            memoDesc: '你可以在這裡寫下一些鼓勵他們的話。',
             memoPlaceholder: '在這裡寫下你的備忘...',
             memoAdd: '新增備忘',
             memoEmpty: '尚未有備忘內容。',
@@ -199,12 +199,12 @@
     memoCard.setAttribute('aria-label', 'Personal memo section');
     memoCard.innerHTML = `
         <h2 id="memo-title">Memo Board</h2>
-        <p id="memo-desc">Write anything you want to remember here.</p>
+        <p id="memo-desc">你可以在這裡寫下一些鼓勵他們的話。</p>
         <div class="memo-input-wrap">
-            <textarea id="memo-input" class="memo-input" placeholder="Write your memo here..."></textarea>
+            <textarea id="memo-input" class="memo-input" placeholder="在這裡寫下你的備忘..."></textarea>
             <button id="memo-add-btn" class="memo-add-btn" type="button">Add Memo</button>
         </div>
-        <p id="memo-empty" class="memo-empty">No memos yet.</p>
+        <p id="memo-empty" class="memo-empty">尚未有備忘內容。</p>
         <ul id="memo-list" class="memo-list" aria-live="polite"></ul>
     `;
 
@@ -220,7 +220,7 @@
     let memoCache = [];
 
     function getLang() {
-        const lang = localStorage.getItem('senergy_lang') || 'en';
+        const lang = localStorage.getItem('senergy_lang') || 'zh';
         return lang === 'zh' ? 'zh' : 'en';
     }
 
@@ -261,7 +261,7 @@
 
     function applyUIText() {
         memoTitle.textContent = t('memoTitle', 'Memo Board');
-        memoDesc.textContent = t('memoDesc', 'Write anything you want to remember here.');
+        memoDesc.textContent = t('memoDesc', '你可以在這裡寫下一些鼓勵他們的話。');
         memoInput.setAttribute('placeholder', t('memoPlaceholder', 'Write your memo here...'));
         memoAddBtn.textContent = t('memoAdd', 'Add Memo');
         if (!memoCache.length) {

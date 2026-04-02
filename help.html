@@ -250,7 +250,7 @@
         const HK_LAT_RANGE = [22.15, 22.58];
         const HK_LNG_RANGE = [113.83, 114.45];
         const SHOW_COORD_DEBUG = false;
-        let currentLang = localStorage.getItem("senergy_lang") || "en";
+        let currentLang = localStorage.getItem("senergy_lang") || "zh";
 
         const TRANSLATIONS = {
             en: {
@@ -933,7 +933,7 @@
         document.getElementById("lang-zh").addEventListener("click", () => setLanguage("zh"));
 
         // Initialize language from storage or default
-        setLanguage(localStorage.getItem("senergy_lang") || "en");
+        setLanguage(localStorage.getItem("senergy_lang") || "zh");
 
         initMap();
         loadCentersFromFirestore();
