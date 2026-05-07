@@ -14,7 +14,7 @@
     const UI_TEXT = {
         en: {
             memoTitle: 'Memo Board',
-            memoDesc: '你可以在這裡寫下一些鼓勵他們的話。',
+            memoDesc: 'You can write some encouraging words here.',
             memoPlaceholder: 'Write your memo here...',
             memoAdd: 'Add Memo',
             memoEmpty: 'No memos yet.',
