@@ -141,7 +141,7 @@
             .memo-item.tilt-right { transform: rotate(1.2deg); }
             .memo-row {
                 display: flex;
-                justify-content: space-between;
+                justify-content: flex-start;
                 align-items: center;
                 gap: 10px;
             }
@@ -157,17 +157,6 @@
                 font-weight: 700;
                 line-height: 1.5;
                 padding-top: 0.2rem;
-            }
-            .memo-delete-btn {
-                border: 1px solid rgba(125, 95, 78, 0.3);
-                background: rgba(255, 255, 255, 0.6);
-                color: #7d4f37;
-                border-radius: 999px;
-                padding: 0.18rem 0.62rem;
-                font: inherit;
-                font-size: 0.8rem;
-                font-weight: 700;
-                cursor: pointer;
             }
             .memo-empty {
                 margin-top: 0.9rem;
@@ -268,11 +257,6 @@
             memoEmpty.textContent = t('memoEmpty', 'No memos yet.');
         }
 
-        const buttons = memoList.querySelectorAll('.memo-delete-btn');
-        buttons.forEach((btn) => {
-            btn.textContent = t('memoDelete', 'Delete');
-        });
-
         const dates = memoList.querySelectorAll('.memo-date');
         dates.forEach((dateEl) => {
             const iso = dateEl.getAttribute('data-iso') || '';
@@ -341,26 +325,7 @@
             date.setAttribute('data-iso', memo.createdAt);
             date.textContent = formatMemoDate(memo.createdAt);
 
-            const del = document.createElement('button');
-            del.className = 'memo-delete-btn';
-            del.type = 'button';
-            del.textContent = t('memoDelete', 'Delete');
-            del.addEventListener('click', async () => {
-                try {
-                    del.disabled = true;
-                    const response = await fetch(memoDocumentUrl(memo.id), { method: 'DELETE' });
-                    if (!response.ok) throw new Error('Delete failed');
-                    await loadMemosFromFirestore();
-                } catch (error) {
-                    memoEmpty.textContent = t('memoDeleteFailed', 'Could not delete memo.');
-                    memoEmpty.style.display = '';
-                } finally {
-                    del.disabled = false;
-                }
-            });
-
             row.appendChild(date);
-            row.appendChild(del);
 
             const text = document.createElement('div');
             text.className = 'memo-text';
